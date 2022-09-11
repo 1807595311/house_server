@@ -21,7 +21,7 @@ module.exports = (req, res) => {
                 // 成功
                 if (result.affectedRows === 1) {
                     urlArr.push({
-                        url: `${config.serverOptions.host}:${config.serverOptions.port}/static/file` + url,
+                        url: `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}${url}`,
                         id: result.insertId
                     });
                     res.send({msg: '上传成功',status: 0,data:urlArr});

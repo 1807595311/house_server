@@ -14,9 +14,13 @@ const manage_login = function (u){
     let password = escape(u.password);
     return `select * from users where account_number=${account_number} and password=${password} and customer_type=2`
 }
+const find_headImg_url = function (){
+    return `select * from images where id=1`
+}
 module.exports = {
     insertImagesStr,// 插入图片
     insertUsersStr,// 插入用户
     findUser, // 查找用户
-    manage_login // 管理员登录
+    manage_login, // 管理员登录
+    find_headImg_url // 查找用户头像
 }

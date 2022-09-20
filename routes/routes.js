@@ -8,6 +8,8 @@ module.exports = app =>{
     app.post('/register',controller.register),
     app.post('/manage/register',controller.manage_register),
     app.post('/manage/login',controller.manage_login),
+    app.get('/manage/ordinary_users_home_page',controller.ordinary_users_home_page),
+
     app.post('/upload',controller.upload)
     
 }

@@ -10,7 +10,7 @@ module.exports = (req, res) => {
             userInfo = { ...userInfo, headimg: 1 };
             let u = {
                 ...userInfo,
-                nickname: userInfo.nickname ? userInfo.nickname : `用户${userInfo.account_number}`,
+                nickname: userInfo.nickname ? userInfo.nickname : `管理员`,
                 introduce: userInfo.introduce ? userInfo.introduce : '该用户很懒，什么都没留下',
                 customer_type: userInfo.customer_type ? userInfo.customer_type : 0
             }

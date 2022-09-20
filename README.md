@@ -3,7 +3,7 @@
 ## 上传github仓库
 
 ```
-git push house_manage master
+git push house_server master
 ```
 
 # 接口文档

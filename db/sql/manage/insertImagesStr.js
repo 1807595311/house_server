@@ -1,0 +1,1 @@
+module.exports =  `insert into images (head_img) values (?)`;

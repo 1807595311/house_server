@@ -4,11 +4,13 @@
 const controller = require(path.resolve(__basename, 'controller/controller.js'))
 
 module.exports = app =>{
-    app.post('/test',controller.test),
-    app.post('/register',controller.register),
-    app.post('/manage/register',controller.manage_register),
-    app.post('/manage/login',controller.manage_login),
-    app.get('/manage/ordinary_users_home_page',controller.ordinary_users_home_page),
+    app.post('/test',controller.test), // 测试接口
+    app.post('/register',controller.register), // 用户注册
+    app.post('/manage/register',controller.manage_register), // 管理员注册
+    app.post('/manage/login',controller.manage_login), // 管理员登录
+    app.get('/manage/getOrdinaryUserList',controller.manage_get_ordinary_userList), // 获取普通用户列表
+    app.post('/manage/changeUserState',controller.changeUserState), // 修改 普通用户/设计机构 状态
+    app.get('/manage/getDesignDepartmentList',controller.getDesignDepartmentList), // 获取设计机构列表
 
     app.post('/upload',controller.upload)
     

@@ -18,7 +18,8 @@ module.exports = app =>{
 
 
     /*-------------  用户端接口 -------------*/
-    app.post('/client/register_ord_user',controller.register_ord_user)
+    app.post('/client/register_ord_user',controller.register_ord_user),
+    app.post('/client/register_des_user',controller.register_des_user)
 
     
 }

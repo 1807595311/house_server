@@ -17,6 +17,7 @@ const getStatisticsInfo = require(path.resolve(__basename, 'db/sql/manage/getSta
 
 // 用户端sql
 const inster_ord_user = require(path.resolve(__basename, 'db/sql/client/inster_ord_user.js'));
+const inster_des_user = require(path.resolve(__basename, 'db/sql/client/inster_des_user.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -33,5 +34,6 @@ module.exports = {
     getStatisticsInfo, // 查询统计信息首页数据
 
     // 用户端
-    inster_ord_user, // 注册
+    inster_ord_user, // 普通用户注册
+    inster_des_user // 设计机构注册
 }

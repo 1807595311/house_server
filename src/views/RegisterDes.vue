@@ -90,7 +90,7 @@ export default {
         // return console.log(2222,formData.get('userInfo'));
         try{
           let res = await this.$http.register('/client/register_des_user',formData);
-          this.$tip(res.data);
+          // this.$tip(res.data);
           if(res.data.status == -1) this.currentIndex = 0;
           else this.$router.push('/login');
         }catch(err){}

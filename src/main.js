@@ -32,8 +32,9 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-new Vue({
+const _that = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+export default _that;

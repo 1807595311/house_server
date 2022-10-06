@@ -1,5 +1,6 @@
 import axios from 'axios';
-import cookie from 'vue-cookie'
+import cookie from 'vue-cookie';
+import _that from '@/main'
 
 const config = process.env;
 // 创建axios实例
@@ -16,15 +17,24 @@ instance.interceptors.request.use(config=>{
             'Authorization': token
         }
     }
+    _that.$store.state.loading = true;
     return config;
 },err=>{
     return Promise.reject(err);
 })
 
 // 响应拦截器
-instance.interceptors.request.use(res=>{
+instance.interceptors.response.use(res=>{
+    let data = res.data;
+    setTimeout(() => {
+        _that.$store.state.loading = false;
+        _that.$tip(data);
+    }, 400);
     return res;
 },err=>{
+    setTimeout(() => {
+        _that.$store.state.loading = false;
+    }, 400);
     return Promise.reject(err);
 })
 

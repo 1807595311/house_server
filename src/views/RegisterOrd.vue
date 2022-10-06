@@ -1,5 +1,6 @@
 <template>
   <div class="clientLogin">
+    <!-- <Spin size="large" fix v-if="true"></Spin> -->
     <div class="box">
       <div class="box-left">
         <div class="logo">
@@ -63,6 +64,9 @@ export default {
       formData: null
     };
   },
+  created(){
+    this.$http.post('/test',{data:2});
+  },
 
   methods: {
     // 获取form1子组件传递事件
@@ -88,7 +92,7 @@ export default {
         formData.append('userInfo',JSON.stringify(this.formInline));
         try{
           let res = await this.$http.register('/client/register_ord_user',formData);
-          this.$tip(res.data);
+          // this.$tip(res.data);
           if(res.data.status == -1) this.currentIndex = 0;
           else this.$router.push('/login');
         }catch(err){}

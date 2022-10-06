@@ -87,9 +87,7 @@ export default {
         // console.log(res.data);
         this.total = res.data.count;
         this.tableData = res.data.data;
-      } catch (err) {
-        this.$tip({ status: -1, msg: "接口异常" });
-      }
+      } catch (err) {}
     },
     // 修改状态
     async changeState(userInfo){
@@ -99,11 +97,9 @@ export default {
       }
       try{
         let res = await this.$http.post('/manage/changeUserState',data);
-        this.$tip(res.data);
+        // this.$tip(res.data);
         this.getHomePageData();
-      }catch(err){
-         this.$tip({ status: -1, msg: `接口异常:${err}` });
-      }
+      }catch(err){}
 
     },
     // 条件搜索

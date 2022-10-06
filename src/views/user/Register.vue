@@ -141,15 +141,15 @@ export default {
       let data = { ...this.ruleForm2, customer_type: 2 };
       try{
         let res = await this.$http.post("/manage/register", data);
-        this.$tip(res.data);
-      }catch(err){
-        this.$tip({status: -1,msg:'接口异常'});
-      }
+        if(res.data.status == 0) {
+          this.isLogin = true;
+          this.resetForm('ruleForm2');
+        }
+      }catch(err){}
     },
     async login() {
       try{
         let res = await this.$http.post("/manage/login", this.ruleForm1);
-        this.$tip(res.data);
         let data = res.data;
         // 将token存放在cookie
         if (data.status === 0) {
@@ -163,9 +163,7 @@ export default {
           document.cookie = `userInfo=${userInfo};expires=${expires}`;
           this.$router.push({path: '/'})
         }
-      }catch(err){
-        this.$tip({status: -1,msg:'接口异常'});
-      }
+      }catch(err){}
     },
     // async register() {
     //   // 使用的是multer中间件，所以需要传递formdata格式的数据

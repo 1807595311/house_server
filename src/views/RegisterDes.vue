@@ -120,7 +120,7 @@ export default {
   &-left {
     width: 400px;
     position: relative;
-    background: #0058a3;
+    background: $theme_color;
     padding: 20px;
     box-sizing: border-box;
     .logo {

@@ -21,7 +21,7 @@
         <Icon style="width: 20px;" type="ios-unlocked-outline" slot="prepend"></Icon>
         </Input>
       </Form-item>
-      <Form-item prop="check_password">
+      <Form-item>
         <div class="sex-box">
           <Radio-group v-model="formInline.sex">
             <Radio :label="0">男</Radio>

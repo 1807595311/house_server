@@ -1,8 +1,5 @@
 <template>
   <div class="clientLogin">
-    <!-- <Upload :before-upload="handleUpload" accept="image/jpeg,image/jpg,image/png" action="#">
-      <Button icon="ios-cloud-upload-outline">上传升级文件</Button>
-    </Upload> -->
     <div class="box">
       <div class="box-left">
         <div class="logo">
@@ -28,6 +25,14 @@
               </Input>
             </Form-item>
             <Form-item>
+              <div class="customer_type-box">
+                <Radio-group v-model="customer_type">
+                  <Radio :label="0">普通用户</Radio>
+                  <Radio :label="1">设计机构</Radio>
+                </Radio-group>
+              </div>
+            </Form-item>
+            <Form-item>
               <div class="submit">
                 <Button type="primary" @click="handleSubmit('formInline')" long>登录</Button>
               </div>
@@ -42,13 +47,13 @@
 <script>
 export default {
   name: "ClientLogin",
-  data() { 
+  data() {
     return {
       formInline: {
         account_number: "",
         password: "",
-        check_password: ""
       },
+      customer_type: 0,
       ruleInline: {
         account_number: [
           {
@@ -62,10 +67,6 @@ export default {
             trigger: "blur",
           },
         ],
-        check_password: [{
-            validator: this.vcheck_password,
-            trigger: "blur",
-        }]
       },
     };
   },
@@ -92,25 +93,29 @@ export default {
         callback();
       }
     },
-    vcheck_password(rule, value, callback) {
-      if (this.formInline.password != value) {
-        callback(new Error("两次密码不一致"));
-      } else {
-        callback();
-      }
-    },
-    handleUpload(file) {
-      var formData = new FormData();
-      formData.append("file", file);
-      console.log(formData.get("file"), "formData");
-      return false;
-    },
-    handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
+    async handleSubmit(name) {
+      this.$refs[name].validate(async (valid) => {
         if (valid) {
-          this.$Message.success("提交成功!");
-        } else {
-          this.$Message.error("表单验证失败!");
+          let res = null;
+          if(this.customer_type == 0){
+            res = await this.$http.post("/client/login_ord", this.formInline);
+          }else if(this.customer_type == 1){
+            res = await this.$http.post("/client/login_des", this.formInline);
+          }
+          // console.log(res);
+          let data = res.data;
+          if (data.status === 0) {
+            let token = data.data.token;
+            let userInfo = JSON.stringify(data.data.user_info);
+            let currentTime = new Date().getTime();
+            currentTime += 24 * 60 * 60 * 1000;
+            let expires = new Date(currentTime).toUTCString(); // 有效时间
+            // 将token存入cookie
+            document.cookie = `access_token=${token};expires=${expires}`;
+            document.cookie = `access_userInfo=${userInfo};expires=${expires}`;
+            this.$router.push({ path: "/" });
+            // this.$refs[name].resetFields();
+          }
         }
       });
     },
@@ -185,6 +190,15 @@ export default {
         font-size: 28px;
         text-align: center;
         padding-bottom: 20px;
+      }
+      .customer_type-box {
+        display: flex;
+        justify-content: center;
+        .ivu-radio-group {
+          width: 60%;
+          display: flex;
+          justify-content: space-around;
+        }
       }
     }
   }

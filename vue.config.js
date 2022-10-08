@@ -5,4 +5,11 @@ module.exports = defineConfig({
     host: "127.0.0.1",
     port: 8008
   },
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `@import "~@/assets/styles/public.scss";`,
+      },
+    }
+  }
 });

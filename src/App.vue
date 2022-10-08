@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <Spin v-show="$store.state.loading" fix>
+    <!-- <Spin v-show="$store.state.loading" fix>
       <div class="spin-bg">
         <img src="@/assets/images/loading.gif">
       </div>
-    </Spin>
+    </Spin> -->
     <router-view />
   </div>
 </template>

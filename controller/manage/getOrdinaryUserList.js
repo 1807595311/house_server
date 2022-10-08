@@ -17,7 +17,8 @@ module.exports = (req, res) => {
             })
             let sendData = {
                 count: resu.length,
-                data: result
+                data: result,
+                status: 2
             };
             res.send(sendData);
         })

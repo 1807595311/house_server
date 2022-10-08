@@ -12,7 +12,7 @@ module.exports = (app) => {
         // 让第一次options请求快速结束。
         if (req.method == "OPTIONS") {
             // res.sendStatus(200);
-            res.send(true);
+            res.send({status:1});
         } else {
             next();
         }
@@ -29,7 +29,7 @@ module.exports = (app) => {
         if(token.includes("Bearer ")) token = token.split("Bearer ")[1]
         jwt.verify(token, config.tokenEncryption.salt, (err, decoded) => {
             if (err) {
-                return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -1 });
+                return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -2 });
             }
             else {
                 console.log('token验证通过');

@@ -32,9 +32,9 @@ module.exports = (req, res) => {
         let statistics =  result[0];
         result.shift(result[0]);
         let oneWeekAddUsers = result;
-        sendData = {...statistics,oneWeekAddUsers,status: 0}
+        sendData = {...statistics,oneWeekAddUsers,status: 2}
         res.send(sendData)
     }).catch(err=>{
-        res.send(err)
+        res.send({status:-1,data:err})
     })
 }

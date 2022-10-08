@@ -18,8 +18,10 @@ module.exports = app =>{
 
 
     /*-------------  用户端接口 -------------*/
-    app.post('/client/register_ord_user',controller.register_ord_user),
-    app.post('/client/register_des_user',controller.register_des_user)
+    app.post('/client/register_ord_user',controller.register_ord_user), // 注册普通用户
+    app.post('/client/register_des_user',controller.register_des_user), // 注册设计机构
+    app.post('/client/login_ord',controller.login_ord), // 普通用户登录
+    app.post('/client/login_des',controller.login_des) // 普通用户登录
 
     
 }

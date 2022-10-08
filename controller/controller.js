@@ -15,6 +15,8 @@ let getStatisticsInfo = require(path.resolve(__basename, 'controller/manage/getS
 // 用户端接口
 let register_ord_user = require(path.resolve(__basename, 'controller/client/register_ord_user.js')); // 普通用户注册
 let register_des_user = require(path.resolve(__basename, 'controller/client/register_des_user.js')); // 设计机构注册
+let login_ord = require(path.resolve(__basename, 'controller/client/login_ord.js')); // 普通用户登录
+let login_des = require(path.resolve(__basename, 'controller/client/login_des.js')); // 普通用户登录
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -30,5 +32,7 @@ module.exports = {
     getDesignDepartmentList,
     getStatisticsInfo,
     register_ord_user,
-    register_des_user
+    register_des_user,
+    login_ord,
+    login_des
 }

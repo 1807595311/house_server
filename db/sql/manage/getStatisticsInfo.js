@@ -4,7 +4,7 @@ module.exports = ()=>{
     return `SELECT 
     DISTINCT (SELECT COUNT(account_number) FROM users WHERE users.customer_type=1) AS des_user_count,
     (SELECT COUNT(account_number) FROM users  WHERE users.customer_type=0) AS old_user_count,
-    (SELECT COUNT(account_number) FROM users  WHERE users.sex!=2) AS sex_count,
+    (SELECT COUNT(account_number) FROM users  WHERE users.sex!=2 AND customer_type=0) AS sex_count,
     (SELECT COUNT(account_number) FROM users  WHERE users.sex=1 AND customer_type=0) AS male_count,
     (SELECT COUNT(account_number) FROM users  WHERE users.sex=0 AND customer_type=0) AS female_count,
     (SELECT COUNT(id) FROM DYNAMIC AS dy  WHERE dy.id) AS dynamic_count

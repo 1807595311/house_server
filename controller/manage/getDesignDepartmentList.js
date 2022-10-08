@@ -6,7 +6,7 @@ module.exports = (req,res)=>{
     data.currentPage = currentPage;
     // 查询设计机构列表
     db.query(sqlStr.getDesignDepartmentList(data), (err, result) => {
-        console.log(err);
+        // console.log(err);
         if(err) return res.send({ msg: err, status: -1 });
         // 查询设计机构当前状态的总数量
         db.query(sqlStr.getDesignDepartmentCount(data), (er, resu) => {
@@ -18,7 +18,8 @@ module.exports = (req,res)=>{
             })
             let sendData = {
                 count: resu.length,
-                data: result
+                data: result,
+                status: 2
             };
             res.send(sendData);
         })

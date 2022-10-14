@@ -41,9 +41,9 @@ export const routes = [
           },
         },
         {
-          path: "/more_dynamic",
-          name: "MoreDynamic",
-          // component: () => import("@/views/tabViews/MoreDynamic.vue"),
+          path: "/released_dynamics",
+          name: "ReleaseDynamics",
+          component: () => import("@/views/tabViews/ReleaseDynamics.vue"),
           meta: {
             title: "发布动态"
           },

@@ -28,7 +28,15 @@ VueRouter.prototype.push = function push(location) {
 }
 
 router.beforeEach((to, from, next) => {
+  const VerifyToken = ['/released_dynamics'];
   if (to.meta.title) document.title = to.meta.title;
+  if( VerifyToken.indexOf(to.path) > -1){
+    if(cookie.get("access_userInfo")){
+      let account_number = JSON.parse( cookie.get("access_userInfo") ).account_number;
+      if(account_number) next();
+       else next('/login');
+    }else next('/login');
+  }
   next()
 })
 

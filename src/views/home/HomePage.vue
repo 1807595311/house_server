@@ -36,7 +36,7 @@
         </Tooltip>
       </div>
     </div>
-    <div>
+    <div class="webView">
         <router-view></router-view>
     </div>
   </div>
@@ -50,18 +50,25 @@ export default {
     return {
       activedTab: 0,
       isLogin: true,
-      userInfo: this.$cookie.get("access_userInfo")
-        ? JSON.parse(this.$cookie.get("access_userInfo"))
-        : null,
+      userInfo: {
+        account_number: null,
+        customer_type: null,
+        head_img: '',
+        nickname: ''
+      },
       searchValue: "",
       tabList: [],
     };
   },
-
+created(){
+  console.log( this.$cookie.get("access_userInfo"));
+  if( this.$cookie.get("access_userInfo") ){
+    this.userInfo = JSON.parse(this.$cookie.get("access_userInfo"));
+  }
+},
   mounted() {
     // 获取子路由
     this.tabList = this.$router.options.routes.find(v => v.name == 'HomePage').children;
-    // this.$router.push(this.tabList[this.activedTab].path); // 默认打开tab第一项
   },
 
   methods: {
@@ -82,10 +89,11 @@ export default {
   src: url(../../utils/GongFanYueXinTiCu-2.ttf);
 }
 .home-page {
-  width: 100vw;
-  height: 100vh;
-  background: #f5f5f5;
+  width: 100%;
+  height: 100%;
+  background: #f7f7f7;
   .navigation {
+    margin-bottom: 20px;
     background: #fff;
     height: 70px;
     display: flex;
@@ -119,17 +127,24 @@ export default {
       }
       .search {
         width: 350px;
+        .ivu-input-group-append{
+          background: $theme_color !important;
+        }
+        .ivu-icon.ivu-icon-ios-search{
+          color: #fff !important;
+        }
       }
       .user {
         // padding-top: 5px;
         border-radius: 50%;
         height: 50px;
+        overflow: hidden;
         transition: all 0.5s;
         &.hover {
           width: 50px;
         }
         img {
-          width: 24px;
+          width: 100%;
         }
         .head_img_box {
           border-radius: 50%;
@@ -159,6 +174,10 @@ export default {
         }
       }
     }
+  }
+  .webView{
+    width: 1250px;
+    margin: auto;
   }
 }
 </style>

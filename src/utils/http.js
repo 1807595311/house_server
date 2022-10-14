@@ -12,8 +12,13 @@ const register = function (url,data){
     return request({ method: 'POST', url, data , headers: { "Content-Type": "multipart/form-data" } });
 }
 
+const upload = function (url,data){
+    return request({ method: 'POST', url, data , headers: { "Content-Type": "multipart/form-data" } });
+}
+
 export default {
     get,
     post,
-    register
+    register,
+    upload
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <UploadHeadImg @getFormdata="getFormdata"></UploadHeadImg>
-    <div class="markdown-body" v-html="gg"></div>
+    <div class="box markdown-body" v-html="showContent"></div>
     <mavon-editor ref="md" @change="changeData" v-model="content" :toolbars="toolbars" />
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
         table: true, // 表格
         fullscreen: true, // 全屏编辑
         readmodel: true, // 沉浸式阅读
-        htmlcode: false, // 展示html源码
+        htmlcode: true, // 展示html源码
         help: false, // 帮助
         /* 1.3.5 */
         undo: true, // 上一步
@@ -52,7 +52,7 @@ export default {
         subfield: true, // 单双栏模式
         preview: true, // 预览
       },
-      gg: ''
+      showContent: ''
     };
   },
   mounted() {},
@@ -63,7 +63,7 @@ export default {
     },
     changeData(value, render) {
         	// value中是文本值,render是渲染出的html文本
-          this.gg = render;
+          this.showContent = render;
           console.log(render);
         },
   },
@@ -72,4 +72,7 @@ export default {
 
 <style lang="scss">
 @import "mavon-editor/dist/css/index.css";
+.box{
+  width: 50%;
+}
 </style>

@@ -7,6 +7,8 @@ const findUser = require(path.resolve(__basename, 'db/sql/public/findUser.js'));
 const find_headImg_url = require(path.resolve(__basename, 'db/sql/public/find_headImg_url.js'));
 const find_orduser_or_desuser = require(path.resolve(__basename, 'db/sql/public/find_orduser_or_desuser.js'));
 const find_user_img_url = require(path.resolve(__basename, 'db/sql/public/find_user_img_url.js'));
+const find_cover = require(path.resolve(__basename, 'db/sql/public/find_cover.js'));
+const find_desuser = require(path.resolve(__basename, 'db/sql/public/find_desuser.js'));
 
 // 管理员sql
 const manage_login = require(path.resolve(__basename, 'db/sql/manage/manage_login.js'));
@@ -22,6 +24,10 @@ const inster_ord_user = require(path.resolve(__basename, 'db/sql/client/inster_o
 const inster_des_user = require(path.resolve(__basename, 'db/sql/client/inster_des_user.js'));
 const login_ord = require(path.resolve(__basename, 'db/sql/client/login_ord.js'));
 const login_des = require(path.resolve(__basename, 'db/sql/client/login_des.js'));
+const inster_dynamic = require(path.resolve(__basename, 'db/sql/client/inster_dynamic.js'));
+const home_info = require(path.resolve(__basename, 'db/sql/client/home_info.js'));
+const inster_img_url = require(path.resolve(__basename, 'db/sql/client/inster_img_url.js'));
+const dynamic_detail = require(path.resolve(__basename, 'db/sql/client/dynamic_detail.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -29,6 +35,8 @@ module.exports = {
     findUser, // 查找用户
     find_orduser_or_desuser, // 查找普通用户和设计机构
     find_user_img_url, // 查找普通用户和设计机构的头像
+    find_cover, // 查找动态封面图片路径
+    find_desuser, // 查询设计机构信息
 
     // 管理员
     manage_login, // 管理员登录
@@ -44,5 +52,9 @@ module.exports = {
     inster_ord_user, // 普通用户注册
     inster_des_user, // 设计机构注册
     login_ord, // 普通用户登录
-    login_des // 设计机构登录
+    login_des, // 设计机构登录
+    inster_dynamic, // 发布动态
+    inster_img_url, // 插入封面图片
+    home_info, // 首页数据
+    dynamic_detail // 动态详情
 }

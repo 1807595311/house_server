@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      let formatTime = (count) => {
+        // 声明变量，空字符串，用来存储时间
+        let time = "";
+        let second = count % 60;
+        let minute = parseInt(parseInt(count) / 60) % 60;
+        time = `${second}秒`;
+        if (minute >= 1) {
+          time = `${minute}分${second}秒`;
+        }
+        let hour = parseInt(parseInt(count / 60) / 60) % 24;
+        if (hour >= 1) {
+          time = `${hour}时${minute}分${second}秒`;
+        }
+        let day = parseInt(parseInt(parseInt(count / 60) / 60) / 24);
+        if (day >= 1) {
+          time = `${day}天${hour}时${minute}分${second}秒`;
+        }
+        return time;
+      };
+      console.log(formatTime(4546234));
+      
+      function getTime(second) {
+        var duration;
+        /*  1天的秒数： 24小时 * 60分 * 60秒 = 86400秒;
+            1小时秒数：60秒 * 60分 = 3600秒;
+        */
+        var days = Math.floor(second / 86400);
+        var hours = Math.floor((second % 86400) / 3600);
+        var minutes = Math.floor(((second % 86400) % 3600) / 60);
+        var seconds = Math.floor(((second % 86400) % 3600) % 60);
+        if (days > 0){
+            duration = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+        }
+        else if (hours > 0) {
+            duration = hours + "小时" + minutes + "分" + seconds + "秒";
+        }
+        else if (minutes > 0){ 
+            duration = minutes + "分" + seconds + "秒";
+        }
+        else if (seconds > 0) {
+            duration = seconds + "秒";
+        }
+        return duration;
+      }
+      console.log(getTime(4546234));
+    </script>
+  </body>
+</html>

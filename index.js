@@ -30,6 +30,8 @@ let middleware = require(path.resolve(__basename, 'middleware/middleware.js'))
 let app = new express();
 
 // 解析post请求体
+app.use(bodyParser.json({limit:'50mb'}));
+app.use(bodyParser.urlencoded({limit:'50mb',extended:true}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

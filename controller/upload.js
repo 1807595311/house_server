@@ -17,7 +17,7 @@ module.exports = (req, res) => {
             // 将图片地址存放在数据库images表
             // 3、使用数组的形式，依次为 ? 占位符指定具体的值
             db.query(sqlStr.insertImagesStr, url, (err, result) => {
-                if (err) res.send({msg: `上传失败:${err.message}`,status: -1});
+                if (err) return res.send({msg: `上传失败:${err.message}`,status: -1});
                 // 成功
                 if (result.affectedRows === 1) {
                     urlArr.push({

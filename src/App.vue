@@ -8,6 +8,15 @@
     <router-view />
   </div>
 </template>
+<script>
+export default {
+  created() {
+      if (this.$router.path !== "/home")
+        this.$router.replace("home")
+    }
+
+}
+</script>
 
 <style lang="scss">
 * {

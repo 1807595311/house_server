@@ -31,13 +31,13 @@
             <p>我的评论</p>
             <p v-if="userInfo.customer_type == 0">我的咨询</p>
             <p>我的收藏</p>
-            <p>退出登录</p>
+            <p @click="logout">退出登录</p>
           </div>
         </Tooltip>
       </div>
     </div>
     <div class="webView">
-        <router-view></router-view>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -53,31 +53,46 @@ export default {
       userInfo: {
         account_number: null,
         customer_type: null,
-        head_img: '',
-        nickname: ''
+        head_img: "",
+        nickname: "",
       },
       searchValue: "",
       tabList: [],
     };
   },
-created(){
-  console.log( this.$cookie.get("access_userInfo"));
-  if( this.$cookie.get("access_userInfo") ){
-    this.userInfo = JSON.parse(this.$cookie.get("access_userInfo"));
-  }
-},
+  created() {
+    // console.log( this.$cookie.get("access_userInfo"));
+    if (this.$cookie.get("access_userInfo")) {
+      this.userInfo = JSON.parse(this.$cookie.get("access_userInfo"));
+    }
+  },
   mounted() {
     // 获取子路由
-    this.tabList = this.$router.options.routes.find(v => v.name == 'HomePage').children;
+    this.tabList = this.$router.options.routes.find(
+      (v) => v.name == "HomePage"
+    ).children;
   },
 
   methods: {
-    changeActived(i,path) {
+    changeActived(i, path) {
       this.activedTab = i;
-      this.$router.push(path)
+      this.$router.push(path);
     },
     toLogin() {
       this.$router.push("/login");
+    },
+    // 退出登录
+    logout() {
+      this.$Modal.confirm({
+        title: "退出登录",
+        content: "您确定要退出登录吗",
+        onOk: () => {
+          this.$cookie.delete("access_userInfo");
+          this.$cookie.delete("access_token");
+          this.$router.push({ path: "/login" });
+        },
+        onCancel: () => {},
+      });
     },
   },
 };
@@ -95,7 +110,7 @@ created(){
   .navigation {
     margin-bottom: 20px;
     background: #fff;
-    height: 70px;
+    // height: 70px;
     display: flex;
     align-items: center;
     box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 5%);
@@ -127,17 +142,18 @@ created(){
       }
       .search {
         width: 350px;
-        .ivu-input-group-append{
+        .ivu-input-group-append {
           background: $theme_color !important;
         }
-        .ivu-icon.ivu-icon-ios-search{
+        .ivu-icon.ivu-icon-ios-search {
           color: #fff !important;
         }
       }
       .user {
         // padding-top: 5px;
+        padding: 4px;
         border-radius: 50%;
-        height: 50px;
+        // height: 64px;
         overflow: hidden;
         transition: all 0.5s;
         &.hover {
@@ -150,9 +166,16 @@ created(){
           border-radius: 50%;
           overflow: hidden;
           border: 1px solid #e3e3e3;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           .head_img {
-            width: 50px;
-            height: 50px;
+            overflow: hidden;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
           }
         }
         &.hover:hover {
@@ -175,7 +198,7 @@ created(){
       }
     }
   }
-  .webView{
+  .webView {
     width: 1250px;
     margin: auto;
   }

@@ -8,6 +8,7 @@ export const routes = [
       },
       component: () => import("@/views/home/Home.vue"),
     },
+    // 首页
     {
       path: "/home_page",
       name: "HomePage",
@@ -73,6 +74,14 @@ export const routes = [
         title: "设计机构注册",
       },
       component: () => import("@/views/RegisterDes.vue"),
+    },
+    {
+      path: "/dynamic_details",
+      name: "DynamicDetails",
+      meta: {
+        title: "动态详情",
+      },
+      component: () => import("@/views/DynamicDetails.vue"),
     }
   ];
   

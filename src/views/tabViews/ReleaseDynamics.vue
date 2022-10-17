@@ -6,14 +6,17 @@
           <Input size="large" v-model="formValidate.title" placeholder="标题(2-12字)"></Input>
         </Form-item>
         <Form-item label="封面" prop="cover">
-          <UploadHeadImg @getFormdata="getFormdata"></UploadHeadImg>
+          <UploadHeadImg @getFormdata="v=>formValidate.cover = v"></UploadHeadImg>
         </Form-item>
       </Form>
     </div>
     <div class="markdown">
       <mavon-editor ref="md" @imgAdd="imgAdd" @imgDel="imgDel" @change="changeData" v-model="content" :toolbars="toolbars" />
     </div>
-    <Button type="primary" @click="testResDy">testResDy</Button>
+    <div class="commit-box">
+      <!-- <Button type="primary" long @click="testResDy">testResDy</Button> -->
+      <Button type="primary" :disabled="content == '' ? true: false" long @click="releaseDynamics">发布动态</Button>
+    </div>
   </div>
 </template>
 
@@ -32,7 +35,6 @@ export default {
       },
       ruleValidate: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
-        cover: [{ required: true, message: "请上传封面", trigger: "change" }],
       },
       content: "",
       toolbars: {
@@ -53,7 +55,7 @@ export default {
         table: false, // 表格
         fullscreen: true, // 全屏编辑
         readmodel: false, // 沉浸式阅读
-        htmlcode: true, // 展示html源码
+        htmlcode: false, // 展示html源码
         help: false, // 帮助
         /* 1.3.5 */
         undo: true, // 上一步
@@ -74,29 +76,40 @@ export default {
     };
   },
   methods: {
-    handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.$Message.success("提交成功!");
-        } else {
-          this.$Message.error("表单验证失败!");
-        }
-      });
-    },
     handleReset(name) {
       this.$refs[name].resetFields();
     },
     getFormdata(v) {
-      this.cover = v;
+      this.formValidate.cover = v;
     },
     changeData(value, render) {
       // value中是文本值,render是渲染出的html文本
       this.showContent = render;
-      console.log(render);
     },
     async testResDy() {
       let res = await this.$http.post("/testResDy", { data: this.showContent });
       console.log(res);
+    },
+    // 提交发布
+    releaseDynamics(){
+      this.$refs['formValidate'].validate(async (valid) => {
+        if (valid) {
+          if(this.showContent == '') return this.$Message.error("请先编辑动态内容");
+          if(!this.formValidate.cover) return this.$Message.error("请上传封面");
+            let data = { title: this.formValidate.title, contentHTML: this.showContent};
+            const formData = new FormData();
+            formData.append('file',this.formValidate.cover);
+            formData.append('info',JSON.stringify(data));
+            let res = await this.$http.post("/client/release_dynamics", formData);
+            if(res.data.status === 0) {
+              setTimeout(() => {
+                this.$router.go(0);
+              }, 200);
+            }
+        } else {
+          this.$Message.error("表单验证失败!");
+        }
+      });
     },
     // 将图片上传到服务器，返回地址替换到md中
     imgAdd(pos, $file) {
@@ -126,9 +139,16 @@ export default {
     // margin: auto;
   }
   .markdown {
+    position: relative;
+    z-index: 1;
     .v-note-wrapper.markdown-body.shadow {
       height: 530px;
     }
+  }
+  .commit-box{
+    margin: auto;
+    width: 30%;
+    padding: 20px 0 40px;
   }
 }
 </style>

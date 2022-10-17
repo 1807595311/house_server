@@ -27,7 +27,7 @@
     <div class="recommend">
       <p>推荐案例</p>
       <div class="box dynamic-box d_f">
-        <Dynamic v-for="v in 11" :key="v"></Dynamic>
+        <Dynamic v-for="v in recommended_cases" :dynamic="v" :key="v.id"></Dynamic>
       </div>
     </div>
   </div>
@@ -45,12 +45,25 @@ export default {
   data() {
     return {
       activeIndex: 0,
+      recommended_cases: []
     };
   },
 
+  created() {
+    this.getHomeInfo();
+  },
   mounted() {},
 
-  methods: {},
+  methods: {
+    // 获取首页数据
+    async getHomeInfo() {
+      try {
+        let res = await this.$http.get("/client/home_info");
+        let data = res.data.data;
+        this.recommended_cases = data.recommended_cases;
+      } catch (err) {}
+    },
+  },
 };
 </script>
 

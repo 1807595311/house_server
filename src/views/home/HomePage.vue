@@ -105,7 +105,7 @@ export default {
 }
 .home-page {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   background: #f7f7f7;
   .navigation {
     margin-bottom: 20px;
@@ -174,6 +174,7 @@ export default {
           .head_img {
             overflow: hidden;
             border-radius: 50%;
+            padding: 1px;
             width: 100%;
             height: 100%;
           }

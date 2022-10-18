@@ -28,6 +28,7 @@ const inster_dynamic = require(path.resolve(__basename, 'db/sql/client/inster_dy
 const home_info = require(path.resolve(__basename, 'db/sql/client/home_info.js'));
 const inster_img_url = require(path.resolve(__basename, 'db/sql/client/inster_img_url.js'));
 const dynamic_detail = require(path.resolve(__basename, 'db/sql/client/dynamic_detail.js'));
+const find_dynamic_by_account = require(path.resolve(__basename, 'db/sql/client/find_dynamic_by_account.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -56,5 +57,6 @@ module.exports = {
     inster_dynamic, // 发布动态
     inster_img_url, // 插入封面图片
     home_info, // 首页数据
-    dynamic_detail // 动态详情
+    dynamic_detail, // 动态详情
+    find_dynamic_by_account // 通过账号查找该用户的其他动态
 }

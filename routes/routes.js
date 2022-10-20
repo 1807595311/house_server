@@ -25,7 +25,8 @@ module.exports = app =>{
     app.post('/client/login_des',controller.login_des), // 设计机构登录
     app.post('/client/release_dynamics',controller.release_dynamics), // 发布动态
     app.get('/client/home_info',controller.home_info), //首页数据
-    app.get('/client/dynamic_detail',controller.dynamic_detail) // 动态详情
+    app.post('/client/dynamic_detail',controller.dynamic_detail), // 动态详情
+    app.post('/client/dynamic_likes',controller.dynamic_likes) // 点赞
 
     
 }

@@ -2,7 +2,8 @@
 
 module.exports = async (req, res) => {
     // 动态id
-    let dynamicId = Number( req.query.id );
+    let dynamicId = Number( req.body.id );
+    let account_number = req.body.account_number;
     try{
         let getDynamicDetail = new Promise((resolve, reject) => {
             // 通过动态的用户账号查询资料 update_dynamic_views
@@ -24,13 +25,27 @@ module.exports = async (req, res) => {
             
         })
         let dynamicDetail = await getDynamicDetail;
-        res.send({
-            msg: '获取动态详情成功', 
-            status: 2,
-            data: {
-                dynamicDetail
-            }
+        // 查询该动态是否被点赞
+        // return;
+        let like = new Promise((resolve, reject) => {
+            db.query(sqlStr.find_fabulous({account_number,dynamic_id:dynamicDetail.id }), (err, result) => {
+                if(result.length > 0) resolve({is_like: true});
+                else resolve({is_like: false});
             })
+        })
+
+        Promise.all([like]).then(result=>{
+            let resData = {...dynamicDetail, ...result[0]}
+            res.send({
+                msg: '获取动态详情成功', 
+                status: 2,
+                data: {
+                    dynamicDetail: resData
+                }
+            })
+        })
+
+
     }catch(err){
         res.send({msg: `服务器错误:${err}`, status: -1})
     }

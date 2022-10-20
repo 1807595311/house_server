@@ -1,5 +1,5 @@
 module.exports = (id) => {
-    return `SELECT dy.id,u.nickname,u.account_number,img.head_img,u.introduce,u.customer_type,dy.title,dy.content,dy.views,dy.cover,dy.update_time
+    return `SELECT dy.id,u.nickname,u.account_number,img.head_img,u.introduce,u.customer_type,dy.title,dy.content,dy.views,dy.cover,dy.create_time
 FROM users AS u
 INNER JOIN images AS img ON u.headimg = img.id
 INNER JOIN dynamic AS dy ON u.account_number = dy.account_number

@@ -21,6 +21,7 @@ let login_des = require(path.resolve(__basename, 'controller/client/login_des.js
 let release_dynamics = require(path.resolve(__basename, 'controller/client/release_dynamics.js')); // 发布动态
 let home_info = require(path.resolve(__basename, 'controller/client/home_info.js')); // 首页数据
 let dynamic_detail = require(path.resolve(__basename, 'controller/client/dynamic_detail.js')); // 获取案例详情
+let dynamic_likes = require(path.resolve(__basename, 'controller/client/dynamic_likes.js')); // 点赞
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -42,5 +43,6 @@ module.exports = {
     testResDy,
     release_dynamics,
     home_info,
-    dynamic_detail
+    dynamic_detail,
+    dynamic_likes
 }

@@ -4,7 +4,7 @@
       <div class="designer-box">
         <div class="designer-item" :style="'border-bottom: 3px solid '+ bottomBorderColor">
           <img src="@/assets/a.png" alt="">
-          <div class="mask d_f a_l_c j_c_c">
+          <div class="maskbox d_f a_l_c j_c_c">
             <span>王设计师</span>
           </div>
         </div>
@@ -50,8 +50,8 @@ export default {
     border-bottom: 3px solid #abf542;
     &:hover {
       cursor: pointer;
-      .mask {
-        background: rgba(0, 0, 0, 0.5);
+      .maskbox {
+        background: rgba(0, 0, 0, 0.5) !important;
         z-index: 1;
         span {
           transition: all 0.2s;
@@ -59,7 +59,7 @@ export default {
         }
       }
     }
-    .mask {
+    .maskbox {
       transition: all 0.5s;
       position: absolute;
       top: 0;

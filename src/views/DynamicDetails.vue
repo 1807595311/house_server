@@ -1,11 +1,28 @@
 <template>
   <div class="clientDynamicDetails">
+    <Drawer @close="toggle" align="right" :closeable="true">
+      <div v-if="open">content here</div>
+    </Drawer>
     <div class="header">
       <img :src="dynamicDetail.cover" alt="">
       <div class="mask"></div>
       <div class="title">
         <p>{{dynamicDetail.title}}</p>
-        <p class="time">{{dynamicDetail.update_time}}</p>
+        <p class="time">{{dynamicDetail.create_time}}</p>
+        <div class="btnBox" v-if="$store.state.userInfo">
+          <Button @click="change" type="ghost">
+            <Icon size="16" :color="flag? '#0058A3' : ''" type="star"></Icon>
+            {{flag? '取消收藏':'收藏' }}
+          </Button>
+          <Button @click="like" type="ghost">
+            <Icon size="16" :color="dynamicDetail.is_like? '#0058A3' : ''" type="thumbsup"></Icon>
+            {{dynamicDetail.is_like? '取消点赞':'点赞' }}
+          </Button>
+          <Button @click="openDrawer" type="ghost">
+            <Icon size="14" color="" type="chatbox-working"></Icon>
+            评论
+          </Button>
+        </div>
       </div>
     </div>
     <div class="box d_f j_c_sb">
@@ -15,11 +32,18 @@
       </div>
       <Affix>
         <div class="box_right">
+
           <div class="content">
             <img :src="dynamicDetail.head_img" alt="">
             <p>{{dynamicDetail.nickname}}</p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
+            <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1">
+              <Button @click="openDrawer" type="info">
+                <Icon size="14" color="" type="chatbox-working"></Icon>
+                咨询
+              </Button>
+            </div>
           </div>
           <div class="other_list">
             <div class="item d_f" @click="toDetail(v.id)" v-for="v in otherDynamicList" :key="v.id">
@@ -42,39 +66,77 @@
 </template>
 
 <script>
+import Drawer from "vue-simple-drawer";
 export default {
   name: "ClientDynamicDetails",
+  components: {
+    Drawer,
+  },
   data() {
     return {
       dynamicDetail: {},
       userData: {},
       otherDynamicList: [],
+      flag: true,
+      open: false,
+      account_number: this.$store.state.userInfo.account_number,
+      detaidId: null
     };
   },
 
   created() {
-    this.getDynamicDetail(this.$route.query.id);
+    this.detaidId = this.$route.query.id
+    this.getDynamicDetail(this.detaidId);
   },
+  mounted() {},
 
   methods: {
     async getDynamicDetail(id) {
       try {
-        let res = await this.$http.get("/client/dynamic_detail", { id });
+        let res = await this.$http.post("/client/dynamic_detail", { id, account_number: this.account_number});
         let data = res.data.data;
         this.dynamicDetail = data.dynamicDetail;
         this.otherDynamicList = data.dynamicDetail.otherDynamicList;
       } catch (err) {}
     },
-    toDetail(id){
-      this.$router.push({path: '/dynamic_details', query:{id}});
-      this.$router.go(0)
-    }
+    toDetail(id) {
+      this.getDynamicDetail(id);
+      window.scrollTo(0, 0);
+    },
+    change() {
+      this.flag = !this.flag;
+    },
+    // 点赞
+    async like(){
+      try{
+        let data = {
+          dynamic_id: this.dynamicDetail.id,
+          account_number: this.account_number
+        }
+        let res = await this.$http.post('/client/dynamic_likes',data);
+        this.getDynamicDetail(this.detaidId);
+      }catch(err){}
+    },
+    openDrawer() {
+      // this.drawer != this.drawer;
+      this.open = !this.open;
+    },
+    toggle() {
+      this.open = !this.open;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "mavon-editor/dist/css/index.css";
+::v-deep .vue-simple-drawer {
+  color: black !important;
+  background-color: white !important;
+}
+::v-deep .mask {
+  background-color: black !important;
+}
 .clientDynamicDetails {
   // font-size: 1rem;
   .header {
@@ -103,6 +165,13 @@ export default {
       color: white;
       z-index: 3;
       text-align: center;
+      .btnBox {
+        margin-top: 20px;
+        button {
+          color: #fff;
+          margin-right: 20px;
+        }
+      }
       p {
         font-size: 32px;
         &.time {
@@ -142,7 +211,7 @@ export default {
           border-radius: 50%;
           width: 100px;
           height: 100px;
-          &:hover{
+          &:hover {
             cursor: pointer;
           }
         }
@@ -159,7 +228,7 @@ export default {
         .item {
           padding: 10px;
           background: white;
-          &:hover{
+          &:hover {
             cursor: pointer;
           }
           .title {
@@ -173,7 +242,7 @@ export default {
             height: 100px;
           }
         }
-        .right{
+        .right {
           position: relative;
         }
         .icon-box {

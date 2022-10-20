@@ -160,6 +160,7 @@ export default {
           width: 50px;
         }
         img {
+          border-radius: 50%;
           width: 100%;
         }
         .head_img_box {

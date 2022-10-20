@@ -5,9 +5,9 @@
         <img src="@/assets/images/loading.gif">
       </div>
     </Spin> -->
-    <transition name="fade">
+    <!-- <transition name="fade"> -->
       <router-view />
-    </transition>
+    <!-- </transition> -->
 
   </div>
 </template>
@@ -49,7 +49,7 @@ export default {
 .fade-leave-avtive,
 .fade-enter,
 .fade-leave-to {
-  transition: all .3s;
+  transition: all .1s;
 }
 .fade-enter-to,.fade-enter-active{
   opacity: 1;

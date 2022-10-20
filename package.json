@@ -16,6 +16,7 @@
     "vue-cookie": "^1.1.4",
     "vue-cropper": "^0.5.8",
     "vue-router": "^3.5.1",
+    "vue-simple-drawer": "^1.0.6",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

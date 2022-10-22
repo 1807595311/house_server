@@ -5,7 +5,7 @@
     </Drawer>
     <div class="header">
       <img :src="dynamicDetail.cover" alt="">
-      <div class="mask"></div>
+      <div class="maskbox"></div>
       <div class="title">
         <p>{{dynamicDetail.title}}</p>
         <p class="time">{{dynamicDetail.create_time}}</p>
@@ -38,7 +38,7 @@
             <p>{{dynamicDetail.nickname}}</p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
-            <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1">
+            <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1 && account_number && dynamicDetail.account_number != account_number">
               <Button @click="openDrawer" type="info">
                 <Icon size="14" color="" type="chatbox-working"></Icon>
                 咨询
@@ -79,7 +79,7 @@ export default {
       otherDynamicList: [],
       flag: true,
       open: false,
-      account_number: this.$store.state.userInfo.account_number,
+      account_number: this.$store.state.userInfo? this.$store.state.userInfo.account_number : '',
       detaidId: null
     };
   },
@@ -135,7 +135,7 @@ export default {
   background-color: white !important;
 }
 ::v-deep .mask {
-  background-color: black !important;
+  background-color: rgba(0, 0, 0, .7) !important;
 }
 .clientDynamicDetails {
   // font-size: 1rem;
@@ -147,10 +147,10 @@ export default {
       width: 100%;
     }
     .title,
-    .mask {
+    .maskbox {
       position: absolute;
     }
-    .mask {
+    .maskbox {
       width: 100%;
       height: 100%;
       z-index: 2;

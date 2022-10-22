@@ -27,7 +27,7 @@
           </div>
           <div class="tooltip_content" slot="content">
             <p>个人资料</p>
-            <p>点赞列表</p>
+            <p @click="toDynamicLikes">我的点赞</p>
             <p>我的评论</p>
             <p v-if="userInfo.customer_type == 0">我的咨询</p>
             <p>我的收藏</p>
@@ -94,6 +94,9 @@ export default {
         onCancel: () => {},
       });
     },
+    toDynamicLikes(){
+      this.$router.push('/likes')
+    }
   },
 };
 </script>

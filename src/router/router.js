@@ -76,12 +76,20 @@ export const routes = [
       component: () => import("@/views/RegisterDes.vue"),
     },
     {
+      path: "/likes",
+      name: "Likes",
+      meta: {
+        title: "我的点赞",
+      },
+      component: () => import("@/views/user/Likes.vue"),
+    },
+    {
       path: "/dynamic_details",
       name: "DynamicDetails",
       meta: {
         title: "动态详情",
       },
       component: () => import("@/views/DynamicDetails.vue"),
-    }
+    },
   ];
   

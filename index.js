@@ -16,6 +16,8 @@ global.sqlStr = require(path.resolve(__basename, 'db/sqlStr.js'));
 
 // 导入sql语句并设为全局
 global.formatDate = require(path.resolve(__basename, 'utils/formatDate.js'));
+// 导入sql语句并设为全局
+global.parseToken = require(path.resolve(__basename, 'utils/parseToken.js'));
 
 // 导入数据库连接实例 设为全局
 global.db = mysql.createPool(config.dataBaseOptions);

@@ -3,7 +3,7 @@
 module.exports = async (req, res) => {
     // 动态id
     let dynamicId = Number( req.body.id );
-    let account_number = req.body.account_number;
+    let account_number = parseToken(req.headers.authorization);
     try{
         let getDynamicDetail = new Promise((resolve, reject) => {
             // 通过动态的用户账号查询资料 update_dynamic_views
@@ -20,9 +20,7 @@ module.exports = async (req, res) => {
                     info = {...info,otherDynamicList}
                     resolve(info);
                 })
-
             })
-            
         })
         let dynamicDetail = await getDynamicDetail;
         // 查询该动态是否被点赞

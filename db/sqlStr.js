@@ -32,6 +32,7 @@ const find_dynamic_by_account = require(path.resolve(__basename, 'db/sql/client/
 const inster_like = require(path.resolve(__basename, 'db/sql/client/inster_like.js'));
 const find_fabulous = require(path.resolve(__basename, 'db/sql/client/find_fabulous.js'));
 const delete_likes = require(path.resolve(__basename, 'db/sql/client/delete_likes.js'));
+const find_fabulous_by_account = require(path.resolve(__basename, 'db/sql/client/find_fabulous_by_account.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -64,5 +65,6 @@ module.exports = {
     find_dynamic_by_account, // 通过账号查找该用户的其他动态
     inster_like, // 点赞
     delete_likes, // 取消点赞
-    find_fabulous // 查询某动态是否被某用户点赞
+    find_fabulous, // 查询某动态是否被某用户点赞
+    find_fabulous_by_account // 查询用户点赞的动态
 }

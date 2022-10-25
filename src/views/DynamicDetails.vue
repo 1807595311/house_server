@@ -10,9 +10,9 @@
         <p>{{dynamicDetail.title}}</p>
         <p class="time">{{dynamicDetail.create_time}}</p>
         <div class="btnBox" v-if="$store.state.userInfo">
-          <Button @click="change" type="ghost">
-            <Icon size="16" :color="flag? '#0058A3' : ''" type="star"></Icon>
-            {{flag? '取消收藏':'收藏' }}
+          <Button @click="collection" type="ghost">
+            <Icon size="16" :color="dynamicDetail.is_collection? '#0058A3' : ''" type="star"></Icon>
+            {{dynamicDetail.is_collection? '取消收藏':'收藏' }}
           </Button>
           <Button @click="like" type="ghost">
             <Icon size="16" :color="dynamicDetail.is_like? '#0058A3' : ''" type="thumbsup"></Icon>
@@ -80,20 +80,20 @@ export default {
       flag: true,
       open: false,
       account_number: this.$store.state.userInfo? this.$store.state.userInfo.account_number : '',
-      detaidId: null
+      detaId: null
     };
   },
 
   created() {
-    this.detaidId = this.$route.query.id
-    this.getDynamicDetail(this.detaidId);
+    this.detaId = this.$route.query.id
+    this.getDynamicDetail(this.detaId);
   },
   mounted() {},
 
   methods: {
     async getDynamicDetail(id) {
       try {
-        let res = await this.$http.post("/client/dynamic_detail", { id, account_number: this.account_number});
+        let res = await this.$http.post("/client/dynamic_detail", { id});
         let data = res.data.data;
         this.dynamicDetail = data.dynamicDetail;
         this.otherDynamicList = data.dynamicDetail.otherDynamicList;
@@ -109,16 +109,20 @@ export default {
     // 点赞
     async like(){
       try{
-        let data = {
-          dynamic_id: this.dynamicDetail.id,
-          account_number: this.account_number
-        }
+        let data = { dynamic_id: this.dynamicDetail.id }
         let res = await this.$http.post('/client/dynamic_likes',data);
-        this.getDynamicDetail(this.detaidId);
+        this.getDynamicDetail(this.detaId);
+      }catch(err){}
+    },
+    // 收藏
+    async collection(){
+      try{
+        let data = { dynamic_id: this.dynamicDetail.id }
+        let res = await this.$http.post('/client/dynamic_collection',data);
+        this.getDynamicDetail(this.detaId);
       }catch(err){}
     },
     openDrawer() {
-      // this.drawer != this.drawer;
       this.open = !this.open;
     },
     toggle() {

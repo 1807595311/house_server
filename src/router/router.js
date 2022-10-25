@@ -84,6 +84,14 @@ export const routes = [
       component: () => import("@/views/user/Likes.vue"),
     },
     {
+      path: "/collection",
+      name: "Collection",
+      meta: {
+        title: "我的收藏",
+      },
+      component: () => import("@/views/user/Collection.vue"),
+    },
+    {
       path: "/dynamic_details",
       name: "DynamicDetails",
       meta: {

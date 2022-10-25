@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="recommend">
-      <p>推荐案例</p>
+      <p>推荐动态</p>
       <div class="box dynamic-box d_f">
         <Dynamic v-for="v in recommended_cases" :dynamic="v" :key="v.id"></Dynamic>
       </div>

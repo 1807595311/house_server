@@ -30,7 +30,7 @@
             <p @click="toDynamicLikes">我的点赞</p>
             <p>我的评论</p>
             <p v-if="userInfo.customer_type == 0">我的咨询</p>
-            <p>我的收藏</p>
+            <p @click="toCollection">我的收藏</p>
             <p @click="logout">退出登录</p>
           </div>
         </Tooltip>
@@ -96,7 +96,10 @@ export default {
     },
     toDynamicLikes(){
       this.$router.push('/likes')
-    }
+    },
+    toCollection(){
+      this.$router.push('/collection')
+    },
   },
 };
 </script>

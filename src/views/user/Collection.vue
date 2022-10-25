@@ -1,6 +1,6 @@
 <template>
   <div class="dynamicList">
-    <HeadBG title="我的点赞"></HeadBG>
+    <HeadBG title="我的收藏"></HeadBG>
     <div class="content box dynamic-box d_f">
       <Dynamic v-for="v in dynamicList" :dynamic="v" :key="v.id"></Dynamic>
     </div>
@@ -25,8 +25,8 @@ export default {
         currentPage: 1,
       },
       scrollstate: true,
-      scrollTitle: "正在加载中...",
-      timer: null,
+      scrollTitle: '正在加载中...',
+      timer: null
     };
   },
 
@@ -48,10 +48,11 @@ export default {
   methods: {
     async getMyLikes() {
       try {
-        let res = await this.$http.post("/client/my_likes", this.info);
+        let res = await this.$http.post("/client/my_collection", this.info);
         res.data.data.forEach((v) => this.dynamicList.push(v));
         let listLength = res.data.data.length;
         this.isLoadingCompleted(listLength);
+        // 对象数组去重
         let deWeightThree = () => {
           let map = new Map();
           for (let item of this.dynamicList) {
@@ -79,7 +80,7 @@ export default {
 
       if (this.scrollstate == true) {
         this.scrollstate = false;
-        this.timer = setTimeout(() => {
+        this.timer = setTimeout( ()=> {
           if (scrollHeight > clientHeight && numHeight > scrollHeight - 100) {
             this.info.currentPage += 1;
           }
@@ -87,6 +88,7 @@ export default {
         }, 500);
       }
     },
+    // 判断是否加载完毕
     isLoadingCompleted(length) {
       if (length < this.info.pageSize || length <= 0) {
         this.scrollTitle = "已加载全部";
@@ -122,7 +124,7 @@ export default {
   .dynamic:last-child:nth-child(4n - 2) {
     margin-right: calc(48% + 8% / 3);
   }
-  .scroll {
+  .scroll{
     margin: auto;
     padding: 40px 0;
     font-size: 20px;

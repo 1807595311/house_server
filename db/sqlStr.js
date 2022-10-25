@@ -33,6 +33,11 @@ const inster_like = require(path.resolve(__basename, 'db/sql/client/inster_like.
 const find_fabulous = require(path.resolve(__basename, 'db/sql/client/find_fabulous.js'));
 const delete_likes = require(path.resolve(__basename, 'db/sql/client/delete_likes.js'));
 const find_fabulous_by_account = require(path.resolve(__basename, 'db/sql/client/find_fabulous_by_account.js'));
+const find_likes_count = require(path.resolve(__basename, 'db/sql/client/find_likes_count.js'));
+const find_collection = require(path.resolve(__basename, 'db/sql/client/find_collection.js'));
+const inster_collection = require(path.resolve(__basename, 'db/sql/client/inster_collection.js'));
+const delete_collection = require(path.resolve(__basename, 'db/sql/client/delete_collection.js'));
+const find_collection_by_account = require(path.resolve(__basename, 'db/sql/client/find_collection_by_account.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -66,5 +71,10 @@ module.exports = {
     inster_like, // 点赞
     delete_likes, // 取消点赞
     find_fabulous, // 查询某动态是否被某用户点赞
-    find_fabulous_by_account // 查询用户点赞的动态
+    find_fabulous_by_account, // 分页查询用户点赞的动态
+    find_likes_count, // 查询用户点赞动态数量
+    find_collection, // 查询某动态是否被某用户收藏
+    inster_collection, // 收藏
+    delete_collection, // 取消收藏
+    find_collection_by_account // 分页查询用户收藏的动态
 }

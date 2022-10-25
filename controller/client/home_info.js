@@ -1,6 +1,6 @@
 module.exports = async (req, res) => {
     try{
-        // 查询推荐案例
+        // 查询推荐动态，按浏览次数排序
         let recommendCase = new Promise((resolve, reject) => {
             db.query(sqlStr.home_info.recommendCaseFn, (err, result) => {
                 resolve(result);

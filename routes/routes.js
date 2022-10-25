@@ -26,8 +26,10 @@ module.exports = app =>{
     app.post('/client/release_dynamics',controller.release_dynamics), // 发布动态
     app.get('/client/home_info',controller.home_info), //首页数据
     app.post('/client/dynamic_detail',controller.dynamic_detail), // 动态详情
-    app.post('/client/dynamic_likes',controller.dynamic_likes), // 点赞
-    app.post('/client/my_likes',controller.my_likes) // 我的点赞
+    app.post('/client/dynamic_likes',controller.dynamic_likes), // 点赞(取消点赞)
+    app.post('/client/my_likes',controller.my_likes), // 我的点赞列表
+    app.post('/client/dynamic_collection',controller.dynamic_collection), // 收藏(取消收藏)
+    app.post('/client/my_collection',controller.my_collection) // 我的收藏列表
 
     
 }

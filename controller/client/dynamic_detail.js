@@ -24,16 +24,22 @@ module.exports = async (req, res) => {
         })
         let dynamicDetail = await getDynamicDetail;
         // 查询该动态是否被点赞
-        // return;
         let like = new Promise((resolve, reject) => {
             db.query(sqlStr.find_fabulous({account_number,dynamic_id:dynamicDetail.id }), (err, result) => {
                 if(result.length > 0) resolve({is_like: true});
                 else resolve({is_like: false});
             })
         })
+        // 查询该动态是否被收藏
+        let collection = new Promise((resolve, reject) => {
+            db.query(sqlStr.find_collection({account_number,dynamic_id:dynamicDetail.id }), (err, result) => {
+                if(result.length > 0) resolve({is_collection: true});
+                else resolve({is_collection: false});
+            })
+        })
 
-        Promise.all([like]).then(result=>{
-            let resData = {...dynamicDetail, ...result[0]}
+        Promise.all( [like,collection] ).then(result=>{
+            let resData = {...dynamicDetail, ...result[0], ...result[1]}
             res.send({
                 msg: '获取动态详情成功', 
                 status: 2,

@@ -21,14 +21,15 @@ let login_des = require(path.resolve(__basename, 'controller/client/login_des.js
 let release_dynamics = require(path.resolve(__basename, 'controller/client/release_dynamics.js')); // 发布动态
 let home_info = require(path.resolve(__basename, 'controller/client/home_info.js')); // 首页数据
 let dynamic_detail = require(path.resolve(__basename, 'controller/client/dynamic_detail.js')); // 获取案例详情
-let dynamic_likes = require(path.resolve(__basename, 'controller/client/dynamic_likes.js')); // 点赞
-let my_likes = require(path.resolve(__basename, 'controller/client/my_likes.js')); // 我的点赞
+let dynamic_likes = require(path.resolve(__basename, 'controller/client/dynamic_likes.js')); // 点赞(取消点赞)
+let my_likes = require(path.resolve(__basename, 'controller/client/my_likes.js')); // 我的点赞列表
+let dynamic_collection = require(path.resolve(__basename, 'controller/client/dynamic_collection.js')); // 收藏(取消收藏)
+let my_collection = require(path.resolve(__basename, 'controller/client/my_collection.js')); // 我的收藏列表
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
 module.exports = {
-    // 测试接口
-    test,
+    test,   // 测试接口
     register,
     manage_register,
     manage_login,
@@ -46,5 +47,7 @@ module.exports = {
     home_info,
     dynamic_detail,
     dynamic_likes,
-    my_likes
+    my_likes,
+    dynamic_collection,
+    my_collection
 }

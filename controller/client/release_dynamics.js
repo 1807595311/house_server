@@ -15,29 +15,28 @@ module.exports = (req, res) => {
         })
     })
     // 验证token并解析出用户账号
-    let token = req.headers.authorization;
-    let account_number = null;
-    if (!token) return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -1 });
-    if (token.includes("Bearer ")) token = token.split("Bearer ")[1];
-    jwt.verify(token, config.tokenEncryption.salt, (err, decoded) => {
-        account_number = decoded.data
-    });
+    // let token = req.headers.authorization;
+    // let account_number = null;
+    // if (!token) return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -1 });
+    // if (token.includes("Bearer ")) token = token.split("Bearer ")[1];
+    // jwt.verify(token, config.tokenEncryption.salt, (err, decoded) => {
+    //     account_number = decoded.data
+    // });
+    let account_number = parseToken(req.headers.authorization);
     multipleFile(req, res, async (err) => {
-        if (err instanceof multer.MulterError) {
-            console.log("---errMulterError---", err);
-        } else if (err) {
-            console.log("---err---", err);
-        }
+        if (err instanceof multer.MulterError)  console.log("---errMulterError---", err);
+        else if (err)  console.log("---err---", err);
         for (let i = 0; i < req.files.length; i++) {
             info = await formPro;
             // 重新设置存储在数据库的 url 地址，去掉前面的public字符串方便读取
             let destination = req.files[i].destination.substring(6);
             let url = `${destination}/${req.files[i].filename}`;
-
             
             let data = {
                 title: info.title,
                 content: info.contentHTML,
+                content_md: info.contentMD,
+                tags: info.tags,
                 account_number,
                 cover: url
             }

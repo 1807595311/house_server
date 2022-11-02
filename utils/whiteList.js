@@ -6,5 +6,6 @@ module.exports = [
     '/client/login_ord',
     '/client/login_des',
     '/client/home_info',
-    '/client/dynamic_detail'
+    '/client/dynamic_detail',
+    '/client/search_dynamic'
 ]

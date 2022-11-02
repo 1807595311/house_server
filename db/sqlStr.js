@@ -38,6 +38,7 @@ const find_collection = require(path.resolve(__basename, 'db/sql/client/find_col
 const inster_collection = require(path.resolve(__basename, 'db/sql/client/inster_collection.js'));
 const delete_collection = require(path.resolve(__basename, 'db/sql/client/delete_collection.js'));
 const find_collection_by_account = require(path.resolve(__basename, 'db/sql/client/find_collection_by_account.js'));
+const search_dynamic = require(path.resolve(__basename, 'db/sql/client/search_dynamic.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -76,5 +77,6 @@ module.exports = {
     find_collection, // 查询某动态是否被某用户收藏
     inster_collection, // 收藏
     delete_collection, // 取消收藏
-    find_collection_by_account // 分页查询用户收藏的动态
+    find_collection_by_account, // 分页查询用户收藏的动态
+    search_dynamic // 搜索动态
 }

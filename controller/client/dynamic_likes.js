@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
         let sqlData = { account_number, dynamic_id: data.dynamic_id };
         // 查询该用户是否已经对该动态点赞
         db.query(sqlStr.find_fabulous(sqlData), (err, result) => {
+            if(err) return res.send({msg: err,status: -1});
             if(result.length > 0){
                 db.query(sqlStr.delete_likes(sqlData), (err1, result1) => {
                     if(err1) return res.send({msg:err,status: -1});

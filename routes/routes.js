@@ -29,7 +29,7 @@ module.exports = app =>{
     app.post('/client/dynamic_likes',controller.dynamic_likes), // 点赞(取消点赞)
     app.post('/client/my_likes',controller.my_likes), // 我的点赞列表
     app.post('/client/dynamic_collection',controller.dynamic_collection), // 收藏(取消收藏)
-    app.post('/client/my_collection',controller.my_collection) // 我的收藏列表
-
+    app.post('/client/my_collection',controller.my_collection), // 我的收藏列表
+    app.get('/client/search_dynamic',controller.search_dynamic) // 搜索动态
     
 }

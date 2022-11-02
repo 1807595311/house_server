@@ -29,7 +29,6 @@ export default {
       timer: null,
     };
   },
-
   created() {
     this.getMyLikes();
   },
@@ -61,8 +60,7 @@ export default {
           }
           return [...map.values()];
         };
-        let newArr3 = deWeightThree();
-        this.dynamicList = newArr3;
+        this.dynamicList = deWeightThree();
       } catch (err) {}
     },
     getbottom() {
@@ -84,7 +82,7 @@ export default {
             this.info.currentPage += 1;
           }
           this.scrollstate = true; //工作结束开启节流阀方便下一个工作
-        }, 500);
+        }, 50);
       }
     },
     isLoadingCompleted(length) {
@@ -103,6 +101,7 @@ export default {
 <style lang="scss" scoped>
 .dynamicList {
   .box {
+    padding-top: 20px;
     width: 1280px;
     margin: auto;
     background: #fff;

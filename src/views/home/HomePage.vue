@@ -9,8 +9,8 @@
           </p>
         </div>
         <div class="search d_f a_l_c">
-          <Input v-model="searchValue" size="large" placeholder="搜索相关作品">
-          <Button slot="append" icon="ios-search"></Button>
+          <Input v-model="searchValue" size="large" placeholder="搜索相关动态(内容/作者/标题/标签)">
+          <Button @click="search" slot="append" icon="ios-search"></Button>
           </Input>
         </div>
         <Tooltip v-if="!userInfo.account_number" content="未登录" placement="bottom">
@@ -28,9 +28,10 @@
           <div class="tooltip_content" slot="content">
             <p>个人资料</p>
             <p @click="toDynamicLikes">我的点赞</p>
-            <p>我的评论</p>
-            <p v-if="userInfo.customer_type == 0">我的咨询</p>
             <p @click="toCollection">我的收藏</p>
+            <p>我的评论</p>
+            <!-- <p>我的咨询</p>
+            <p>我的动态</p> -->
             <p @click="logout">退出登录</p>
           </div>
         </Tooltip>
@@ -94,6 +95,17 @@ export default {
         onCancel: () => {},
       });
     },
+    // 搜索
+    search(){
+      if(this.searchValue){
+        this.$router.push({
+          path: '/search_dynamic',
+          query: { 
+            keyword: this.searchValue
+          } 
+        })
+      }
+    },
     toDynamicLikes(){
       this.$router.push('/likes')
     },
@@ -148,6 +160,9 @@ export default {
       }
       .search {
         width: 350px;
+        input{
+          z-index: 1;
+        }
         .ivu-input-group-append {
           background: $theme_color !important;
         }

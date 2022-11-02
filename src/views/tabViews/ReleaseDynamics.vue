@@ -5,13 +5,16 @@
         <Form-item label="标题" prop="title">
           <Input size="large" v-model="formValidate.title" placeholder="标题(2-12字)"></Input>
         </Form-item>
+        <Form-item label="标签">
+          <Checkbox v-for="(v,i) in tagList" :key="i" v-model="v.check">{{v.title}}</Checkbox>
+        </Form-item>
         <Form-item label="封面" prop="cover">
           <UploadHeadImg @getFormdata="v=>formValidate.cover = v"></UploadHeadImg>
         </Form-item>
       </Form>
     </div>
     <div class="markdown">
-      <mavon-editor ref="md" @imgAdd="imgAdd" @imgDel="imgDel" @change="changeData" v-model="content" :toolbars="toolbars" />
+      <mavon-editor ref="md" @fullScreen="fullScreen" @imgAdd="imgAdd" @imgDel="imgDel" @change="changeData" v-model="content" :toolbars="toolbars" />
     </div>
     <div class="commit-box">
       <!-- <Button type="primary" long @click="testResDy">testResDy</Button> -->
@@ -52,6 +55,7 @@ export default {
         link: false, // 链接
         imagelink: true, // 图片链接
         code: false, // code
+        ishljs: true, // 代码块高亮
         table: false, // 表格
         fullscreen: true, // 全屏编辑
         readmodel: false, // 沉浸式阅读
@@ -70,9 +74,47 @@ export default {
         alignright: false, // 右对齐
         /* 2.2.1 */
         subfield: false, // 单双栏模式
-        preview: true, // 预览
+        preview: true // 预览
       },
       showContent: "",
+      tagList: [
+        {
+          title: '卧室',
+          check: false
+        },
+        {
+          title: '客厅',
+          check: false
+        },
+        {
+          title: '书房',
+          check: false
+        },
+        {
+          title: '厨房',
+          check: false
+        },
+        {
+          title: '餐厅',
+          check: false
+        },
+        {
+          title: '玄关',
+          check: false
+        },
+        {
+          title: '阳台',
+          check: false
+        },
+        {
+          title: '儿童房',
+          check: false
+        },
+        {
+          title: '卫生间',
+          check: false
+        },
+      ]
     };
   },
   methods: {
@@ -96,7 +138,8 @@ export default {
         if (valid) {
           if(this.showContent == '') return this.$Message.error("请先编辑动态内容");
           if(!this.formValidate.cover) return this.$Message.error("请上传封面");
-            let data = { title: this.formValidate.title, contentHTML: this.showContent};
+            let tags = this.tagList.map(v=> v.check === true ? v.title: null).filter(v=>v).join(',');
+            let data = { title: this.formValidate.title, contentHTML: this.showContent, contentMD: this.$refs.md.d_value, tags};
             const formData = new FormData();
             formData.append('file',this.formValidate.cover);
             formData.append('info',JSON.stringify(data));
@@ -125,6 +168,10 @@ export default {
         });
     },
     imgDel(pos) {},
+    // md全屏
+    fullScreen(status){
+      // console.log(status);
+    }
   },
 };
 </script>
@@ -141,8 +188,10 @@ export default {
   .markdown {
     position: relative;
     z-index: 1;
+    height: 550px;
     .v-note-wrapper.markdown-body.shadow {
-      height: 530px;
+      // height: 550px;
+      height: 100%;
     }
   }
   .commit-box{

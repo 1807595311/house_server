@@ -85,7 +85,7 @@ export default {
             this.info.currentPage += 1;
           }
           this.scrollstate = true; //工作结束开启节流阀方便下一个工作
-        }, 500);
+        }, 50);
       }
     },
     // 判断是否加载完毕
@@ -105,6 +105,7 @@ export default {
 <style lang="scss" scoped>
 .dynamicList {
   .box {
+    padding-top: 20px;
     width: 1280px;
     margin: auto;
     background: #fff;

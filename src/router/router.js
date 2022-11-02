@@ -26,19 +26,19 @@ export const routes = [
           },
         },
         {
-          path: "/more_dynamic",
-          name: "MoreDynamic",
+          path: "/my_consult",
+          name: "MyConsult",
           // component: () => import("@/views/tabViews/MoreDynamic.vue"),
           meta: {
-            title: "更多动态"
+            title: "我的咨询"
           },
         },
         {
-          path: "/more_dynamic",
-          name: "MoreDynamic",
+          path: "/my_dynamic",
+          name: "MyDynamic",
           // component: () => import("@/views/tabViews/MoreDynamic.vue"),
           meta: {
-            title: "设计机构"
+            title: "我的动态"
           },
         },
         {
@@ -90,6 +90,14 @@ export const routes = [
         title: "我的收藏",
       },
       component: () => import("@/views/user/Collection.vue"),
+    },
+    {
+      path: "/search_dynamic",
+      name: "SearchDynamic",
+      meta: {
+        title: "搜索",
+      },
+      component: () => import("@/views/tabViews/SearchDynamic.vue"),
     },
     {
       path: "/dynamic_details",

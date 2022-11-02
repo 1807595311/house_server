@@ -9,7 +9,16 @@
       <div class="title">
         <p>{{dynamicDetail.title}}</p>
         <p class="time">{{dynamicDetail.create_time}}</p>
+        <!-- 标签 -->
+        <div class="tags">
+          <span v-for="(v,i) in tags" :key="i">{{v}}</span>
+        </div>
+        <!-- 关注 收藏 点赞 评论 -->
         <div class="btnBox" v-if="$store.state.userInfo">
+          <Button v-if="!isSelf" @click="collection" type="ghost">
+            <Icon size="16" :color="dynamicDetail.is_collection? '#0058A3' : ''" :type="dynamicDetail.is_collection? 'checkmark-round' : 'plus-round' "></Icon>
+            {{dynamicDetail.is_collection? '取消关注':'关注' }}
+          </Button>
           <Button @click="collection" type="ghost">
             <Icon size="16" :color="dynamicDetail.is_collection? '#0058A3' : ''" type="star"></Icon>
             {{dynamicDetail.is_collection? '取消收藏':'收藏' }}
@@ -38,7 +47,7 @@
             <p>{{dynamicDetail.nickname}}</p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
-            <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1 && account_number && dynamicDetail.account_number != account_number">
+            <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1 && account_number && dynamicDetail.account_number != account_number && $store.state.userInfo.customer_type == 0">
               <Button @click="openDrawer" type="info">
                 <Icon size="14" color="" type="chatbox-working"></Icon>
                 咨询
@@ -46,7 +55,7 @@
             </div>
           </div>
           <div class="other_list">
-            <div class="item d_f" @click="toDetail(v.id)" v-for="v in otherDynamicList" :key="v.id">
+            <div class="item d_f j_c_sb" @click="toDetail(v.id)" v-for="v in otherDynamicList" :key="v.id">
               <div class="left">
                 <img :src="v.cover" alt="">
               </div>
@@ -80,8 +89,16 @@ export default {
       flag: true,
       open: false,
       account_number: this.$store.state.userInfo? this.$store.state.userInfo.account_number : '',
-      detaId: null
+      detaId: null,
+      tags: []
     };
+  },
+  computed:{
+    // 判断是否本人
+    isSelf(){
+      if(this.account_number == this.dynamicDetail.account_number) return true;
+      else return false;
+    }
   },
 
   created() {
@@ -96,6 +113,7 @@ export default {
         let res = await this.$http.post("/client/dynamic_detail", { id});
         let data = res.data.data;
         this.dynamicDetail = data.dynamicDetail;
+        this.tags = data.dynamicDetail.tags.split(',');
         this.otherDynamicList = data.dynamicDetail.otherDynamicList;
       } catch (err) {}
     },
@@ -180,6 +198,20 @@ export default {
         font-size: 32px;
         &.time {
           font-size: 25px;
+        }
+      }
+      .tags{
+        margin: 10px;
+        width: 100%;
+        span{
+          padding: 6px 12px;
+          background: hsla(0,0%,100%,.2);
+          color: #fff;
+          font-size: 14px;
+          margin-right: 10px;
+          &:last-of-type{
+            margin-right: 0;
+          }
         }
       }
     }

@@ -18,8 +18,7 @@ export default {
     };
   },
   created() {
-    // if (this.$router.path !== "/home")
-    //   this.$router.replace("home")
+    if (this.$router.path !== "/home") this.$router.replace("home");
   }
 };
 </script>

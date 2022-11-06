@@ -8,18 +8,24 @@
         <div class="item-title">
           <p>{{dynamic.title}}</p>
           <div class="icon">
+            <div class="icon-box">
+              <slot name="del"></slot>
+              <slot name="edit"></slot>
+              <slot name="up"></slot>
+              <slot name="down"></slot>
+            </div>
             <!-- <div class="icon-box">
-                            <Icon size="18" color="#C6C6C6" type="chatbox"></Icon>
-                            <div class="count">12</div>
-                        </div>
-                        <div class="icon-box">
-                            <Icon size="20" color="#C6C6C6" type="ios-star"></Icon>
-                            <div class="count">12</div>
-                        </div>
-                        <div class="icon-box">
-                            <Icon size="20" color="#C6C6C6" type="thumbsup"></Icon>
-                            <div class="count">12</div>
-                        </div> -->
+              <Icon size="18" color="#C6C6C6" type="chatbox"></Icon>
+              <div class="count">12</div>
+            </div>
+            <div class="icon-box">
+              <Icon size="20" color="#C6C6C6" type="ios-star"></Icon>
+              <div class="count">12</div>
+            </div>
+            <div class="icon-box">
+              <Icon size="20" color="#C6C6C6" type="thumbsup"></Icon>
+              <div class="count">12</div>
+            </div> -->
             <div class="icon-box">
               <Icon size="20" color="#C6C6C6" type="eye"></Icon>
               <div class="count">{{dynamic.views}}</div>
@@ -43,8 +49,11 @@ export default {
   mounted() {},
 
   methods: {
-    toDetail(id){
-      this.$router.push({path: '/dynamic_details', query:{id}});
+    toDetail(id) {
+      this.$router.push({ path: "/dynamic_details", query: { id } });
+    },
+    deleteDynamic(){
+      console.log(12314);
     }
   },
 };
@@ -72,7 +81,7 @@ export default {
         }
       }
       &-title {
-        height: 80px;
+        height: 90px;
         width: 100%;
         font-size: 16px;
         position: relative;
@@ -84,6 +93,13 @@ export default {
           right: 10px;
           display: flex;
           justify-content: flex-end;
+          span{
+            font-size: 14px;
+            margin-right: 5px;
+            &:hover{
+              color: #0058A3;
+            }
+          }
           &-box {
             display: flex;
             color: #c6c6c6;

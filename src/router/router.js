@@ -36,7 +36,7 @@ export const routes = [
         {
           path: "/my_dynamic",
           name: "MyDynamic",
-          // component: () => import("@/views/tabViews/MoreDynamic.vue"),
+          component: () => import("@/views/tabViews/MyDynamic.vue"),
           meta: {
             title: "我的动态"
           },
@@ -106,6 +106,14 @@ export const routes = [
         title: "动态详情",
       },
       component: () => import("@/views/DynamicDetails.vue"),
+    },
+    {
+      path: "/dynamic_edit",
+      name: "DynamicEdit",
+      meta: {
+        title: "编辑动态",
+      },
+      component: () => import("@/views/tabViews/ReleaseDynamics.vue"),
     },
   ];
   

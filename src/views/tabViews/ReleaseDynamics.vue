@@ -3,13 +3,13 @@
     <div class="form">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
         <Form-item label="标题" prop="title">
-          <Input size="large" v-model="formValidate.title" placeholder="标题(2-12字)"></Input>
+          <Input size="large" v-model="formValidate.title" placeholder="标题(2-30字)"></Input>
         </Form-item>
         <Form-item label="标签">
           <Checkbox v-for="(v,i) in tagList" :key="i" v-model="v.check">{{v.title}}</Checkbox>
         </Form-item>
         <Form-item label="封面" prop="cover">
-          <UploadHeadImg @getFormdata="v=>formValidate.cover = v"></UploadHeadImg>
+          <UploadHeadImg :imgUrl="editData.cover" @getFormdata="v=>formValidate.cover = v"></UploadHeadImg>
         </Form-item>
       </Form>
     </div>
@@ -37,7 +37,12 @@ export default {
         cover: null,
       },
       ruleValidate: {
-        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        title: [
+          {
+            validator: this.vTitle,
+            trigger: "blur",
+          },
+        ],
       },
       content: "",
       toolbars: {
@@ -74,50 +79,87 @@ export default {
         alignright: false, // 右对齐
         /* 2.2.1 */
         subfield: false, // 单双栏模式
-        preview: true // 预览
+        preview: true, // 预览
       },
       showContent: "",
       tagList: [
         {
-          title: '卧室',
-          check: false
+          title: "卧室",
+          check: false,
         },
         {
-          title: '客厅',
-          check: false
+          title: "客厅",
+          check: false,
         },
         {
-          title: '书房',
-          check: false
+          title: "书房",
+          check: false,
         },
         {
-          title: '厨房',
-          check: false
+          title: "厨房",
+          check: false,
         },
         {
-          title: '餐厅',
-          check: false
+          title: "餐厅",
+          check: false,
         },
         {
-          title: '玄关',
-          check: false
+          title: "玄关",
+          check: false,
         },
         {
-          title: '阳台',
-          check: false
+          title: "阳台",
+          check: false,
         },
         {
-          title: '儿童房',
-          check: false
+          title: "儿童房",
+          check: false,
         },
         {
-          title: '卫生间',
-          check: false
+          title: "卫生间",
+          check: false,
         },
-      ]
+      ],
+      editData: {},
+      contentMD: "",
+      dynamicId: null, // 动态id
     };
   },
+  created() {
+    this.dynamicId = this.$route.params.id;
+    if (this.dynamicId) this.getDynamic();
+  },
+  mounted(){
+
+  },
   methods: {
+    vTitle(rule, value, callback) {
+      if (value.length > 30 || value.length < 2) {
+        callback(new Error("标题2-30字之间"));
+      } else {
+        callback();
+      }
+    },
+    // 获取编辑动态内容详情
+    async getDynamic() {
+      try {
+        let res = await this.$http.post("/client/dynamic_edit_detail", {
+          id: this.dynamicId,
+        });
+        let data = res.data.data;
+        this.formValidate.title = data.title;
+        this.contentMD = data.content_md;
+        this.content = data.content_md;
+        this.editData = data;
+        // this.showContent = data.content;
+        console.log(data);
+        this.tagList.forEach((v) => {
+          if (data.tags.indexOf(v.title) != -1) {
+            v.check = true;
+          }
+        });
+      } catch (err) {}
+    },
     handleReset(name) {
       this.$refs[name].resetFields();
     },
@@ -133,22 +175,39 @@ export default {
       console.log(res);
     },
     // 提交发布
-    releaseDynamics(){
-      this.$refs['formValidate'].validate(async (valid) => {
+    releaseDynamics() {
+      this.$refs["formValidate"].validate(async (valid) => {
         if (valid) {
-          if(this.showContent == '') return this.$Message.error("请先编辑动态内容");
-          if(!this.formValidate.cover) return this.$Message.error("请上传封面");
-            let tags = this.tagList.map(v=> v.check === true ? v.title: null).filter(v=>v).join(',');
-            let data = { title: this.formValidate.title, contentHTML: this.showContent, contentMD: this.$refs.md.d_value, tags};
-            const formData = new FormData();
-            formData.append('file',this.formValidate.cover);
-            formData.append('info',JSON.stringify(data));
-            let res = await this.$http.post("/client/release_dynamics", formData);
-            if(res.data.status === 0) {
-              setTimeout(() => {
-                this.$router.go(0);
-              }, 200);
-            }
+          if (this.showContent == "")
+            return this.$Message.error("请先编辑动态内容");
+          if (!this.formValidate.cover && !this.dynamicId)
+            return this.$Message.error("请上传封面");
+          let tags = this.tagList
+            .map((v) => (v.check === true ? v.title : null))
+            .filter((v) => v)
+            .join(",");
+          this.contentMD = this.$refs.md.d_value;
+          let data = {
+            id: this.dynamicId,
+            title: this.formValidate.title,
+            contentHTML: this.showContent,
+            contentMD: this.contentMD,
+            tags,
+          };
+          const formData = new FormData();
+          formData.append("file", this.formValidate.cover);
+          formData.append("info", JSON.stringify(data));
+          let res = null;
+          if (this.dynamicId) {
+            res = await this.$http.post("/client/edit_dynamic", formData);
+          } else {
+            res = await this.$http.post("/client/release_dynamics", formData);
+          }
+          if (res.data.status === 0) {
+            setTimeout(() => {
+              this.$router.go(0);
+            }, 200);
+          }
         } else {
           this.$Message.error("表单验证失败!");
         }
@@ -159,20 +218,32 @@ export default {
       var _this = this;
       var formdata = new FormData();
       formdata.append("file", $file);
-      this.$http.upload('/upload',formdata).then((response) => {
-          // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-          if (response.status === 200) {
-            var url = response.data.data[0].url;
-            _this.$refs.md.$img2Url(pos, url);
-          }
-        });
+      this.$http.upload("/upload", formdata).then((response) => {
+        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+        if (response.status === 200) {
+          var url = response.data.data[0].url;
+          _this.$refs.md.$img2Url(pos, url);
+        }
+      });
     },
     imgDel(pos) {},
     // md全屏
-    fullScreen(status){
+    fullScreen(status) {
       // console.log(status);
-    }
+    },
   },
+  // beforeRouteLeave(to, from, next) {
+  //   this.$Modal.confirm({
+  //     title: "提示",
+  //     content: "<p>离开后您所编辑的内容会清空，您确定要离开吗</p>",
+  //     onOk: () => {
+  //       next();
+  //     },
+  //     onCancel: () => {
+        
+  //     },
+  //   });
+  // },
 };
 </script>
 
@@ -194,7 +265,7 @@ export default {
       height: 100%;
     }
   }
-  .commit-box{
+  .commit-box {
     margin: auto;
     width: 30%;
     padding: 20px 0 40px;

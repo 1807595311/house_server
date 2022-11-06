@@ -39,11 +39,11 @@
       action=""
       class="upload-box"
     >
-      <div class="upload-icon" v-show="!imgSrc">
+      <div class="upload-icon" v-show="imgSrc || imgUrl ? false : true">
         <Icon type="ios-camera" size="40"></Icon>
       </div>
-      <div class="upload-icon" v-show="imgSrc">
-        <img class="upload-img" :src="imgSrc" alt="" />
+      <div class="upload-icon" v-show="imgSrc || imgUrl">
+        <img class="upload-img" :src="imgSrc ? imgSrc : imgUrl" alt="" />
       </div>
     </Upload>
   </div>
@@ -56,6 +56,7 @@ export default {
   components: {
     VueCropper,
   },
+  props: ['imgUrl'],
   data() {
     return {
       modal1: false,

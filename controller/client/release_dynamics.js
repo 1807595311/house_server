@@ -14,14 +14,6 @@ module.exports = (req, res) => {
             resolve(JSON.parse(fields.info[0]));
         })
     })
-    // 验证token并解析出用户账号
-    // let token = req.headers.authorization;
-    // let account_number = null;
-    // if (!token) return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -1 });
-    // if (token.includes("Bearer ")) token = token.split("Bearer ")[1];
-    // jwt.verify(token, config.tokenEncryption.salt, (err, decoded) => {
-    //     account_number = decoded.data
-    // });
     let account_number = parseToken(req.headers.authorization);
     multipleFile(req, res, async (err) => {
         if (err instanceof multer.MulterError)  console.log("---errMulterError---", err);

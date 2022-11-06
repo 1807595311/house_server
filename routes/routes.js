@@ -30,6 +30,9 @@ module.exports = app =>{
     app.post('/client/my_likes',controller.my_likes), // 我的点赞列表
     app.post('/client/dynamic_collection',controller.dynamic_collection), // 收藏(取消收藏)
     app.post('/client/my_collection',controller.my_collection), // 我的收藏列表
-    app.get('/client/search_dynamic',controller.search_dynamic) // 搜索动态
+    app.get('/client/search_dynamic',controller.search_dynamic), // 搜索动态
+    app.post('/client/my_dynamic',controller.my_dynamic), // 我的动态
+    app.post('/client/dynamic_edit_detail',controller.dynamic_edit_detail), // 编辑动态详情
+    app.post('/client/edit_dynamic',controller.edit_dynamic) // 编辑动态详情
     
 }

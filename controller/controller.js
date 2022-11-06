@@ -26,6 +26,9 @@ let my_likes = require(path.resolve(__basename, 'controller/client/my_likes.js')
 let dynamic_collection = require(path.resolve(__basename, 'controller/client/dynamic_collection.js')); // 收藏(取消收藏)
 let my_collection = require(path.resolve(__basename, 'controller/client/my_collection.js')); // 我的收藏列表
 let search_dynamic = require(path.resolve(__basename, 'controller/client/search_dynamic.js')); // 搜索动态
+let my_dynamic = require(path.resolve(__basename, 'controller/client/my_dynamic.js')); // 我的动态
+let dynamic_edit_detail = require(path.resolve(__basename, 'controller/client/dynamic_edit_detail.js')); // 编辑动态详情
+let edit_dynamic = require(path.resolve(__basename, 'controller/client/edit_dynamic.js')); // 编辑动态
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -51,5 +54,8 @@ module.exports = {
     my_likes,
     dynamic_collection,
     my_collection,
-    search_dynamic
+    search_dynamic,
+    my_dynamic,
+    dynamic_edit_detail,
+    edit_dynamic
 }

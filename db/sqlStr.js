@@ -39,6 +39,9 @@ const inster_collection = require(path.resolve(__basename, 'db/sql/client/inster
 const delete_collection = require(path.resolve(__basename, 'db/sql/client/delete_collection.js'));
 const find_collection_by_account = require(path.resolve(__basename, 'db/sql/client/find_collection_by_account.js'));
 const search_dynamic = require(path.resolve(__basename, 'db/sql/client/search_dynamic.js'));
+const find_my_dynamic = require(path.resolve(__basename, 'db/sql/client/find_my_dynamic.js'));
+const edit_detail_dynamic = require(path.resolve(__basename, 'db/sql/client/edit_detail_dynamic.js'));
+const update_dynamic = require(path.resolve(__basename, 'db/sql/client/update_dynamic.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -78,5 +81,8 @@ module.exports = {
     inster_collection, // 收藏
     delete_collection, // 取消收藏
     find_collection_by_account, // 分页查询用户收藏的动态
-    search_dynamic // 搜索动态
+    search_dynamic, // 搜索动态
+    find_my_dynamic, // 查询我的动态
+    edit_detail_dynamic, // 查询编辑的动态详情
+    update_dynamic // 修改的动态
 }

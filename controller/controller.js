@@ -29,6 +29,7 @@ let search_dynamic = require(path.resolve(__basename, 'controller/client/search_
 let my_dynamic = require(path.resolve(__basename, 'controller/client/my_dynamic.js')); // 我的动态
 let dynamic_edit_detail = require(path.resolve(__basename, 'controller/client/dynamic_edit_detail.js')); // 编辑动态详情
 let edit_dynamic = require(path.resolve(__basename, 'controller/client/edit_dynamic.js')); // 编辑动态
+let user_follow = require(path.resolve(__basename, 'controller/client/user_follow.js')); // 编辑动态
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -57,5 +58,6 @@ module.exports = {
     search_dynamic,
     my_dynamic,
     dynamic_edit_detail,
-    edit_dynamic
+    edit_dynamic,
+    user_follow
 }

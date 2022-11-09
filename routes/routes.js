@@ -34,5 +34,6 @@ module.exports = app =>{
     app.post('/client/my_dynamic',controller.my_dynamic), // 我的动态
     app.post('/client/dynamic_edit_detail',controller.dynamic_edit_detail), // 编辑动态详情
     app.post('/client/edit_dynamic',controller.edit_dynamic) // 编辑动态详情
+    app.post('/client/user_follow',controller.user_follow) // 关注(取消关注)
     
 }

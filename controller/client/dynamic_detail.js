@@ -37,9 +37,36 @@ module.exports = async (req, res) => {
                 else resolve({is_collection: false});
             })
         })
+        // 查询该动态点赞数，收藏数，评论数
+        let countInfo = new Promise((resolve, reject) => {
+            db.query(sqlStr.find_count({account_number,id: dynamicDetail.id }), (err, result) => {
+                if(result.length > 0) {
+                    let countData = {
+                        collection_count: result[0][0].collection_count,
+                        fabulous_count: result[1][0].fabulous_count,
+                        comment_count: result[2][0].comment_count
+                    }
+                    resolve(countData);
+                }else{
+                    let countData = {
+                        collection_count: 0,
+                        fabulous_count: 0,
+                        comment_count: 0
+                    }
+                    resolve(countData);
+                }
+            })
+        })
+        // 查询该动态是否被收藏
+        let isFollow = new Promise((resolve, reject) => {
+            db.query(sqlStr.find_follow_by_dynamic({id: dynamicDetail.id }), (err, result) => {
+                if(result.length > 0) resolve({is_follow: true});
+                else resolve({is_follow: false});
+            })
+        })
 
-        Promise.all( [like,collection] ).then(result=>{
-            let resData = {...dynamicDetail, ...result[0], ...result[1]}
+        Promise.all( [like,collection,countInfo,isFollow] ).then(result=>{
+            let resData = {...dynamicDetail, ...result[0], ...result[1], ...result[2], ...result[3]}
             res.send({
                 msg: '获取动态详情成功', 
                 status: 2,

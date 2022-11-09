@@ -42,6 +42,11 @@ const search_dynamic = require(path.resolve(__basename, 'db/sql/client/search_dy
 const find_my_dynamic = require(path.resolve(__basename, 'db/sql/client/find_my_dynamic.js'));
 const edit_detail_dynamic = require(path.resolve(__basename, 'db/sql/client/edit_detail_dynamic.js'));
 const update_dynamic = require(path.resolve(__basename, 'db/sql/client/update_dynamic.js'));
+const find_count = require(path.resolve(__basename, 'db/sql/client/find_count.js'));
+const delete_follow = require(path.resolve(__basename, 'db/sql/client/delete_follow.js'));
+const inster_follow = require(path.resolve(__basename, 'db/sql/client/inster_follow.js'));
+const find_follow = require(path.resolve(__basename, 'db/sql/client/find_follow.js'));
+const find_follow_by_dynamic = require(path.resolve(__basename, 'db/sql/client/find_follow_by_dynamic.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -84,5 +89,10 @@ module.exports = {
     search_dynamic, // 搜索动态
     find_my_dynamic, // 查询我的动态
     edit_detail_dynamic, // 查询编辑的动态详情
-    update_dynamic // 修改的动态
+    update_dynamic, // 修改动态
+    find_count, // 查询动态的点赞数，收藏数，评论数
+    find_follow, // 查询某用户是否被该用户关注
+    delete_follow, // 取消关注
+    inster_follow, //关注
+    find_follow_by_dynamic // 通过动态查询是否关注该用户
 }

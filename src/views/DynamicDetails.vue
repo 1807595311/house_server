@@ -15,21 +15,21 @@
         </div>
         <!-- 关注 收藏 点赞 评论 -->
         <div class="btnBox" v-if="$store.state.userInfo">
-          <Button v-if="!isSelf" @click="collection" type="ghost">
-            <Icon size="16" :color="dynamicDetail.is_collection? '#0058A3' : ''" :type="dynamicDetail.is_collection? 'checkmark-round' : 'plus-round' "></Icon>
-            {{dynamicDetail.is_collection? '取消关注':'关注' }}
+          <Button v-if="!isSelf" @click="follow" type="ghost">
+            <Icon size="16" :color="dynamicDetail.is_follow? '#0058A3' : ''" :type="dynamicDetail.is_follow? 'checkmark-round' : 'plus-round' "></Icon>
+            {{dynamicDetail.is_follow? '取消关注':'关注' }}
           </Button>
           <Button @click="collection" type="ghost">
             <Icon size="16" :color="dynamicDetail.is_collection? '#0058A3' : ''" type="star"></Icon>
-            {{dynamicDetail.is_collection? '取消收藏':'收藏' }}
+            {{dynamicDetail.is_collection? '取消收藏':'收藏' }}【{{dynamicDetail.collection_count}}】
           </Button>
           <Button @click="like" type="ghost">
             <Icon size="16" :color="dynamicDetail.is_like? '#0058A3' : ''" type="thumbsup"></Icon>
-            {{dynamicDetail.is_like? '取消点赞':'点赞' }}
+            {{dynamicDetail.is_like? '取消点赞':'点赞' }}【{{dynamicDetail.fabulous_count}}】
           </Button>
           <Button @click="openDrawer" type="ghost">
             <Icon size="14" color="" type="chatbox-working"></Icon>
-            评论
+            评论【{{dynamicDetail.comment_count}}】
           </Button>
         </div>
       </div>
@@ -41,7 +41,6 @@
       </div>
       <Affix>
         <div class="box_right">
-
           <div class="content">
             <img :src="dynamicDetail.head_img" alt="">
             <p>{{dynamicDetail.nickname}}</p>
@@ -55,7 +54,7 @@
             </div>
           </div>
           <div class="other_list">
-            <div class="item d_f j_c_sb" @click="toDetail(v.id)" v-for="v in otherDynamicList" :key="v.id">
+            <div class="item d_f j_c_sb" @click="toDetail(v.id)" v-for="v in dynamicDetail.otherDynamicList" :key="v.id">
               <div class="left">
                 <img :src="v.cover" alt="">
               </div>
@@ -110,7 +109,7 @@ export default {
   methods: {
     async getDynamicDetail(id) {
       try {
-        let res = await this.$http.post("/client/dynamic_detail", { id});
+        let res = await this.$http.post("/client/dynamic_detail", {id});
         let data = res.data.data;
         this.dynamicDetail = data.dynamicDetail;
         this.tags = data.dynamicDetail.tags.split(',');
@@ -128,7 +127,7 @@ export default {
     async like(){
       try{
         let data = { dynamic_id: this.dynamicDetail.id }
-        let res = await this.$http.post('/client/dynamic_likes',data);
+        await this.$http.post('/client/dynamic_likes',data);
         this.getDynamicDetail(this.detaId);
       }catch(err){}
     },
@@ -136,7 +135,15 @@ export default {
     async collection(){
       try{
         let data = { dynamic_id: this.dynamicDetail.id }
-        let res = await this.$http.post('/client/dynamic_collection',data);
+        await this.$http.post('/client/dynamic_collection',data);
+        this.getDynamicDetail(this.detaId);
+      }catch(err){}
+    },
+    // 关注
+    async follow(){
+      try{
+        let data = { f_account_number: this.dynamicDetail.account_number };
+        await this.$http.post('/client/user_follow',data);
         this.getDynamicDetail(this.detaId);
       }catch(err){}
     },

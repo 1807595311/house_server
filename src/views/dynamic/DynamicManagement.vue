@@ -1,16 +1,16 @@
 <template>
-  <div class="manageUser">
+  <div class="dynamicManagement">
     <div class="header">
       <div class="header-left">
         <el-form :inline="true" size="small" :model="formInline" class="demo-form-inline">
-          <el-form-item label="用户账号:">
+          <el-form-item label="发布账号:">
             <el-input v-model="formInline.account_number"></el-input>
           </el-form-item>
-          <el-form-item label="用户昵称:">
-            <el-input v-model="formInline.nickname"></el-input>
+          <el-form-item label="动态标题:">
+            <el-input v-model="formInline.title"></el-input>
           </el-form-item>
-          <el-form-item label="用户状态:">
-            <el-select v-model="formInline.state">
+          <el-form-item label="动态状态:">
+            <el-select v-model="formInline.is_delete">
               <el-option label="所有" :value="2"></el-option>
               <el-option label="启用" :value="1"></el-option>
               <el-option label="禁用" :value="0"></el-option>
@@ -28,25 +28,23 @@
         <!-- <el-table-column label="序号" type="index" align="center" width="50" /> -->
         <el-table-column prop="id" label="ID" align="center" width="50" />
         <el-table-column prop="account_number" label="账号" align="center" width="150" />
-        <el-table-column prop="nickname" label="昵称" align="center" width="160" />
-        <el-table-column prop="mechanism_name" label="机构名称" align="center" width="150" />
-        <el-table-column prop="city" label="所在城市" align="center" width="150" />
-        <el-table-column prop="establish_time" label="成立时间" align="center" width="120" />
-        <el-table-column prop="introduce" label="简介" :show-overflow-tooltip="true" align="center" />
-        <el-table-column prop="create_time" label="创建时间" width="150" align="center" />
-        <el-table-column label="操作" align="center" width="200">
+        <el-table-column prop="title" label="标题" align="center" width="200" show-overflow-tooltip />
+        <el-table-column prop="tags" label="标签" align="center" width="180" show-overflow-tooltip />
+        <el-table-column prop="views" label="浏览次数" align="center" width="100"  />
+        <el-table-column prop="create_time" label="创建时间" width="180" align="center" />
+        <el-table-column label="操作" align="center" width="">
           <template slot-scope="scope">
             <div>
-              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.state == 1" type="success">启用</el-button>
-              <!-- <el-button class="operation-btn" size="mini" type="warning">编辑</el-button> -->
-              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.state == 0" type="danger">禁用</el-button>
+              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" type="primary">查看</el-button>
+              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.is_delete == 1" type="success">上架</el-button>
+              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.is_delete == 0" type="danger">下架</el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="pagination">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageForm.currentPage" :page-sizes="[20, 30, 40]" :page-size="pageForm.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageForm.currentPage" :page-sizes="[20,30,40]" :page-size="pageForm.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -54,13 +52,13 @@
 
 <script>
 export default {
-  name: "ManageOrdinaryUsers",
+  name: "ManageDynamicManagement",
 
   data() {
     return {
       formInline: {
-        nickname: "",
-        state: 2,
+        title: "",
+        is_delete: 2,
         account_number: "",
       },
       pageForm: {
@@ -81,21 +79,19 @@ export default {
     async getHomePageData() {
       try {
         let data = { ...this.formInline, ...this.pageForm };
-        let res = await this.$http.get("/manage/getDesignDepartmentList", data);
-        // console.log(res.data);
+        let res = await this.$http.get("/manage/getDynamicList", data);
         this.total = res.data.count;
         this.tableData = res.data.data;
       } catch (err) {}
     },
     //修改状态
-    async changeState(userInfo) {
+    async changeState(info) {
       let data = {
-        account_number: userInfo.account_number,
-        state: userInfo.state,
+        id: info.id,
+        is_delete: info.is_delete,
       };
       try {
-        let res = await this.$http.post("/manage/changeUserState", data);
-        // this.$tip(res.data);
+        let res = await this.$http.post("/manage/changeDynamicState", data);
         this.getHomePageData();
       } catch (err) {}
     },
@@ -117,14 +113,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.manageUser {
+.dynamicManagement {
   height: 100%;
   background: #fff;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   padding: 20px;
   box-sizing: border-box;
-  // overflow: hidden;
   .header {
     display: flex;
     .el-form.demo-form-inline.el-form--inline {

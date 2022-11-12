@@ -25,7 +25,8 @@
     <!-- 表格 -->
     <div class="content">
       <el-table :data="tableData" height="calc(100vh - 240px)" :header-cell-style="{background:'#eff3f6','text-align':'center'}" stripe style="width: 100%">
-        <el-table-column label="序号" type="index" align="center" width="50" />
+        <!-- <el-table-column label="序号" type="index" align="center" width="50" /> -->
+        <el-table-column prop="id" label="ID" align="center" width="50" />
         <el-table-column prop="account_number" label="账号" align="center" width="150" />
         <el-table-column prop="nickname" label="昵称" align="center" width="160" />
         <el-table-column prop="sex" label="性别" align="center" width="50" />

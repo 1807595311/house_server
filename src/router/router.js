@@ -54,7 +54,16 @@ export const routes = [
         component: () => import("../views/statistics/Statistics.vue"),
         meta: {
           title: "统计信息",
-          icon: "el-icon-user-solid"
+          icon: "el-icon-s-data"
+        }
+      },
+      {
+        path: "/dynamicManagement",
+        name: "DynamicManagement",
+        component: () => import("../views/dynamic/DynamicManagement.vue"),
+        meta: {
+          title: "动态管理",
+          icon: "el-icon-s-order"
         }
       }
     ],

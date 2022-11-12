@@ -14,7 +14,7 @@
           <el-menu :unique-opened="true" default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#393D49" text-color="#fff" active-text-color="#409EFF">
             <!-- 没有二级菜单的路由 -->
             <el-menu-item v-if="item.children?false:true" @click="showView(item.path)" v-for="(item,index) in routes" :key="index" :index="index.toString()">
-              <i class="el-icon-menu"></i>
+              <i :class="item.meta.icon"></i>
               <span slot="title">{{item.meta.title}}</span>
             </el-menu-item>
             <!-- 有二级菜单的路由 -->

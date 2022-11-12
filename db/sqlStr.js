@@ -18,6 +18,9 @@ const changeUserState = require(path.resolve(__basename, 'db/sql/manage/changeUs
 const getDesignDepartmentList = require(path.resolve(__basename, 'db/sql/manage/getDesignDepartmentList.js'));
 const getDesignDepartmentCount = require(path.resolve(__basename, 'db/sql/manage/getDesignDepartmentCount.js'));
 const getStatisticsInfo = require(path.resolve(__basename, 'db/sql/manage/getStatisticsInfo.js'));
+const getDynamicList = require(path.resolve(__basename, 'db/sql/manage/getDynamicList.js'));
+const changeDynamicState = require(path.resolve(__basename, 'db/sql/manage/changeDynamicState.js'));
+const getDynamicCount = require(path.resolve(__basename, 'db/sql/manage/getDynamicCount.js'));
 
 // 用户端sql
 const inster_ord_user = require(path.resolve(__basename, 'db/sql/client/inster_ord_user.js'));
@@ -66,6 +69,9 @@ module.exports = {
     getDesignDepartmentList, // 查询设计机构列表
     getDesignDepartmentCount, // 查询设计机构数量
     getStatisticsInfo, // 查询统计信息首页数据
+    getDynamicList, // 查询动态管理列表
+    getDynamicCount, // 查询动态数量
+    changeDynamicState, // 修改动态状态
 
     // 用户端
     inster_ord_user, // 普通用户注册

@@ -12,6 +12,8 @@ let manage_get_ordinary_userList = require(path.resolve(__basename, 'controller/
 let changeUserState = require(path.resolve(__basename, 'controller/manage/changeUserState.js')); // 改变用户/设计机构 状态(启用/禁用)
 let getDesignDepartmentList = require(path.resolve(__basename, 'controller/manage/getDesignDepartmentList.js')); // 设计机构列表
 let getStatisticsInfo = require(path.resolve(__basename, 'controller/manage/getStatisticsInfo.js')); // 获取统计信息
+let getDynamicList = require(path.resolve(__basename, 'controller/manage/getDynamicList.js')); // 获取动态列表
+let changeDynamicState = require(path.resolve(__basename, 'controller/manage/changeDynamicState.js')); // 修改动态状态
 
 // 用户端接口
 let register_ord_user = require(path.resolve(__basename, 'controller/client/register_ord_user.js')); // 普通用户注册
@@ -59,5 +61,7 @@ module.exports = {
     my_dynamic,
     dynamic_edit_detail,
     edit_dynamic,
-    user_follow
+    user_follow,
+    getDynamicList,
+    changeDynamicState
 }

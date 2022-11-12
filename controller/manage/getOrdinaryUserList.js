@@ -1,3 +1,4 @@
+// 普通用户列表
 module.exports = (req, res) => {
     let data = req.query;
     let pageSize = data.pageSize * data.currentPage;

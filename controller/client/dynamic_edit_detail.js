@@ -9,7 +9,6 @@ module.exports = async (req, res) => {
             if(err) return res.send({msg: err,status: -1});
             if(result.length > 0){
                 let fileUrl = `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}`;
-                console.log('编辑详情==>',result);
                 let data  = {
                     ...result[0],
                     cover: fileUrl + result[0].cover,

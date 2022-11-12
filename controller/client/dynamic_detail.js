@@ -57,9 +57,9 @@ module.exports = async (req, res) => {
                 }
             })
         })
-        // 查询该动态是否被收藏
+        // 查询该动态的发布者是否被登陆用户关注
         let isFollow = new Promise((resolve, reject) => {
-            db.query(sqlStr.find_follow_by_dynamic({id: dynamicDetail.id }), (err, result) => {
+            db.query(sqlStr.find_follow_by_dynamic({id: dynamicDetail.id,account_number }), (err, result) => {
                 if(result.length > 0) resolve({is_follow: true});
                 else resolve({is_follow: false});
             })

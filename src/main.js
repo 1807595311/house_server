@@ -1,20 +1,22 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import http from '@/utils/http'
-import tip from '@/utils/tip'
-import confirm from '@/utils/confirm'
-import cookie from 'vue-cookie'
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import http from '@/utils/http';
+import tip from '@/utils/tip';
+import confirm from '@/utils/confirm';
+import cookie from 'vue-cookie';
 import VueRouter from 'vue-router';
-import  * as  echarts from 'echarts'
-import VueAnimateNumber from 'vue-animate-number'
+import  * as  echarts from 'echarts';
+import VueAnimateNumber from 'vue-animate-number';
+import mavonEditor from "mavon-editor";
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(VueAnimateNumber)
+Vue.use(mavonEditor);
 Vue.prototype.$http = http;
 Vue.prototype.$cookie = cookie;
 Vue.prototype.$tip = tip;

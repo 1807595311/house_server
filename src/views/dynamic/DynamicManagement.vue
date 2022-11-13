@@ -28,14 +28,22 @@
         <!-- <el-table-column label="序号" type="index" align="center" width="50" /> -->
         <el-table-column prop="id" label="ID" align="center" width="50" />
         <el-table-column prop="account_number" label="账号" align="center" width="150" />
-        <el-table-column prop="title" label="标题" align="center" width="200" show-overflow-tooltip />
+        <el-table-column prop="title" label="标题" align="center" width="250" show-overflow-tooltip />
+        <el-table-column prop="cover" label="封面" align="center" width="100">
+          <template slot-scope="scope">
+            <div>
+              <el-image style="width: 50px; height: 50px" :src="scope.row.cover" :preview-src-list="[scope.row.cover]">
+              </el-image>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="tags" label="标签" align="center" width="180" show-overflow-tooltip />
-        <el-table-column prop="views" label="浏览次数" align="center" width="100"  />
+        <el-table-column prop="views" label="浏览次数" align="center" width="100" />
         <el-table-column prop="create_time" label="创建时间" width="180" align="center" />
         <el-table-column label="操作" align="center" width="">
           <template slot-scope="scope">
             <div>
-              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" type="primary">查看</el-button>
+              <el-button class="operation-btn" size="mini" @click="showDialog(scope.row)" type="primary">查看</el-button>
               <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.is_delete == 1" type="success">上架</el-button>
               <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.is_delete == 0" type="danger">下架</el-button>
             </div>
@@ -47,6 +55,17 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageForm.currentPage" :page-sizes="[20,30,40]" :page-size="pageForm.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+    <el-dialog title="动态详情" :visible.sync="dialogVisible" width="55%">
+      <!-- <div v-html="dialogContent" class="dialogContent"></div> -->
+      <div class="dialogContent">
+        <div class="markdown-body" v-html="dialogContent"></div>
+        <mavon-editor v-show="false" ref="md" />
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,6 +86,8 @@ export default {
       },
       total: 0,
       tableData: [],
+      dialogVisible: false,
+      dialogContent: ''
     };
   },
 
@@ -95,6 +116,10 @@ export default {
         this.getHomePageData();
       } catch (err) {}
     },
+    showDialog(info){
+      this.dialogVisible = true;
+      this.dialogContent = info.content;
+    },
     // 条件搜索
     search() {
       this.getHomePageData();
@@ -113,6 +138,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "mavon-editor/dist/css/index.css";
 .dynamicManagement {
   height: 100%;
   background: #fff;
@@ -137,5 +163,9 @@ export default {
     justify-content: flex-end;
     padding: 20px;
   }
+}
+.dialogContent{
+  overflow-y: scroll;
+  height: 55vh;
 }
 </style>

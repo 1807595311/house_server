@@ -44,6 +44,10 @@
           <div class="content">
             <img :src="dynamicDetail.head_img" alt="">
             <p>{{dynamicDetail.nickname}}</p>
+            <p>
+              <span style="margin-right: 10px;">关注：{{dynamicDetail.follow_to_count}}</span>
+              <span>粉丝：{{dynamicDetail.follows_count}}</span>
+            </p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
             <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1 && account_number && dynamicDetail.account_number != account_number && $store.state.userInfo.customer_type == 0">
@@ -235,7 +239,7 @@ export default {
       overflow: hidden;
       .content {
         margin-top: 50px;
-        height: 250px;
+        // height: 250px;
         p {
           text-align: center;
         }

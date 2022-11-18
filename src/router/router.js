@@ -95,9 +95,17 @@ export const routes = [
       path: "/search_dynamic",
       name: "SearchDynamic",
       meta: {
-        title: "搜索",
+        title: "更多动态",
       },
       component: () => import("@/views/tabViews/SearchDynamic.vue"),
+    },
+    {
+      path: "/search_designer",
+      name: "SearchDesigner",
+      meta: {
+        title: "更多动态",
+      },
+      component: () => import("@/views/tabViews/SearchDesigner.vue"),
     },
     {
       path: "/dynamic_details",

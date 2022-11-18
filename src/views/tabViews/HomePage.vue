@@ -1,31 +1,44 @@
 <template>
   <div class="home">
-    <Carousel v-model="activeIndex">
-      <Carousel-item>
-        <div class="swiper_box d_f j_c_sb a_l_c">
+    <Carousel v-model="activeIndex" autoplay :autoplay-speed="4000">
+      <Carousel-item v-for="(v,i) in banner_cases" :key="i">
+        <div @click="toDetail(v.id)" class="swiper_box d_f j_c_c a_l_c">
+          <div class="bg" :style="{background:`url(${v.cover})`}"></div>
           <div class="item">
+            <img :src="v.cover" alt="">
+            <div class="item-title d_f a_l_c j_c_c">
+              <p>{{v.title}}</p>
+            </div>
+          </div>
+          <!-- <div class="item">
             <img src="@/assets/a.png" alt="">
             <div class="item-title d_f a_l_c j_c_c">
               <p>这里是标题</p>
             </div>
-          </div>
-          <div class="item">
-            <img src="@/assets/a.png" alt="">
-            <div class="item-title d_f a_l_c j_c_c">
-              <p>这里是标题</p>
-            </div>
-          </div>
+          </div> -->
         </div>
       </Carousel-item>
     </Carousel>
     <div class="recommend">
-      <p>推荐机构</p>
+      <div class="d_f j_c_sb">
+        <p>推荐机构</p>
+        <p @click="toSearch" class="more">
+          <span style="margin-right:10px;">更多</span>
+          <Icon  style="margin-right:5px;" type="chevron-right"></Icon>
+          </p>
+      </div>
       <div class="box d_f">
-        <Designer class="design" v-for="v in 8" :key="v"></Designer>
+        <Designer class="design" v-for="v in recommend_design" :recommend_design="v" :key="v.id"></Designer>
       </div>
     </div>
     <div class="recommend">
-      <p>推荐动态</p>
+      <div class="d_f j_c_sb">
+        <p>推荐动态</p>
+        <p @click="toSearch" class="more">
+          <span style="margin-right:10px;">更多</span>
+          <Icon  style="margin-right:5px;" type="chevron-right"></Icon>
+          </p>
+      </div>
       <div class="box dynamic-box d_f">
         <Dynamic v-for="v in recommended_cases" :dynamic="v" :key="v.id"></Dynamic>
       </div>
@@ -45,7 +58,9 @@ export default {
   data() {
     return {
       activeIndex: 0,
-      recommended_cases: []
+      recommended_cases: [],
+      banner_cases: [],
+      recommend_design: []
     };
   },
 
@@ -61,24 +76,49 @@ export default {
         let res = await this.$http.get("/client/home_info");
         let data = res.data.data;
         this.recommended_cases = data.recommended_cases;
+        this.banner_cases = data.banner_cases;
+        this.recommend_design = data.recommend_design;
       } catch (err) {}
     },
+    toDetail(id) {
+      this.$router.push({ path: "/dynamic_details", query: { id } });
+    },
+    toSearch(){
+      this.$router.push({
+        path: '/search_dynamic',
+        query: { 
+          keyword: ''
+        } 
+      })
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .home {
-  .swiper_box {
-    height: 500px;
+  .ivu-carousel{
     overflow: hidden;
-    background: #fff;
+  }
+  .swiper_box {
+    position: relative;
+    overflow: hidden;
+    .bg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: url(@/assets/a.png);
+      background-size: cover;
+      filter: blur(50px);
+      transform: scale(3);
+      overflow: hidden;
+    }
     .item {
       height: 500px;
       position: relative;
       font-size: 0;
-      &:hover {
-        & {
+      // &:hover {
+      //   & {
           cursor: pointer;
           .item-title {
             height: 80px;
@@ -87,8 +127,8 @@ export default {
               font-size: 18px;
             }
           }
-        }
-      }
+        // }
+      // }
       img {
         width: 600px;
         height: 500px;
@@ -108,6 +148,10 @@ export default {
   }
   .recommend {
     margin-top: 20px;
+    background: #fff;
+    .more:hover{
+      cursor: pointer;
+    }
     .box {
       background: #fff;
       flex-wrap: wrap;

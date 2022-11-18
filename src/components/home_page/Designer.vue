@@ -3,9 +3,9 @@
     <div class="designer">
       <div class="designer-box">
         <div class="designer-item" :style="'border-bottom: 3px solid '+ bottomBorderColor">
-          <img src="@/assets/a.png" alt="">
+          <img :src="recommend_design.head_img" alt="">
           <div class="maskbox d_f a_l_c j_c_c">
-            <span>王设计师</span>
+            <span>{{recommend_design.nickname}}</span>
           </div>
         </div>
       </div>
@@ -16,7 +16,11 @@
 <script>
 export default {
   name: "ClientDesigner",
-
+  props:{
+    recommend_design:{
+      type: Object
+    }
+  },
   data() {
     return {
         bottomBorderColor: '#'
@@ -51,7 +55,7 @@ export default {
     &:hover {
       cursor: pointer;
       .maskbox {
-        background: rgba(0, 0, 0, 0.5) !important;
+        background: rgba(0, 0, 0, 0.7) !important;
         z-index: 1;
         span {
           transition: all 0.2s;

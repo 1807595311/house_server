@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
             }
             return res.send({
                 msg: '搜索完毕',
-                status: 0,
+                status: 2,
                 data: result
             })
         })

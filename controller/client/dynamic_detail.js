@@ -39,19 +39,21 @@ module.exports = async (req, res) => {
         })
         // 查询该动态点赞数，收藏数，评论数
         let countInfo = new Promise((resolve, reject) => {
-            db.query(sqlStr.find_count({account_number,id: dynamicDetail.id }), (err, result) => {
+            db.query(sqlStr.find_count({account_number: dynamicDetail.account_number,id: dynamicDetail.id }), (err, result) => {
+                let countData = {
+                    collection_count: 0,
+                    fabulous_count: 0,
+                    comment_count: 0,
+                    follows_count: 0,
+                    follow_to_count: 0
+                }
                 if(result.length > 0) {
-                    let countData = {
+                    countData = {
                         collection_count: result[0][0].collection_count,
                         fabulous_count: result[1][0].fabulous_count,
-                        comment_count: result[2][0].comment_count
-                    }
-                    resolve(countData);
-                }else{
-                    let countData = {
-                        collection_count: 0,
-                        fabulous_count: 0,
-                        comment_count: 0
+                        comment_count: result[2][0].comment_count,
+                        follows_count:  result[3][0].follows_count,
+                        follow_to_count: result[4][0].follow_to_count
                     }
                     resolve(countData);
                 }

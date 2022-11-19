@@ -50,6 +50,8 @@ const delete_follow = require(path.resolve(__basename, 'db/sql/client/delete_fol
 const inster_follow = require(path.resolve(__basename, 'db/sql/client/inster_follow.js'));
 const find_follow = require(path.resolve(__basename, 'db/sql/client/find_follow.js'));
 const find_follow_by_dynamic = require(path.resolve(__basename, 'db/sql/client/find_follow_by_dynamic.js'));
+const search_users = require(path.resolve(__basename, 'db/sql/client/search_users.js'));
+const find_follow_by_account = require(path.resolve(__basename, 'db/sql/client/find_follow_by_account.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -99,6 +101,8 @@ module.exports = {
     find_count, // 查询动态的点赞数，收藏数，评论数
     find_follow, // 查询某用户是否被该用户关注
     delete_follow, // 取消关注
-    inster_follow, //关注
-    find_follow_by_dynamic // 通过动态查询是否关注该用户
+    inster_follow, // 关注
+    find_follow_by_dynamic, // 通过动态查询是否关注该用户
+    search_users, // 搜索用户/机构
+    find_follow_by_account // 查询我的关注
 }

@@ -37,5 +37,7 @@ module.exports = app =>{
     app.post('/client/dynamic_edit_detail',controller.dynamic_edit_detail);// 编辑动态详情
     app.post('/client/edit_dynamic',controller.edit_dynamic);// 编辑动态详情
     app.post('/client/user_follow',controller.user_follow); // 关注(取消关注)
+    app.get('/client/search_users',controller.search_users);// 搜索用户/机构
+    app.post('/client/my_follow',controller.my_follow);// 搜索用户/机构
     
 }

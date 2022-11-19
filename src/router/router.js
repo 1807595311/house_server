@@ -76,6 +76,14 @@ export const routes = [
       component: () => import("@/views/RegisterDes.vue"),
     },
     {
+      path: "/follow",
+      name: "Follow",
+      meta: {
+        title: "我的关注",
+      },
+      component: () => import("@/views/user/Follow.vue"),
+    },
+    {
       path: "/likes",
       name: "Likes",
       meta: {
@@ -103,7 +111,7 @@ export const routes = [
       path: "/search_designer",
       name: "SearchDesigner",
       meta: {
-        title: "更多动态",
+        title: "更多机构",
       },
       component: () => import("@/views/tabViews/SearchDesigner.vue"),
     },

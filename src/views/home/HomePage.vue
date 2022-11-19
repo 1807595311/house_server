@@ -27,7 +27,7 @@
           </div>
           <div class="tooltip_content" slot="content">
             <p>个人资料</p>
-            <p @click="toDynamicLikes">我的关注</p>
+            <p @click="toFollow">我的关注</p>
             <p @click="toDynamicLikes">我的点赞</p>
             <p @click="toCollection">我的收藏</p>
             <p>我的评论</p>
@@ -112,6 +112,9 @@ export default {
     },
     toCollection(){
       this.$router.push('/collection')
+    },
+    toFollow(){
+      this.$router.push('/follow')
     },
   },
 };

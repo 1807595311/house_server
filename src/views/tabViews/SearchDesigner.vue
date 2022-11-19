@@ -2,12 +2,16 @@
   <div class="dynamicList">
     <HeadBG title="搜索"></HeadBG>
     <div class="search">
-      <Input v-model="searchValue" size="large" placeholder="搜索相关动态(内容/作者/标题/标签)">
-      <Button @click="searchByKeword(searchValue)" slot="append" icon="ios-search"></Button>
+      <Input v-model="searchValue" size="large" :placeholder="searchPlaceholder">
+      <Select v-model="searchType" slot="prepend" style="width: 80px">
+            <Option value="des">设计机构</Option>
+            <Option value="ord">普通用户</Option>
+        </Select>
+        <Button @click="searchByKeword(searchValue)" slot="append" icon="ios-search"></Button>
       </Input>
     </div>
-    <div class="content box dynamic-box d_f">
-      <Dynamic v-for="v in dynamicList" :dynamic="v" :key="v.id"></Dynamic>
+    <div class="box">
+      <DesignDepartment v-for="v in designList" :design="v" :key="v.id"></DesignDepartment>
     </div>
     <div class="scroll">已加载全部</div>
   </div>
@@ -15,18 +19,20 @@
 
 <script>
 import HeadBG from "@/components/HeadBG.vue";
-import Dynamic from "@/components/Dynamic.vue";
+import DesignDepartment from "@/components/DesignDepartment.vue";
 export default {
   name: "ClientSearchDynamic",
   components: {
     HeadBG,
-    Dynamic
+    DesignDepartment
   },
   data() {
     return {
-      dynamicList: [],
+      designList: [],
       keyword: "",
-      searchValue: ''
+      searchValue: '',
+      searchType: 'des',
+      searchPlaceholder: '搜索机构(昵称/账号/机构名称)'
     };
   },
   created() {
@@ -34,18 +40,30 @@ export default {
     this.searchValue = this.keyword;
     this.searchByKeword(this.keyword);
   },
+  watch: {
+    searchType(val){
+      let type = ['des','ord'];
+      let placeholder = ['搜索机构(昵称/账号/机构名称)','搜索用户(昵称/账号)']
+      let index = type.indexOf(val);
+      this.searchPlaceholder = placeholder[index];
+    }
+  },
   methods: {
+    getType(){
+      let type = ['des','ord'];
+      return type.indexOf(this.searchType);
+    },
     async searchByKeword(keyword) {
       try {
-        let res = await this.$http.get("/client/search_dynamic", { keyword});
-        return this.dynamicList = res.data.data;
+        let res = await this.$http.get("/client/search_users", { keyword, type: this.getType() });
+        return this.designList = res.data.data;
       } catch (err) {}
     }
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dynamicList {
   .search {
     position: absolute;
@@ -61,25 +79,14 @@ export default {
     }
   }
   .box {
-    width: 1280px;
+    width: 1200px;
     padding-top: 20px;
     margin: auto;
     background: #fff;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    .design {
-      margin-right: 30px;
-      &:last-of-type {
-        margin-right: 0;
-      }
-    }
-  }
-  .dynamic:last-child:nth-child(4n - 1) {
-    margin-right: calc(24% + 4% / 3);
-  }
-
-  .dynamic:last-child:nth-child(4n - 2) {
-    margin-right: calc(48% + 8% / 3);
+    display: grid;
+    grid-template-columns: repeat(auto-fill,280px);
+    column-gap: 26px;
+    row-gap: 20px;
   }
   .scroll {
     margin: auto;

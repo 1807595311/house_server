@@ -22,8 +22,8 @@
     <div class="recommend">
       <div class="d_f j_c_sb">
         <p>推荐机构</p>
-        <p @click="toSearch" class="more">
-          <span style="margin-right:10px;">更多</span>
+        <p @click="toSearchDesigner" class="more">
+          <span style="margin-right:10px;">更多机构</span>
           <Icon  style="margin-right:5px;" type="chevron-right"></Icon>
           </p>
       </div>
@@ -35,7 +35,7 @@
       <div class="d_f j_c_sb">
         <p>推荐动态</p>
         <p @click="toSearch" class="more">
-          <span style="margin-right:10px;">更多</span>
+          <span style="margin-right:10px;">更多动态</span>
           <Icon  style="margin-right:5px;" type="chevron-right"></Icon>
           </p>
       </div>
@@ -90,7 +90,15 @@ export default {
           keyword: ''
         } 
       })
-    }
+    },
+    toSearchDesigner(){
+      this.$router.push({
+        path: '/search_designer',
+        query: { 
+          keyword: ''
+        } 
+      })
+    },
   },
 };
 </script>

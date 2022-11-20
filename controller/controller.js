@@ -34,6 +34,7 @@ let edit_dynamic = require(path.resolve(__basename, 'controller/client/edit_dyna
 let user_follow = require(path.resolve(__basename, 'controller/client/user_follow.js')); // 关注（取消关注）
 let search_users = require(path.resolve(__basename, 'controller/client/search_users.js')); // 搜索机构
 let my_follow = require(path.resolve(__basename, 'controller/client/my_follow.js')); // 我的关注
+let find_other_userinfo = require(path.resolve(__basename, 'controller/client/find_other_userinfo.js')); // 查看其他用户资料
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -67,5 +68,6 @@ module.exports = {
     getDynamicList,
     changeDynamicState,
     search_users,
-    my_follow
+    my_follow,
+    find_other_userinfo
 }

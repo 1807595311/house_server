@@ -52,6 +52,8 @@ const find_follow = require(path.resolve(__basename, 'db/sql/client/find_follow.
 const find_follow_by_dynamic = require(path.resolve(__basename, 'db/sql/client/find_follow_by_dynamic.js'));
 const search_users = require(path.resolve(__basename, 'db/sql/client/search_users.js'));
 const find_follow_by_account = require(path.resolve(__basename, 'db/sql/client/find_follow_by_account.js'));
+const find_other_userinfo = require(path.resolve(__basename, 'db/sql/client/find_other_userinfo.js'));
+const find_dynamic_by_userinfo = require(path.resolve(__basename, 'db/sql/client/find_dynamic_by_userinfo.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -104,5 +106,7 @@ module.exports = {
     inster_follow, // 关注
     find_follow_by_dynamic, // 通过动态查询是否关注该用户
     search_users, // 搜索用户/机构
-    find_follow_by_account // 查询我的关注
+    find_follow_by_account, // 查询我的关注
+    find_other_userinfo, // 查询该用户资料
+    find_dynamic_by_userinfo // 查询该用户的动态
 }

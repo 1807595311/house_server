@@ -39,5 +39,6 @@ module.exports = app =>{
     app.post('/client/user_follow',controller.user_follow); // 关注(取消关注)
     app.get('/client/search_users',controller.search_users);// 搜索用户/机构
     app.post('/client/my_follow',controller.my_follow);// 搜索用户/机构
+    app.post('/client/find_other_userinfo',controller.find_other_userinfo);// 查看其他用户资料
     
 }

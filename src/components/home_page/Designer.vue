@@ -1,11 +1,14 @@
 <template>
   <div>
     <div class="designer">
-      <div class="designer-box">
-        <div class="designer-item" :style="'border-bottom: 3px solid '+ bottomBorderColor">
-          <img :src="recommend_design.head_img" alt="">
+      <div class="designer-box" @click="toUserHome">
+        <div
+          class="designer-item"
+          :style="'border-bottom: 3px solid ' + bottomBorderColor"
+        >
+          <img :src="recommend_design.head_img" alt="" />
           <div class="maskbox d_f a_l_c j_c_c">
-            <span>{{recommend_design.nickname}}</span>
+            <span>{{ recommend_design.nickname }}</span>
           </div>
         </div>
       </div>
@@ -16,14 +19,14 @@
 <script>
 export default {
   name: "ClientDesigner",
-  props:{
-    recommend_design:{
+  props: {
+    recommend_design: {
       type: Object
     }
   },
   data() {
     return {
-        bottomBorderColor: '#'
+      bottomBorderColor: '#'
     };
   },
 
@@ -32,12 +35,22 @@ export default {
   },
 
   methods: {
-    randomColor(){
-        let colorStr = ['0','a','1','7','b','2','8','c','3','9','d','4','e','5','f','6'];
-        for(let j = 0; j < 6; j++){
-            let random = parseInt(Math.random() * 16)
-            this.bottomBorderColor += colorStr[random];
+    randomColor() {
+      let colorStr = ['0', 'a', '1', '7', 'b', '2', '8', 'c', '3', '9', 'd', '4', 'e', '5', 'f', '6'];
+      for (let j = 0; j < 6; j++) {
+        let random = parseInt(Math.random() * 16)
+        this.bottomBorderColor += colorStr[random];
+      }
+    },
+    toUserHome() {
+      this.$router.push(
+        {
+          path: '/user_home',
+          query: {
+            account_number: this.recommend_design.account_number,
+          }
         }
+      )
     }
   },
 };

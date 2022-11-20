@@ -6,20 +6,18 @@
         <Tab-pane label="已发布">
           <div class="container">
             <Dynamic v-for="v in published" :dynamic="v" :key="v.id">
-                <template slot="del"><span @click.stop="deleteDynamic">删除</span></template>
+                <template slot="del"><span @click.stop="deleteDynamic(v)">删除</span></template>
                 <template slot="edit"><span @click.stop="editDynamic(v.id)">编辑</span></template>
-                <template slot="down"><span @click.stop="deleteDynamic">下架</span></template>
             </Dynamic>
           </div>
           <div class="empty">
             已加载全部
           </div>
         </Tab-pane>
-        <Tab-pane label="已下架">
+        <Tab-pane label="已删除">
           <div class="container">
             <Dynamic v-for="v in offshelf" :dynamic="v" :key="v.id">
-                <template slot="del"><span @click.stop="deleteDynamic">删除</span></template>
-                <template slot="up"><span @click.stop="deleteDynamic">上架</span></template>
+                <template slot="up"><span @click.stop="deleteDynamic(v)">重新发布</span></template>
             </Dynamic>
           </div>
           <div class="empty">
@@ -59,8 +57,15 @@ export default {
         this.offshelf = res.data.data.offshelf;
       } catch (err) {}
     },
-    deleteDynamic(){
-        console.log(123);
+    async deleteDynamic(info){
+        try{
+          let data = {
+            id: info.id,
+            is_delete: info.is_delete
+          }
+          await this.$http.post('/manage/changeDynamicState', data);
+          this.getMyDynamic();
+        }catch(err){}
     },
     editDynamic(id){
       this.$router.push({name: 'DynamicEdit',params:{id}});

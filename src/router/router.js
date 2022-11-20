@@ -131,5 +131,13 @@ export const routes = [
       },
       component: () => import("@/views/tabViews/ReleaseDynamics.vue"),
     },
+    {
+      path: "/user_home",
+      name: "UserHome",
+      meta: {
+        title: "用户信息",
+      },
+      component: () => import("@/views/user/UserHome.vue"),
+    },
   ];
   

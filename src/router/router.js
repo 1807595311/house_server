@@ -30,7 +30,8 @@ export const routes = [
           name: "MyConsult",
           // component: () => import("@/views/tabViews/MoreDynamic.vue"),
           meta: {
-            title: "我的咨询"
+            title: "我的咨询",
+            keepAlive: true
           },
         },
         {
@@ -38,7 +39,8 @@ export const routes = [
           name: "MyDynamic",
           component: () => import("@/views/tabViews/MyDynamic.vue"),
           meta: {
-            title: "我的动态"
+            title: "我的动态",
+            keepAlive: true
           },
         },
         {
@@ -46,7 +48,8 @@ export const routes = [
           name: "ReleaseDynamics",
           component: () => import("@/views/tabViews/ReleaseDynamics.vue"),
           meta: {
-            title: "发布动态"
+            title: "发布动态",
+            keepAlive: true
           },
         },
       ],
@@ -80,6 +83,7 @@ export const routes = [
       name: "Follow",
       meta: {
         title: "我的关注",
+        keepAlive: true
       },
       component: () => import("@/views/user/Follow.vue"),
     },
@@ -88,6 +92,7 @@ export const routes = [
       name: "Likes",
       meta: {
         title: "我的点赞",
+        keepAlive: true
       },
       component: () => import("@/views/user/Likes.vue"),
     },
@@ -96,6 +101,7 @@ export const routes = [
       name: "Collection",
       meta: {
         title: "我的收藏",
+        keepAlive: true
       },
       component: () => import("@/views/user/Collection.vue"),
     },
@@ -104,6 +110,7 @@ export const routes = [
       name: "SearchDynamic",
       meta: {
         title: "更多动态",
+        keepAlive: true
       },
       component: () => import("@/views/tabViews/SearchDynamic.vue"),
     },
@@ -112,6 +119,7 @@ export const routes = [
       name: "SearchDesigner",
       meta: {
         title: "更多机构",
+        keepAlive: true
       },
       component: () => import("@/views/tabViews/SearchDesigner.vue"),
     },
@@ -120,6 +128,7 @@ export const routes = [
       name: "DynamicDetails",
       meta: {
         title: "动态详情",
+        keepAlive: false
       },
       component: () => import("@/views/DynamicDetails.vue"),
     },
@@ -127,7 +136,7 @@ export const routes = [
       path: "/dynamic_edit",
       name: "DynamicEdit",
       meta: {
-        title: "编辑动态",
+        title: "编辑动态"
       },
       component: () => import("@/views/tabViews/ReleaseDynamics.vue"),
     },
@@ -136,6 +145,7 @@ export const routes = [
       name: "UserHome",
       meta: {
         title: "用户信息",
+        keepAlive: false
       },
       component: () => import("@/views/user/UserHome.vue"),
     },

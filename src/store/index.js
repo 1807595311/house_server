@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: true,
-    userInfo: null
+    userInfo: null,
+    activedTab: 0
   },
   getters: {
   },

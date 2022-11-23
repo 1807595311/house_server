@@ -3,7 +3,7 @@
     <HeadBG title="搜索"></HeadBG>
     <div class="search">
       <Input v-model="searchValue" size="large" :placeholder="searchPlaceholder">
-      <Select v-model="searchType" slot="prepend" style="width: 80px">
+      <Select v-model="searchType" slot="prepend" style="width: 80px;">
             <Option value="des">设计机构</Option>
             <Option value="ord">普通用户</Option>
         </Select>
@@ -63,16 +63,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dynamicList {
   .search {
     position: absolute;
     top: 150px;
     left: calc(50% - 250px);
     width: 500px;
-    .ivu-input-group-append {
+    .ivu-input-group-append,.ivu-input-group-prepend {
       background: $theme_color !important;
       border: 1px solid $theme_color !important;
+    }
+    .ivu-select-selection,.ivu-icon.ivu-icon-arrow-down-b.ivu-select-arrow{
+      color: #ddd !important;
     }
     .ivu-icon.ivu-icon-ios-search {
       color: #fff !important;

@@ -1,6 +1,6 @@
 <template>
   <div class="design">
-    <div class="container">
+    <div class="container" @click="toUserHome">
         <div class="headimg">
             <img :src="design.headimg">
         </div>
@@ -21,6 +21,18 @@ export default {
     props: {
         design: {
             type: Object
+        }
+    },
+    methods: {
+        toUserHome(){
+            this.$router.push(
+                {
+                    path: '/user_home', 
+                    query: {
+                        account_number: this.design.account_number,
+                    }
+                }
+            )
         }
     }
 }

@@ -6,19 +6,30 @@
       </div>
     </Spin> -->
     <!-- <transition name="fade"> -->
-      <router-view />
+    <keep-alive>
+    <!-- 需要缓存的视图组件 -->
+      <router-view v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <!-- 不需要缓存的视图组件 -->
+    <router-view v-if="!$route.meta.keepAlive" />
     <!-- </transition> -->
-
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      tabList: []
     };
   },
   created() {
-    if (this.$router.path !== "/home") this.$router.replace("home");
+    this.tabList = this.$router.options.routes.find((v) => v.name == "HomePage").children;
+    // if (this.$router.path !== "/home") this.$router.replace("home");
+  },
+  watch: {
+    $route(now, old) {
+      this.$store.state.activedTab = this.tabList.findIndex(v =>  v.path == now.path);
+    }
   }
 };
 </script>
@@ -48,9 +59,10 @@ export default {
 .fade-leave-avtive,
 .fade-enter,
 .fade-leave-to {
-  transition: all .1s;
+  transition: all 0.1s;
 }
-.fade-enter-to,.fade-enter-active{
+.fade-enter-to,
+.fade-enter-active {
   opacity: 1;
 }
 .fade-enter,

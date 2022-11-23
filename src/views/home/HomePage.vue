@@ -4,7 +4,7 @@
       <div class="navigation_box d_f j_c_sa">
         <div class="logo">好宜居</div>
         <div class="tab d_f j_c_sa a_l_c">
-          <p :class="{active:activedTab===index}" v-for="(v,index) in tabList" @click="changeActived(index,v.path)" :key="index">
+          <p :class="{active:$store.state.activedTab===index}" v-for="(v,index) in tabList" @click="changeActived(v.path)" :key="index">
             {{v.meta.title}}
           </p>
         </div>
@@ -70,14 +70,11 @@ export default {
   },
   mounted() {
     // 获取子路由
-    this.tabList = this.$router.options.routes.find(
-      (v) => v.name == "HomePage"
-    ).children;
+    this.tabList = this.$router.options.routes.find( (v) => v.name == "HomePage").children;
   },
 
   methods: {
-    changeActived(i, path) {
-      this.activedTab = i;
+    changeActived(path) {
       this.$router.push(path);
     },
     toLogin() {

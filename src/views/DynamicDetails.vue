@@ -1,7 +1,21 @@
 <template>
   <div class="clientDynamicDetails">
+    <!-- 评论弹出组件 -->
     <Drawer @close="toggle" align="right" :closeable="true">
-      <div v-if="open">content here</div>
+      <div class="drawerBox" v-if="open">
+        <!-- 发布评论 -->
+        <div class="commentReply">
+          <div class="selfHeadimg">
+            <img src="@/assets/a.png" alt="">
+            <Input type="textarea" :rows="4" placeholder="请输入评论内容..."></Input>
+          </div>
+          <div class="replyBtn">
+            <Button type="primary">评论</Button>
+          </div>
+        </div>
+        <!-- 评论和回复组件 -->
+        <Comment v-for="v in 10" :key="v"></Comment>
+      </div>
     </Drawer>
     <div class="header">
       <img :src="dynamicDetail.cover" alt="">
@@ -10,7 +24,7 @@
         <p>{{dynamicDetail.title}}</p>
         <p class="time">{{dynamicDetail.create_time}}</p>
         <!-- 标签 -->
-        <div class="tags">
+        <div class="tags">              
           <span v-for="(v,i) in tags" :key="i">{{v}}</span>
         </div>
         <!-- 关注 收藏 点赞 评论 -->
@@ -34,11 +48,13 @@
         </div>
       </div>
     </div>
+    <!-- 动态内容 -->
     <div class="box d_f j_c_sb">
       <div class="box_left">
         <div class="markdown-body" v-html="dynamicDetail.content"></div>
         <mavon-editor v-show="false" ref="md" />
       </div>
+      <!-- 发布者资料 -->
       <Affix>
         <div class="box_right">
           <div class="content">
@@ -79,10 +95,12 @@
 
 <script>
 import Drawer from "vue-simple-drawer";
+import Comment from "@/components/Comment.vue";
 export default {
   name: "ClientDynamicDetails",
   components: {
     Drawer,
+    Comment
   },
   data() {
     return {
@@ -164,12 +182,45 @@ export default {
 <style lang="scss" scoped>
 @import "mavon-editor/dist/css/index.css";
 ::v-deep .vue-simple-drawer {
+  min-width: 550px !important;
   color: black !important;
   background-color: white !important;
 }
 ::v-deep .mask {
   background-color: rgba(0, 0, 0, .7) !important;
 }
+.drawerBox::-webkit-scrollbar {
+  width: 0.5em;
+  background-color: #d9d9d9;
+}
+
+.drawerBox::-webkit-scrollbar-thumb {
+  border-radius: 0.25em;
+  background-color: #b9b9b9;
+}
+.drawerBox{
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 20px;
+  .commentReply{
+    margin: 20px 0;
+    .selfHeadimg{
+      display: flex;
+      img{
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        margin-right: 10px;
+      }
+    }
+    .replyBtn{
+      padding: 10px 0;
+      display: flex;
+      justify-content: end;
+    }
+  }
+}
+/////////////评论样式结束///////////////
 .clientDynamicDetails {
   // font-size: 1rem;
   .header {

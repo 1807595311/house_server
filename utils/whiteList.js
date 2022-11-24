@@ -9,4 +9,5 @@ module.exports = [
     '/client/dynamic_detail',
     '/client/search_dynamic',
     '/client/find_other_userinfo',
+    '/client/find_dynamic_comment',
 ]

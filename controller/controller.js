@@ -35,6 +35,9 @@ let user_follow = require(path.resolve(__basename, 'controller/client/user_follo
 let search_users = require(path.resolve(__basename, 'controller/client/search_users.js')); // 搜索机构
 let my_follow = require(path.resolve(__basename, 'controller/client/my_follow.js')); // 我的关注
 let find_other_userinfo = require(path.resolve(__basename, 'controller/client/find_other_userinfo.js')); // 查看其他用户资料
+let find_dynamic_comment = require(path.resolve(__basename, 'controller/client/find_dynamic_comment.js')); // 获取动态评论
+let dynamic_comment = require(path.resolve(__basename, 'controller/client/dynamic_comment.js')); // 动态评论
+let dynamic_comment_reply = require(path.resolve(__basename, 'controller/client/dynamic_comment_reply.js')); // 回复评论
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -69,5 +72,8 @@ module.exports = {
     changeDynamicState,
     search_users,
     my_follow,
-    find_other_userinfo
+    find_other_userinfo,
+    find_dynamic_comment,
+    dynamic_comment,
+    dynamic_comment_reply
 }

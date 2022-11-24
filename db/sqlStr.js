@@ -54,6 +54,9 @@ const search_users = require(path.resolve(__basename, 'db/sql/client/search_user
 const find_follow_by_account = require(path.resolve(__basename, 'db/sql/client/find_follow_by_account.js'));
 const find_other_userinfo = require(path.resolve(__basename, 'db/sql/client/find_other_userinfo.js'));
 const find_dynamic_by_userinfo = require(path.resolve(__basename, 'db/sql/client/find_dynamic_by_userinfo.js'));
+const find_comment_by_dynamic = require(path.resolve(__basename, 'db/sql/client/find_comment_by_dynamic.js'));
+const insert_comment = require(path.resolve(__basename, 'db/sql/client/insert_comment.js'));
+const dynamic_reply_comment = require(path.resolve(__basename, 'db/sql/client/dynamic_reply_comment.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -108,5 +111,8 @@ module.exports = {
     search_users, // 搜索用户/机构
     find_follow_by_account, // 查询我的关注
     find_other_userinfo, // 查询该用户资料
-    find_dynamic_by_userinfo // 查询该用户的动态
+    find_dynamic_by_userinfo, // 查询该用户的动态
+    find_comment_by_dynamic, // 通过动态id查询该动态下的评论
+    insert_comment, // 动态评论
+    dynamic_reply_comment // 回复评论
 }

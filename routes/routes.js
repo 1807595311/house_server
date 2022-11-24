@@ -39,6 +39,9 @@ module.exports = app =>{
     app.post('/client/user_follow',controller.user_follow); // 关注(取消关注)
     app.get('/client/search_users',controller.search_users);// 搜索用户/机构
     app.post('/client/my_follow',controller.my_follow);// 搜索用户/机构
-    app.post('/client/find_other_userinfo',controller.find_other_userinfo);// 查看其他用户资料
+    app.post('/client/find_other_userinfo',controller.find_other_userinfo); // 查看其他用户资料
+    app.get('/client/find_dynamic_comment',controller.find_dynamic_comment); // 查看动态评论
+    app.post('/client/dynamic_comment',controller.dynamic_comment); // 动态评论
+    app.post('/client/dynamic_comment_reply',controller.dynamic_comment_reply); // 回复评论
     
 }

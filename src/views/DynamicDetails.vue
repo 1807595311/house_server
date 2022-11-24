@@ -6,15 +6,18 @@
         <!-- 发布评论 -->
         <div class="commentReply">
           <div class="selfHeadimg">
-            <img src="@/assets/a.png" alt="">
-            <Input type="textarea" :rows="4" placeholder="请输入评论内容..."></Input>
+            <img :src="$store.state.userInfo.head_img" alt="">
+            <Input v-model="commentContent" type="textarea" :autosize="{minRows: 4,maxRows: 7}" placeholder="请输入评论内容（限50字）..."></Input>
           </div>
           <div class="replyBtn">
-            <Button type="primary">评论</Button>
+            <Button type="primary" @click="sendComment">评论</Button>
           </div>
         </div>
         <!-- 评论和回复组件 -->
-        <Comment v-for="v in 10" :key="v"></Comment>
+        <Comment @refreshComment="getComment" v-for="v in commentList" :key="v.id" :comment="v"></Comment>
+        <div class="empty">
+          已加载全部
+        </div>
       </div>
     </Drawer>
     <div class="header">
@@ -110,8 +113,10 @@ export default {
       flag: true,
       open: false,
       account_number: this.$store.state.userInfo? this.$store.state.userInfo.account_number : '',
-      detaId: null,
-      tags: []
+      dynamicId: null,
+      tags: [],
+      commentList: [],
+      commentContent: ''
     };
   },
   computed:{
@@ -123,10 +128,10 @@ export default {
   },
 
   created() {
-    this.detaId = this.$route.query.id
-    this.getDynamicDetail(this.detaId);
+    this.dynamicId = Number( this.$route.query.id );
+    this.getDynamicDetail(this.dynamicId);
+    this.getComment();
   },
-  mounted() {},
 
   methods: {
     async getDynamicDetail(id) {
@@ -150,7 +155,7 @@ export default {
       try{
         let data = { dynamic_id: this.dynamicDetail.id }
         await this.$http.post('/client/dynamic_likes',data);
-        this.getDynamicDetail(this.detaId);
+        this.getDynamicDetail(this.dynamicId);
       }catch(err){}
     },
     // 收藏
@@ -158,7 +163,7 @@ export default {
       try{
         let data = { dynamic_id: this.dynamicDetail.id }
         await this.$http.post('/client/dynamic_collection',data);
-        this.getDynamicDetail(this.detaId);
+        this.getDynamicDetail(this.dynamicId);
       }catch(err){}
     },
     // 关注
@@ -166,8 +171,31 @@ export default {
       try{
         let data = { f_account_number: this.dynamicDetail.account_number };
         await this.$http.post('/client/user_follow',data);
-        this.getDynamicDetail(this.detaId);
+        this.getDynamicDetail(this.dynamicId);
       }catch(err){}
+    },
+    // 获取评论
+    async getComment(){
+      try{
+        let res = await this.$http.get('/client/find_dynamic_comment',{ id: this.dynamicId });
+        this.commentList = res.data.data;
+      }catch(err){}
+    },
+    // 评论
+    async sendComment(){
+      try{
+        let data = {
+          account_number: this.account_number,
+          dynamic_id: this.dynamicId,
+          content: this.commentContent
+        }
+        let res = await this.$http.post('/client/dynamic_comment',data);
+        if(res.data.status === 0){
+          this.commentContent = '';
+          this.getComment();
+        }
+      }catch(err){}
+
     },
     openDrawer() {
       this.open = !this.open;
@@ -200,13 +228,20 @@ export default {
 }
 .drawerBox{
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-right: 20px;
+  .empty{
+    text-align: center;
+    font-size: 14px;
+    color: #aaa;
+    padding: 40px 0;
+  }
   .commentReply{
     margin: 20px 0;
     .selfHeadimg{
       display: flex;
       img{
+        border: 1px solid #ddd;
         border-radius: 50%;
         height: 30px;
         width: 30px;

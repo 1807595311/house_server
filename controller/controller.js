@@ -38,6 +38,9 @@ let find_other_userinfo = require(path.resolve(__basename, 'controller/client/fi
 let find_dynamic_comment = require(path.resolve(__basename, 'controller/client/find_dynamic_comment.js')); // 获取动态评论
 let dynamic_comment = require(path.resolve(__basename, 'controller/client/dynamic_comment.js')); // 动态评论
 let dynamic_comment_reply = require(path.resolve(__basename, 'controller/client/dynamic_comment_reply.js')); // 回复评论
+let my_message = require(path.resolve(__basename, 'controller/client/my_message.js')); // 查询我的消息
+let my_comment = require(path.resolve(__basename, 'controller/client/my_comment.js')); // 查询我的评论
+let delete_comment = require(path.resolve(__basename, 'controller/client/delete_comment.js')); // 删除我的评论
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -75,5 +78,8 @@ module.exports = {
     find_other_userinfo,
     find_dynamic_comment,
     dynamic_comment,
-    dynamic_comment_reply
+    dynamic_comment_reply,
+    my_message,
+    my_comment,
+    delete_comment
 }

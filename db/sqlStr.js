@@ -57,6 +57,9 @@ const find_dynamic_by_userinfo = require(path.resolve(__basename, 'db/sql/client
 const find_comment_by_dynamic = require(path.resolve(__basename, 'db/sql/client/find_comment_by_dynamic.js'));
 const insert_comment = require(path.resolve(__basename, 'db/sql/client/insert_comment.js'));
 const dynamic_reply_comment = require(path.resolve(__basename, 'db/sql/client/dynamic_reply_comment.js'));
+const find_message_by_user = require(path.resolve(__basename, 'db/sql/client/find_message_by_user.js'));
+const find_my_comment = require(path.resolve(__basename, 'db/sql/client/find_my_comment.js'));
+const delete_comment = require(path.resolve(__basename, 'db/sql/client/delete_comment.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -114,5 +117,8 @@ module.exports = {
     find_dynamic_by_userinfo, // 查询该用户的动态
     find_comment_by_dynamic, // 通过动态id查询该动态下的评论
     insert_comment, // 动态评论
-    dynamic_reply_comment // 回复评论
+    dynamic_reply_comment, // 回复评论
+    find_message_by_user, // 消息
+    find_my_comment, // 查询我的评论
+    delete_comment, // 删除我的评论
 }

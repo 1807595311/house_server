@@ -43,5 +43,8 @@ module.exports = app =>{
     app.get('/client/find_dynamic_comment',controller.find_dynamic_comment); // 查看动态评论
     app.post('/client/dynamic_comment',controller.dynamic_comment); // 动态评论
     app.post('/client/dynamic_comment_reply',controller.dynamic_comment_reply); // 回复评论
+    app.post('/client/my_message',controller.my_message); // 我的消息
+    app.post('/client/my_comment',controller.my_comment); // 我的评论
+    app.post('/client/delete_comment',controller.delete_comment); // 删除我的评论
     
 }

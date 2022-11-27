@@ -31,7 +31,7 @@ export const routes = [
           // component: () => import("@/views/tabViews/MoreDynamic.vue"),
           meta: {
             title: "我的咨询",
-            keepAlive: true
+            keepAlive: false
           },
         },
         {
@@ -40,7 +40,7 @@ export const routes = [
           component: () => import("@/views/tabViews/MyDynamic.vue"),
           meta: {
             title: "我的动态",
-            keepAlive: true
+            keepAlive: false
           },
         },
         {
@@ -49,7 +49,16 @@ export const routes = [
           component: () => import("@/views/tabViews/ReleaseDynamics.vue"),
           meta: {
             title: "发布动态",
-            keepAlive: true
+            keepAlive: false
+          },
+        },
+        {
+          path: "/my_message",
+          name: "MyMessage",
+          component: () => import("@/views/tabViews/MyMessage.vue"),
+          meta: {
+            title: "消息",
+            keepAlive: false
           },
         },
       ],
@@ -83,7 +92,7 @@ export const routes = [
       name: "Follow",
       meta: {
         title: "我的关注",
-        keepAlive: true
+        keepAlive: false
       },
       component: () => import("@/views/user/Follow.vue"),
     },
@@ -92,7 +101,7 @@ export const routes = [
       name: "Likes",
       meta: {
         title: "我的点赞",
-        keepAlive: true
+        keepAlive: false
       },
       component: () => import("@/views/user/Likes.vue"),
     },
@@ -101,9 +110,18 @@ export const routes = [
       name: "Collection",
       meta: {
         title: "我的收藏",
-        keepAlive: true
+        keepAlive: false
       },
       component: () => import("@/views/user/Collection.vue"),
+    },
+    {
+      path: "/my_comment",
+      name: "MyComment",
+      meta: {
+        title: "我的评论",
+        keepAlive: false
+      },
+      component: () => import("@/views/user/MyComment.vue"),
     },
     {
       path: "/search_dynamic",

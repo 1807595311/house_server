@@ -119,7 +119,7 @@ export default {
       commentContent: ''
     };
   },
-  computed:{
+  computed: {
     // 判断是否本人
     isSelf(){
       if(this.account_number == this.dynamicDetail.account_number) return true;
@@ -129,11 +129,13 @@ export default {
 
   created() {
     this.dynamicId = Number( this.$route.query.id );
+    this.open = this.$route.query.open ? this.$route.query.open : false;
     this.getDynamicDetail(this.dynamicId);
     this.getComment();
   },
 
   methods: {
+    // 获取动态详情
     async getDynamicDetail(id) {
       try {
         let res = await this.$http.post("/client/dynamic_detail", {id});
@@ -195,7 +197,6 @@ export default {
           this.getComment();
         }
       }catch(err){}
-
     },
     openDrawer() {
       this.open = !this.open;

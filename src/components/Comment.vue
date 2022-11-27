@@ -10,7 +10,8 @@
           <strong> </strong>
           <span>{{comment.create_time}}</span>
         </div>
-        <div class="reply" @click="replys(comment)">{{inputReplays ? '收起': '回复'}}</div>
+        <div class="reply" v-if="!isDelete" @click="replys(comment)">{{inputReplays ? '收起': '回复'}}</div>
+        <div class="reply" v-if="isDelete" @click="deleteComment(comment.id)">删除</div>
       </div>
       <div class="comment-content">{{comment.content}}</div>
       <Input v-model="replyContent" type="textarea" v-show="inputReplays" :autosize="{minRows: 3,maxRows: 5}" placeholder="请输入回复内容（限50字）"></Input>
@@ -50,6 +51,10 @@ export default {
   props: {
     comment:{
       type: Object
+    },
+    isDelete:{
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -111,6 +116,19 @@ export default {
       }
       this.replyId = v.id;
       this.inputReplay = !this.inputReplay;
+    },
+     deleteComment(id){
+      this.$Modal.confirm({
+          title: '删除体提醒',
+          content: '确定要删除该评论吗？',
+          onOk: () => {
+            try{
+              this.$http.post('/client/delete_comment',{id}).then(res=>{
+                this.$emit('refreshComment');
+              })
+            }catch(err){}
+          }
+      });
     }
   }
 }

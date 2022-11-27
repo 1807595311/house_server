@@ -27,10 +27,10 @@
           </div>
           <div class="tooltip_content" slot="content">
             <p>个人资料</p>
-            <p @click="toFollow">我的关注</p>
-            <p @click="toDynamicLikes">我的点赞</p>
-            <p @click="toCollection">我的收藏</p>
-            <p>我的评论</p>
+            <p @click="changeRouter('/follow')">我的关注</p>
+            <p @click="changeRouter('/likes')">我的点赞</p>
+            <p @click="changeRouter('/collection')">我的收藏</p>
+            <p @click="changeRouter('/my_comment')">我的评论</p>
             <!-- <p>我的咨询</p>
             <p>我的动态</p> -->
             <p @click="logout">退出登录</p>
@@ -104,15 +104,9 @@ export default {
         })
       }
     },
-    toDynamicLikes(){
-      this.$router.push('/likes')
-    },
-    toCollection(){
-      this.$router.push('/collection')
-    },
-    toFollow(){
-      this.$router.push('/follow')
-    },
+    changeRouter(path){
+      this.$router.push(path);
+    }
   },
 };
 </script>
@@ -125,17 +119,17 @@ export default {
 .home-page {
   width: 100%;
   // height: 100%;
-  background: #f7f7f7;
+  background: #F5F6F7;
   .navigation {
     margin-bottom: 20px;
     background: #fff;
     // height: 70px;
     display: flex;
     align-items: center;
-    box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 5%);
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
     &_box {
       margin: auto;
-      width: 80%;
+      width: 1350px;
       .logo {
         background: $theme_color;
         padding: 10px;

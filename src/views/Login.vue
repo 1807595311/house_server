@@ -36,6 +36,10 @@
               <div class="submit">
                 <Button type="primary" @click="handleSubmit('formInline')" long>登录</Button>
               </div>
+              <p class="to-register">
+                <span @click="toRegister('/register_ord')">注册普通用户</span>
+                <span @click="toRegister('/register_des')">注册设计机构</span>
+              </p>
             </Form-item>
           </Form>
         </div>
@@ -119,6 +123,9 @@ export default {
         }
       });
     },
+    toRegister(path){
+      this.$router.push(path)
+    }
   },
 };
 </script>
@@ -128,6 +135,15 @@ export default {
   font-family: fontLogo;
   src: url(../utils/GongFanYueXinTiCu-2.ttf);
 }
+.to-register{
+  span{
+    margin-left: 10px;
+  }
+  span:hover{
+    cursor: pointer;
+    color: $theme_color;
+  }
+  }
 .box {
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   height: 500px;
@@ -143,7 +159,7 @@ export default {
   &-left {
     width: 400px;
     position: relative;
-    background: #0058a3;
+    background: $theme_color;
     padding: 20px;
     box-sizing: border-box;
     .logo {

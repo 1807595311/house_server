@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
   }else{
     store.state.userInfo = null;
   }
-  const VerifyToken = ["/released_dynamics","/my_consult","/my_dynamic"];
+  const VerifyToken = ["/released_dynamics","/my_consult","/my_dynamic","/my_message"];
   if (to.meta.title) document.title = to.meta.title;
   if (VerifyToken.indexOf(to.path) > -1) {
     if (access_userInfo) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Cascader :data="data3" :placeholder="placeholder" :render-format="format" @on-change="change"></Cascader>
+    <Cascader :value="value" :data="data3" :placeholder="placeholder" :render-format="format" @on-change="change"></Cascader>
   </div>
 </template>
 
@@ -12,6 +12,9 @@ export default {
     placeholder:{
         type: String,
         default: '请选择所在城市'
+    },
+    value: {
+      type: Array
     }
   },
   data() {

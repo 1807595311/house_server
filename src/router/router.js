@@ -167,5 +167,14 @@ export const routes = [
       },
       component: () => import("@/views/user/UserHome.vue"),
     },
+    {
+      path: "/personal_data",
+      name: "PersonalData",
+      meta: {
+        title: "PersonalData",
+        keepAlive: false
+      },
+      component: () => import("@/views/user/PersonalData.vue"),
+    },
   ];
   

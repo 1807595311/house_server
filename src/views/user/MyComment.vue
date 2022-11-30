@@ -2,7 +2,9 @@
     <div class="comment">
         <HeadBG title="我的评论"></HeadBG>
         <div class="box">
-            <Comment @refreshComment="getMyComment" v-for="v in commentList" :key="v.id" :comment="v" :isDelete="true"></Comment>
+            <div class="comment-box" v-for="v in commentList" :key="v.id" @click="toDynamicDetail(v.dynamic_id)">
+                <Comment @refreshComment="getMyComment" :comment="v" :isDelete="true"></Comment>
+            </div>
         </div>
         <div class="scroll">已加载全部</div>
     </div>
@@ -32,6 +34,9 @@ export default {
                 this.commentList = res.data.data;
             }catch(err){}
         },
+        toDynamicDetail(id){
+            this.$router.push({ path: "/dynamic_details", query: { id,open:true } });
+        }
     }
 }
 </script>
@@ -43,6 +48,9 @@ export default {
         width: 1200px;
         background: #fff;
         padding-top: 20px;
+        .comment-box:hover{
+            cursor: pointer;
+        }
     }
     .scroll {
       margin: auto;

@@ -26,7 +26,7 @@
             <div class="nickname">{{userInfo.nickname}}</div>
           </div>
           <div class="tooltip_content" slot="content">
-            <p>个人资料</p>
+            <p @click="changeRouter('/personal_data')">个人资料</p>
             <p @click="changeRouter('/follow')">我的关注</p>
             <p @click="changeRouter('/likes')">我的点赞</p>
             <p @click="changeRouter('/collection')">我的收藏</p>

@@ -1,24 +1,21 @@
 <template>
-  <div>
-    <Form ref="formInline" :model="formInline" :rules="ruleInline">
-      <Form-item prop="phone_number">
+  <div class="OtherInfo_ord">
+    <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80">
+      <Form-item label="手机号" prop="phone_number">
         <Input size="large" type="text" v-model="formInline.phone_number" placeholder="请输入11位手机号(必填)">
-        <Icon style="width: 20px;" type="ios-pricetag-outline" slot="prepend"></Icon>
         </Input>
       </Form-item>
-      <Form-item prop="wx_number">
+      <Form-item label="微信号" prop="wx_number">
         <Input size="large" type="text" v-model="formInline.wx_number" placeholder="请输入微信号(非必填)">
-        <Icon style="width: 20px;" type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </Form-item>
-      <Form-item prop="qq_number">
+      <Form-item label="QQ号" prop="qq_number">
         <Input size="large" type="text" v-model="formInline.qq_number" placeholder="请输入QQ号(非必填)">
-        <Icon style="width: 20px;" type="ios-unlocked-outline" slot="prepend"></Icon>
         </Input>
       </Form-item>
       <Form-item>
         <div class="submit">
-          <Button type="primary" @click="handleSubmit('formInline')" long>下一步</Button>
+          <Button type="primary" @click="handleSubmit('formInline')" long>保存</Button>
         </div>
       </Form-item>
     </Form>
@@ -27,7 +24,7 @@
 
 <script>
 export default {
-  name: "ClientForm2",
+  name: "OtherInfo_ord",
 
   data() {
     return {

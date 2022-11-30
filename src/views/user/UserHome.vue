@@ -108,10 +108,11 @@ export default {
             }
         }
         .introduce{
+            width: 60%;
             color: #fff;
             font-size: 18px;
             text-align: center;
-            margin-top: 10px;
+            margin: 10px auto 0;
         }
     }
     .container{

@@ -14,9 +14,9 @@
         </div>
         <p class="title">{{userInfo.nickname}}</p>
         <p class="followCount">
-            <span>{{userInfo.dynamic_count}}作品</span>
+            <span>{{userInfo.dynamic_count}} 作品</span>
             <strong>|</strong>
-            <span>{{userInfo.follows_count}}粉丝</span>
+            <span>{{userInfo.follows_count}} 粉丝</span>
         </p>
         <p class="introduce">
             {{userInfo.introduce}}

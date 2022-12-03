@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { replace, filtion } from "verification-sensitive";
 export default {
   name: 'Comment',
   props: {
@@ -82,6 +83,7 @@ export default {
     // 回复评论
     async sendReply(){
       if(this.replyContent == '') return this.$Message.error('请输入内容后再发送...');
+      if(filtion(this.replyContent)) return this.$Message.error('评论存在敏感词...');
       try{
         this.replyInfo = {...this.replyInfo, content: this.replyContent};
         let res = await this.$http.post('/client/dynamic_comment_reply',this.replyInfo);

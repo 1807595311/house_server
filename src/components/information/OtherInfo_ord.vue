@@ -15,7 +15,7 @@
       </Form-item>
       <Form-item>
         <div class="submit">
-          <Button type="primary" @click="handleSubmit('formInline')" long>保存</Button>
+          <Button :disabled="isChange" type="primary" @click="handleSubmit('formInline')" long>保存</Button>
         </div>
       </Form-item>
     </Form>
@@ -25,7 +25,7 @@
 <script>
 export default {
   name: "OtherInfo_ord",
-
+  props: ['userInfo'],
   data() {
     return {
       formInline: {
@@ -52,8 +52,40 @@ export default {
             trigger: "blur",
           },
         ],
-      }
+      },
+      isChange: true
     };
+  },
+  watch: {
+    userInfo(v){
+      this.formInline = {
+        phone_number: v.phone_number, // 手机号
+        wx_number: v.wx_number, // 微信号
+        qq_number: v.qq_number, // QQ号
+      }
+    },
+    formInline: {
+      handler(newVal){
+        let u = this.userInfo;
+        if(u.phone_number != newVal.phone_number || u.wx_number != newVal.wx_number || u.qq_number != newVal.qq_number){
+          this.isChange = false; 
+        }
+        else this.isChange = true;
+		  },
+		  deep: true
+    }
+    // 'formInline.phone_number'(v){
+    //   if(this.userInfo.phone_number != v) this.isChange = false; 
+    //   else this.isChange = true;
+    // },
+    // 'formInline.wx_number'(v){
+    //   if(this.userInfo.wx_number != v) this.isChange = false; 
+    //   else this.isChange = true;
+    // },
+    // 'formInline.qq_number'(v){
+    //   if(this.userInfo.qq_number != v) this.isChange = false; 
+    //   else this.isChange = true;
+    // },
   },
   methods: {
     vPhone_number(rule, value, callback) {
@@ -85,9 +117,13 @@ export default {
       }
     },
     handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
+      this.$refs[name].validate( async (valid) => {
         if (valid) {
-          this.$emit('form2', this.formInline);
+          let res = await this.$http.post('/client/edit_other_userInfo',this.formInline);
+          if(res.data.status === 0){
+            this.isChange = true;
+            this.$parent.getUserInfo();
+          }
         }
       });
     }

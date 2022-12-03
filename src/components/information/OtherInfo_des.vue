@@ -9,11 +9,11 @@
           <Address :value="findCity(formInline.city)" @getAddress="v=>formInline.city=v"></Address>
         </Form-item>
         <Form-item label="成立时间" prop="establish_time">
-          <Date-picker v-model="formInline.establish_time" @on-change="v=>formInline.establish_time=v" type="date" placeholder="请选择成立日期" style="width: 100%"></Date-picker>
+          <Date-picker :value="formInline.establish_time" @on-change="v=>formInline.establish_time=v" type="date" placeholder="请选择成立日期" style="width: 100%"></Date-picker>
         </Form-item>
         <Form-item>
           <div class="submit">
-            <Button type="primary" @click="handleSubmit('formInline')" long>保存</Button>
+            <Button :disabled="isChange" type="primary" @click="handleSubmit('formInline')" long>保存</Button>
           </div>
         </Form-item>
       </Form>
@@ -30,6 +30,7 @@ export default {
   components: {
     Address,
   },
+  props: ['userInfo'],
   data() {
     return {
       formInline: {
@@ -57,9 +58,28 @@ export default {
           },
         ],
       },
+      isChange: true
     };
   },
-  created() {
+  watch: {
+    userInfo(newVal){
+      this.formInline = {
+        mechanism_name: newVal.mechanism_name,
+        city: newVal.city,
+        establish_time: newVal.establish_time
+      }
+      console.log(newVal,this.formInline);
+    },
+    formInline: {
+      handler(newVal){
+        let u = this.userInfo;
+        if(u.mechanism_name != newVal.mechanism_name || u.city != newVal.city || u.establish_time != newVal.establish_time){
+          this.isChange = false; 
+        }
+        else this.isChange = true;
+		  },
+		  deep: true
+    }
   },
   methods: {
     vMechanism_name(rule, value, callback) {
@@ -82,11 +102,17 @@ export default {
       else callback();
     },
     handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) this.$emit("form2", this.formInline);
+      this.$refs[name].validate( async (valid) => {
+        if (valid) {
+          let res = await this.$http.post('/client/edit_other_userInfo',this.formInline);
+          if(res.data.status === 0){
+            this.isChange = true;
+            this.$parent.getUserInfo();
+          }
+        }
       });
     },
-    // 通过城市查找省份和城市
+    // 通过城市查找省份和城市，并组成数组
     findCity(city){
         let p = null;
         let d = null

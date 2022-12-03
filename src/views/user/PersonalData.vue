@@ -11,16 +11,20 @@
         <!-- 头像 -->
         <div class="head-img">
           <div class="left">
-            <img src="@/assets/a.png" alt="">
+            <img :src="userInfo.head_img" alt="">
+            <UploadHeadImg class="upload" @getFormdata="getFormdata"></UploadHeadImg>
           </div>
           <div class="right">
             <p class="nickname">
-              <span>鸡你太美</span>
-              <Tag color="blue">普通用户</Tag>
+              <span>{{userInfo.nickname}}</span>
+              <Tag color="blue">{{userInfo.customer_type == 0 ? '普通用户' : '设计机构'}}</Tag>
             </p>
             <p class="fans-follow">
-              <span>关注:12</span>
-              <span>粉丝:23</span>
+              <span>关注:{{userInfo.follows}}</span>
+              <span>粉丝:{{userInfo.fans}}</span>
+            </p>
+            <p class="create-time">
+              注册时间：<span>{{userInfo.create_time}}</span>
             </p>
           </div>
         </div>
@@ -28,9 +32,9 @@
         <div class="personal">
           <div class="title">{{ this.activeTitle }}</div>
           <div class="msg-box">
-            <BasicInformation v-show="activeKey === 1"></BasicInformation>
-            <OtherInfoDes v-show="activeKey === 2 && $store.state.userInfo.customer_type === '1'"></OtherInfoDes>
-            <OtherInfoOrd v-show="activeKey === 2 && $store.state.userInfo.customer_type === '0'"></OtherInfoOrd>
+            <BasicInformation :userInfo="userInfo" v-show="activeKey === 1"></BasicInformation>
+            <OtherInfoDes :userInfo="userInfo" v-show="activeKey === 2 && $store.state.userInfo.customer_type === '1'"></OtherInfoDes>
+            <OtherInfoOrd :userInfo="userInfo" v-show="activeKey === 2 && $store.state.userInfo.customer_type === '0'"></OtherInfoOrd>
             <AccountSetting v-show="activeKey === 3"></AccountSetting>
           </div>
         </div>
@@ -44,6 +48,7 @@ import BasicInformation from "@/components/information/BasicInformation.vue";
 import OtherInfoDes from "@/components/information/OtherInfo_des.vue";
 import OtherInfoOrd from "@/components/information/OtherInfo_ord.vue";
 import AccountSetting from "@/components/information/AccountSetting.vue";
+import UploadHeadImg from "@/components/UploadHeadImg.vue";
 const menuList = [
   {
     name: 1,
@@ -65,17 +70,56 @@ export default {
     BasicInformation,
     OtherInfoDes,
     OtherInfoOrd,
-    AccountSetting
+    AccountSetting,
+    UploadHeadImg
   },
   data() {
     return {
       menuList,
       activeName: 1,
       activeTitle: menuList[0].title,
-      activeKey: 1
+      activeKey: 1,
+      userInfo: {}
     }
   },
+  created() {
+    this.getUserInfo();
+  },
   methods: {
+    async getFormdata(formdata) {
+      try {
+        const formData = new FormData();
+        formData.append('file', formdata);
+        let res = await this.$http.upload('/client/upload_headimg', formData);
+        if (res.data.status === 0) {
+          // 重新设置cookie
+          let cookie_userInfo = JSON.parse(this.$cookie.get("access_userInfo"));
+          let currentTime = new Date().getTime();
+          currentTime += 24 * 60 * 60 * 1000;
+          let expires = new Date(currentTime).toUTCString(); // 有效时间
+          cookie_userInfo.head_img = res.data.data.head_img;
+          document.cookie = `access_userInfo=${JSON.stringify(cookie_userInfo)};expires=${expires}`;
+          this.getUserInfo();
+        }
+      } catch (err) { }
+
+    },
+    async getUserInfo() {
+      try {
+        let res = await this.$http.post('/client/user_info');
+        this.userInfo = res.data.data;
+        // 重新设置cookie
+        let cookie_userInfo = JSON.parse(this.$cookie.get("access_userInfo"));
+        cookie_userInfo.head_img = this.userInfo.head_img;
+        cookie_userInfo.account_number = this.userInfo.account_number;
+        cookie_userInfo.customer_type = this.userInfo.customer_type;
+        cookie_userInfo.nickname = this.userInfo.nickname;
+        let currentTime = new Date().getTime();
+        currentTime += 24 * 60 * 60 * 1000;
+        let expires = new Date(currentTime).toUTCString(); // 有效时间
+        document.cookie = `access_userInfo=${JSON.stringify(cookie_userInfo)};expires=${expires}`;
+      } catch (err) { }
+    },
     changeMeun(key) {
       this.activeKey = key;
       this.activeTitle = this.menuList.find(v => v.name === key).title;
@@ -89,7 +133,7 @@ export default {
   .ivu-form-item-label {
     font-size: 14px !important;
   }
-  .ivu-form-item-content{
+  .ivu-form-item-content {
     font-size: 14px !important;
   }
   height: 100vh;
@@ -112,6 +156,14 @@ export default {
         align-items: center;
         box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 5%);
         .left {
+          position: relative;
+          .upload {
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }
           img {
             border: 1px solid #ddd;
             border-radius: 50%;
@@ -137,6 +189,11 @@ export default {
           .fans-follow {
             span {
               margin-right: 20px;
+            }
+          }
+          .create-time {
+            span {
+              color: #777;
             }
           }
         }

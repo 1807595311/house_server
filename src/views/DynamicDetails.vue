@@ -76,8 +76,9 @@
               </Button>
             </div>
           </div>
+          <!-- 其他动态 -->
           <div class="other_list">
-            <div class="item d_f j_c_sb" @click="toDetail(v.id)" v-for="v in dynamicDetail.otherDynamicList" :key="v.id">
+            <div class="item d_f" @click="toDetail(v.id)" v-for="v in dynamicDetail.otherDynamicList" :key="v.id">
               <div class="left">
                 <img :src="v.cover" alt="">
               </div>
@@ -99,6 +100,7 @@
 <script>
 import Drawer from "vue-simple-drawer";
 import Comment from "@/components/Comment.vue";
+import { replace, filtion } from "verification-sensitive";
 export default {
   name: "ClientDynamicDetails",
   components: {
@@ -185,6 +187,8 @@ export default {
     },
     // 评论
     async sendComment(){
+      if(this.commentContent == '') return this.$Message.error('请输入内容后再发送...');
+      if(filtion(this.commentContent)) return this.$Message.error('评论存在敏感词...');
       try{
         let data = {
           account_number: this.account_number,
@@ -359,7 +363,9 @@ export default {
         }
       }
       .other_list {
+        margin-bottom: 10px;
         .item {
+          border: 1px solid #eee;
           padding: 10px;
           background: white;
           &:hover {
@@ -377,6 +383,7 @@ export default {
           }
         }
         .right {
+          width: 100%;
           position: relative;
         }
         .icon-box {

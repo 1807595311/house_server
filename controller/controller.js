@@ -41,6 +41,10 @@ let dynamic_comment_reply = require(path.resolve(__basename, 'controller/client/
 let my_message = require(path.resolve(__basename, 'controller/client/my_message.js')); // 查询我的消息
 let my_comment = require(path.resolve(__basename, 'controller/client/my_comment.js')); // 查询我的评论
 let delete_comment = require(path.resolve(__basename, 'controller/client/delete_comment.js')); // 删除我的评论
+let user_info = require(path.resolve(__basename, 'controller/client/user_info.js')); // 查询个人资料
+let upload_headimg = require(path.resolve(__basename, 'controller/client/upload_headimg.js')); // 修改用户头像
+let edit_user_info = require(path.resolve(__basename, 'controller/client/edit_user_info.js')); // 修改用户基本资料
+let edit_other_userInfo = require(path.resolve(__basename, 'controller/client/edit_other_userInfo.js')); // 修改用户或机构资料
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -81,5 +85,9 @@ module.exports = {
     dynamic_comment_reply,
     my_message,
     my_comment,
-    delete_comment
+    delete_comment,
+    user_info,
+    upload_headimg,
+    edit_user_info,
+    edit_other_userInfo
 }

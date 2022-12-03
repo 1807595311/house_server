@@ -60,6 +60,10 @@ const dynamic_reply_comment = require(path.resolve(__basename, 'db/sql/client/dy
 const find_message_by_user = require(path.resolve(__basename, 'db/sql/client/find_message_by_user.js'));
 const find_my_comment = require(path.resolve(__basename, 'db/sql/client/find_my_comment.js'));
 const delete_comment = require(path.resolve(__basename, 'db/sql/client/delete_comment.js'));
+const find_user_info = require(path.resolve(__basename, 'db/sql/client/find_user_info.js'));
+const edit_headimg = require(path.resolve(__basename, 'db/sql/client/edit_headimg.js'));
+const edit_userinfo = require(path.resolve(__basename, 'db/sql/client/edit_userinfo.js'));
+const edit_other_userInfo = require(path.resolve(__basename, 'db/sql/client/edit_other_userInfo.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -121,4 +125,8 @@ module.exports = {
     find_message_by_user, // 消息
     find_my_comment, // 查询我的评论
     delete_comment, // 删除我的评论
+    find_user_info, // 个人资料
+    edit_headimg, // 修改用户头像
+    edit_userinfo, // 修改用户基本资料
+    edit_other_userInfo // 修改普通用户或设计机构资料
 }

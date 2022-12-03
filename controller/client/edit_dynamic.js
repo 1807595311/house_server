@@ -19,6 +19,7 @@ module.exports = (req, res) => {
         if (err instanceof multer.MulterError) console.log("---errMulterError---", err);
         else if (err) console.log("---err---", err);
         info = await formPro;
+        // 判断是否有修改封面
         if (req.files.length > 0) {
             for (let i = 0; i < req.files.length; i++) {
                 // 重新设置存储在数据库的 url 地址，去掉前面的public字符串方便读取

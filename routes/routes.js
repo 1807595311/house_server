@@ -46,5 +46,9 @@ module.exports = app =>{
     app.post('/client/my_message',controller.my_message); // 我的消息
     app.post('/client/my_comment',controller.my_comment); // 我的评论
     app.post('/client/delete_comment',controller.delete_comment); // 删除我的评论
+    app.post('/client/user_info',controller.user_info); // 获取个人资料
+    app.post('/client/upload_headimg',controller.upload_headimg); // 修改用户头像
+    app.post('/client/edit_user_info',controller.edit_user_info); // 修改用户基本资料
+    app.post('/client/edit_other_userInfo',controller.edit_other_userInfo); // 修改普通用户或设计机构资料
     
 }

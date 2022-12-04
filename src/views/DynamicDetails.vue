@@ -46,7 +46,8 @@
           </Button>
           <Button @click="openDrawer" type="ghost">
             <Icon size="14" color="" type="chatbox-working"></Icon>
-            评论【{{dynamicDetail.comment_count}}】
+            评论【{{commentList.length}}】
+            <!-- 评论【{{dynamicDetail.comment_count}}】 -->
           </Button>
         </div>
       </div>
@@ -58,18 +59,26 @@
         <mavon-editor v-show="false" ref="md" />
       </div>
       <!-- 发布者资料 -->
-      <Affix>
+      <Affix v-if="dynamicDetail.state == 1">
         <div class="box_right">
           <div class="content">
             <img :src="dynamicDetail.head_img" alt="">
-            <p>{{dynamicDetail.nickname}}</p>
+            <p>{{dynamicDetail.nickname}}
+            </p>
+            <div class="d_f j_c_c" style="padding: 5px 0;">
+              <Tag color="blue">{{dynamicDetail.customer_type == 0 ? '普通用户' : '设计机构'}}</Tag>
+            </div>
             <p>
               <span style="margin-right: 10px;">关注：{{dynamicDetail.follow_to_count}}</span>
               <span>粉丝：{{dynamicDetail.follows_count}}</span>
             </p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
-            <div class="d_f j_c_c" v-if="dynamicDetail.customer_type == 1 && account_number && dynamicDetail.account_number != account_number && $store.state.userInfo.customer_type == 0">
+            <div class="d_f j_c_c" style="padding: 10px 0 20px;"
+              v-if="dynamicDetail.customer_type == 1 && 
+              account_number && 
+              dynamicDetail.account_number != account_number &&
+              $store.state.userInfo.customer_type == 0">
               <Button @click="openDrawer" type="info">
                 <Icon size="14" color="" type="chatbox-working"></Icon>
                 咨询
@@ -90,6 +99,14 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </Affix>
+      <Affix v-else>
+        <div class="box_right">
+          <div class="content">
+            <img src="@/assets/icons/user.png" alt="">
+            <p class="cancellation">用户已注销</p>
           </div>
         </div>
       </Affix>
@@ -330,7 +347,6 @@ export default {
       overflow: hidden;
       .content {
         margin-top: 50px;
-        // height: 250px;
         p {
           text-align: center;
         }
@@ -404,5 +420,8 @@ export default {
       }
     }
   }
+}
+.cancellation{
+  padding: 25px 0 40px;
 }
 </style>

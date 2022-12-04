@@ -30,7 +30,7 @@ export default {
                 {
                     path: '/user_home', 
                     query: {
-                        account_number: this.collection_fabulous.account_number
+                        account_number: this.comment.account_number
                     }
                 }
             )

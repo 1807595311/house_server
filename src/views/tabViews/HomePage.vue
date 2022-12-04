@@ -10,12 +10,6 @@
               <p>{{v.title}}</p>
             </div>
           </div>
-          <!-- <div class="item">
-            <img src="@/assets/a.png" alt="">
-            <div class="item-title d_f a_l_c j_c_c">
-              <p>这里是标题</p>
-            </div>
-          </div> -->
         </div>
       </Carousel-item>
     </Carousel>

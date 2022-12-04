@@ -2,7 +2,8 @@
   <div class="UserHome">
     <div class="personCenterBg">
         <div class="headimg">
-            <img :src="userInfo.head_img" alt="">
+            <img v-if="userInfo.state==1" :src="userInfo.head_img" alt="">
+            <img v-else src="@/assets/icons/user.png" alt="">
         </div>
         <div class="d_f j_c_c">
             <Button type="ghost" @click="follow">
@@ -12,15 +13,26 @@
                 {{userInfo.is_follows ? '取消关注':'关注' }}
             </Button>
         </div>
-        <p class="title">{{userInfo.nickname}}</p>
-        <p class="followCount">
-            <span>{{userInfo.dynamic_count}} 作品</span>
-            <strong>|</strong>
-            <span>{{userInfo.follows_count}} 粉丝</span>
-        </p>
-        <p class="introduce">
-            {{userInfo.introduce}}
-        </p>
+        <div v-if="userInfo.state==1">
+            <p class="title">{{userInfo.nickname}}</p>
+            <div class="d_f j_c_c" style="padding-top: 10px;" v-if="userInfo.mechanism_name">
+                <Tag color="blue">{{userInfo.mechanism_name}}</Tag>
+            </div>
+            <p class="d_f j_c_c" style="padding-top: 10px;color: #fff;font-size: 14px;">
+                {{userInfo.city}} {{userInfo.establish_time}}
+            </p>
+            <p class="followCount">
+                <span>{{userInfo.dynamic_count}} 作品</span>
+                <strong>|</strong>
+                <span>{{userInfo.follows_count}} 粉丝</span>
+            </p>
+            <p class="introduce">
+                {{userInfo.introduce}}
+            </p>
+        </div>
+        <div v-else>
+            <p class="title">用户已注销</p>
+        </div>
     </div>
     <div class="container">
         <Dynamic v-for="v in dynamicList" :dynamic="v" :key="v.id"></Dynamic>
@@ -74,7 +86,7 @@ export default {
     .personCenterBg{
         background: #333333;
         width: 100%;
-        height: 380px;
+        padding-bottom: 20px;
         background-image: url('@/assets/images/personCenter_bg.png');
         background-repeat: no-repeat;
         background-position: top -275px right 10px;
@@ -102,7 +114,7 @@ export default {
             text-align: center;
             font-size: 18px;
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 10px;
             span{
                 margin: 0 15px;
             }

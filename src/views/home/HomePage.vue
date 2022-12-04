@@ -14,7 +14,7 @@
           </Input>
         </div>
         <Tooltip v-if="!userInfo.account_number" content="未登录" placement="bottom">
-          <div @click="toLogin" class="user hover d_f a_l_c j_c_c">
+          <div @click="toLogin" class="user hover d_f a_l_c j_c_c" style="margin-top: 5px;">
             <img src="@/assets/icons/user.png" />
           </div>
         </Tooltip>
@@ -118,12 +118,10 @@ export default {
 }
 .home-page {
   width: 100%;
-  // height: 100%;
   background: #F5F6F7;
   .navigation {
     margin-bottom: 20px;
     background: #fff;
-    // height: 70px;
     display: flex;
     align-items: center;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
@@ -132,7 +130,7 @@ export default {
       width: 1350px;
       .logo {
         background: $theme_color;
-        padding: 10px;
+        padding: 16px 10px;
         color: #fff;
         font-size: $logo_size;
         font-family: fontLogo;
@@ -166,10 +164,8 @@ export default {
         }
       }
       .user {
-        // padding-top: 5px;
-        padding: 4px;
+        padding: 8px;
         border-radius: 50%;
-        // height: 64px;
         overflow: hidden;
         transition: all 0.5s;
         &.hover {

@@ -1,7 +1,16 @@
 module.exports = {
-    recommendCaseFn: `SELECT id,title,views,cover FROM DYNAMIC WHERE is_delete = 1 ORDER BY views DESC LIMIT 20;`,
+    recommendCaseFn: `
+    SELECT d.id,
+    d.title,
+    d.views,
+    d.cover 
+    FROM DYNAMIC AS d
+    INNER JOIN users AS u ON u.account_number=d.account_number AND u.state=1
+    WHERE d.is_delete = 1 
+    ORDER BY views DESC LIMIT 20;`,
     banner: `SELECT d.id,d.title,d.cover
     FROM DYNAMIC AS d
+    INNER JOIN users AS u ON u.account_number = d.account_number AND u.state=1
     WHERE d.is_delete=1
     ORDER BY d.create_time DESC
     LIMIT 0,6;`,

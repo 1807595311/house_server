@@ -1,7 +1,7 @@
 <template>
   <div class="designDepartment">
-    <div class="container" @click="toUserHome">
-      <div class="headimg">
+    <div class="container">
+      <div class="headimg" @click="toUserHome">
         <img :src="design.headimg">
       </div>
       <div class="nickname">
@@ -65,6 +65,9 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      &:hover{
+        cursor: pointer;
+      }
       img {
         border-radius: 50%;
         width: 96px;

@@ -28,7 +28,7 @@ export const routes = [
         {
           path: "/my_consult",
           name: "MyConsult",
-          // component: () => import("@/views/tabViews/MoreDynamic.vue"),
+          component: () => import("@/views/tabViews/MyConsult.vue"),
           meta: {
             title: "我的咨询",
             keepAlive: false

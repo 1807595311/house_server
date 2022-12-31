@@ -68,7 +68,6 @@ export default {
         city: newVal.city,
         establish_time: newVal.establish_time
       }
-      console.log(newVal,this.formInline);
     },
     formInline: {
       handler(newVal){

@@ -37,8 +37,9 @@
                 <Button type="primary" @click="handleSubmit('formInline')" long>登录</Button>
               </div>
               <p class="to-register">
-                <span @click="toRegister('/register_ord')">注册普通用户</span>
-                <span @click="toRegister('/register_des')">注册设计机构</span>
+                <span @click="changeRoute('/register_ord')">注册普通用户</span>
+                <span @click="changeRoute('/register_des')">注册设计机构</span>
+                <span @click="changeRoute('/')">暂不注册,先逛逛首页</span>
               </p>
             </Form-item>
           </Form>
@@ -106,7 +107,6 @@ export default {
           }else if(this.customer_type == 1){
             res = await this.$http.post("/client/login_des", this.formInline);
           }
-          // console.log(res);
           let data = res.data;
           if (data.status === 0) {
             let token = data.data.token;
@@ -123,7 +123,7 @@ export default {
         }
       });
     },
-    toRegister(path){
+    changeRoute(path){
       this.$router.push(path)
     }
   },

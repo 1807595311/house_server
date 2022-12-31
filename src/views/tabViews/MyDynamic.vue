@@ -6,24 +6,24 @@
         <Tab-pane label="已发布">
           <div class="container">
             <Dynamic v-for="v in published" :dynamic="v" :key="v.id">
-                <template slot="del"><span @click.stop="deleteDynamic(v)">删除</span></template>
-                <template slot="edit"><span @click.stop="editDynamic(v.id)">编辑</span></template>
+              <template slot="del"><span @click.stop="deleteDynamic(v)">删除</span></template>
+              <template slot="edit"><span @click.stop="editDynamic(v.id)">编辑</span></template>
             </Dynamic>
           </div>
           <div class="empty">
             已加载全部
           </div>
         </Tab-pane>
-        <Tab-pane label="已删除">
+        <!-- <Tab-pane label="回收站">
           <div class="container">
             <Dynamic v-for="v in offshelf" :dynamic="v" :key="v.id">
-                <template slot="up"><span @click.stop="deleteDynamic(v)">重新发布</span></template>
+              <template slot="up"><span @click.stop="deleteDynamic(v)">重新发布</span></template>
             </Dynamic>
           </div>
           <div class="empty">
             已加载全部
           </div>
-        </Tab-pane>
+        </Tab-pane> -->
       </Tabs>
       </Col>
     </Row>
@@ -55,29 +55,38 @@ export default {
         let res = await this.$http.post("/client/my_dynamic");
         this.published = res.data.data.published;
         this.offshelf = res.data.data.offshelf;
-      } catch (err) {}
+      } catch (err) { }
     },
-    async deleteDynamic(info){
-        try{
-          let data = {
-            id: info.id,
-            is_delete: info.is_delete
-          }
-          await this.$http.post('/manage/changeDynamicState', data);
-          this.getMyDynamic();
-        }catch(err){}
+    // 删除动态
+    async deleteDynamic(info) {
+      this.$Modal.confirm({
+        title: '删除动态',
+        content: '<p>您确定要删除该动态吗？</p>',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: async () => {
+          try {
+            let data = {
+              id: info.id,
+              is_delete: info.is_delete
+            }
+            await this.$http.post('/manage/changeDynamicState', data);
+            this.getMyDynamic();
+          } catch (err) { }
+        },
+      });
     },
-    editDynamic(id){
-      this.$router.push({name: 'DynamicEdit',params:{id}});
+    editDynamic(id) {
+      this.$router.push({ name: 'DynamicEdit', params: { id } });
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.clientMyDynamic{
-    height: calc(100vh - 80px);
-    overflow: hidden;
+.clientMyDynamic {
+  height: calc(100vh - 90px);
+  overflow: hidden;
 }
 ::v-deep .ivu-tabs-bar {
   margin-bottom: 0px !important;
@@ -86,7 +95,6 @@ export default {
   height: 120px;
   margin-top: -16px;
 }
-
 .demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-content > .ivu-tabs-tabpane {
   background: #fff;
   padding: 5px;
@@ -94,7 +102,14 @@ export default {
   overflow-y: auto;
   height: calc(100vh - 120px);
 }
-
+.ivu-tabs-tabpane::-webkit-scrollbar {
+  width: 0.5em;
+  background-color: #d9d9d9;
+}
+.ivu-tabs-tabpane::-webkit-scrollbar-thumb {
+  border-radius: 0.25em;
+  background-color: #b9b9b9;
+}
 .demo-tabs-style1 > .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab {
   border-color: transparent;
 }
@@ -116,6 +131,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 310px;
+
   .dynamic {
     margin: auto;
   }

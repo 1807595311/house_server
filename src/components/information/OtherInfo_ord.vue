@@ -74,18 +74,6 @@ export default {
 		  },
 		  deep: true
     }
-    // 'formInline.phone_number'(v){
-    //   if(this.userInfo.phone_number != v) this.isChange = false; 
-    //   else this.isChange = true;
-    // },
-    // 'formInline.wx_number'(v){
-    //   if(this.userInfo.wx_number != v) this.isChange = false; 
-    //   else this.isChange = true;
-    // },
-    // 'formInline.qq_number'(v){
-    //   if(this.userInfo.qq_number != v) this.isChange = false; 
-    //   else this.isChange = true;
-    // },
   },
   methods: {
     vPhone_number(rule, value, callback) {

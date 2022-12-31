@@ -51,9 +51,6 @@ export default {
   methods: {
     toDetail(id) {
       this.$router.push({ path: "/dynamic_details", query: { id } });
-    },
-    deleteDynamic(){
-      console.log(12314);
     }
   },
 };
@@ -63,11 +60,16 @@ export default {
 .dynamic {
   &:hover {
     cursor: pointer;
+    .box{
+      transform: translateY(-10px);
+    }
   }
   .box {
+    transition: all .32s;
     flex-wrap: wrap;
     width: 300px;
     .item {
+      width: 300px;
       margin-bottom: 16px;
       background: #fff;
       box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 10%);
@@ -78,6 +80,7 @@ export default {
         img {
           width: 300px;
           height: 200px;
+          object-fit: cover;
         }
       }
       &-title {

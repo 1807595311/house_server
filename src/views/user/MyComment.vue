@@ -2,7 +2,7 @@
     <div class="comment">
         <HeadBG title="我的评论"></HeadBG>
         <div class="box">
-            <div class="comment-box" v-for="v in commentList" :key="v.id" @click="toDynamicDetail(v.dynamic_id)">
+            <div class="comment-box" v-for="v in commentList" :key="v.id" @click.prevent="toDynamicDetail(v.dynamic_id)">
                 <Comment @refreshComment="getMyComment" :comment="v" :isDelete="true"></Comment>
             </div>
         </div>

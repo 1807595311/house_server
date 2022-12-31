@@ -26,6 +26,10 @@
       <div class="title">
         <p>{{dynamicDetail.title}}</p>
         <p class="time">{{dynamicDetail.create_time}}</p>
+        <!-- 设计风格 -->
+        <div>
+          <Tag color="blue">设计风格：{{dynamicStyle.name}}</Tag>
+        </div>
         <!-- 标签 -->
         <div class="tags">              
           <span v-for="(v,i) in tags" :key="i">{{v}}</span>
@@ -62,7 +66,7 @@
       <Affix v-if="dynamicDetail.state == 1">
         <div class="box_right">
           <div class="content">
-            <img :src="dynamicDetail.head_img" alt="">
+            <img class="headimg" @click="toUserHome" :src="dynamicDetail.head_img" alt="">
             <p>{{dynamicDetail.nickname}}
             </p>
             <div class="d_f j_c_c" style="padding: 5px 0;">
@@ -135,7 +139,9 @@ export default {
       dynamicId: null,
       tags: [],
       commentList: [],
-      commentContent: ''
+      commentContent: '',
+      styleList: [],
+      dynamicStyle: {}
     };
   },
   computed: {
@@ -149,6 +155,7 @@ export default {
   created() {
     this.dynamicId = Number( this.$route.query.id );
     this.open = this.$route.query.open ? this.$route.query.open : false;
+    this.getStyleList();
     this.getDynamicDetail(this.dynamicId);
     this.getComment();
   },
@@ -162,6 +169,7 @@ export default {
         this.dynamicDetail = data.dynamicDetail;
         this.tags = data.dynamicDetail.tags.split(',');
         this.otherDynamicList = data.dynamicDetail.otherDynamicList;
+        this.dynamicStyle = await this.styleList.find(v=>v.id === data.dynamicDetail.style);
       } catch (err) {}
     },
     toDetail(id) {
@@ -218,6 +226,23 @@ export default {
           this.getComment();
         }
       }catch(err){}
+    },
+    // 获取装修风格列表
+    async getStyleList(){
+      try{
+        let res = await this.$http.get('/client/find_style_list');
+        this.styleList = res.data.data;
+      }catch(err){}
+    },
+    toUserHome() {
+      this.$router.push(
+        {
+          path: '/user_home',
+          query: {
+            account_number: this.dynamicDetail.account_number,
+          }
+        }
+      )
     },
     openDrawer() {
       this.open = !this.open;
@@ -347,6 +372,9 @@ export default {
       overflow: hidden;
       .content {
         margin-top: 50px;
+        .headimg:hover{
+          cursor: pointer;
+        }
         p {
           text-align: center;
         }

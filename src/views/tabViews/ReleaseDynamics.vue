@@ -8,6 +8,11 @@
         <Form-item label="标签">
           <Checkbox v-for="(v,i) in tagList" :key="i" v-model="v.check">{{v.title}}</Checkbox>
         </Form-item>
+        <Form-item label="风格">
+          <Select v-model="styleId" style="width:200px">
+            <Option v-for="item in styleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
+        </Form-item>
         <Form-item label="封面" prop="cover">
           <UploadHeadImg :imgUrl="editData.cover" @getFormdata="v=>formValidate.cover = v"></UploadHeadImg>
         </Form-item>
@@ -123,10 +128,13 @@ export default {
       editData: {},
       contentMD: "",
       dynamicId: null, // 动态id
+      styleList: [], // 装修风格列表
+      styleId: 1 
     };
   },
   created() {
     this.dynamicId = this.$route.params.id;
+    this.getStyleList();
     if (this.dynamicId) this.getDynamic();
   },
   mounted(){
@@ -150,15 +158,21 @@ export default {
         this.formValidate.title = data.title;
         this.contentMD = data.content_md;
         this.content = data.content_md;
+        this.styleId = data.style;
         this.editData = data;
-        // this.showContent = data.content;
-        console.log(data);
         this.tagList.forEach((v) => {
           if (data.tags.indexOf(v.title) != -1) {
             v.check = true;
           }
         });
       } catch (err) {}
+    },
+    // 获取装修风格列表
+    async getStyleList(){
+      try{
+        let res = await this.$http.get('/client/find_style_list');
+        this.styleList = res.data.data;
+      }catch(err){}
     },
     handleReset(name) {
       this.$refs[name].resetFields();
@@ -205,7 +219,7 @@ export default {
           }
           if (res.data.status === 0) {
             setTimeout(() => {
-              this.$router.go(0);
+              this.$router.go(-1);
             }, 200);
           }
         } else {

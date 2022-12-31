@@ -16,7 +16,6 @@ module.exports = (req, res) => {
                     console.log('err2==>', err);
                     res.send({ msg: `登录失败:${err.message}`, status: -1 });
                 }
-                // console.log(1231231,result);
                 if (result.length >= 1) {
                     // 生成token
                     let token = jwt.sign(

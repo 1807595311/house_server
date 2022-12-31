@@ -9,6 +9,7 @@ const find_orduser_or_desuser = require(path.resolve(__basename, 'db/sql/public/
 const find_user_img_url = require(path.resolve(__basename, 'db/sql/public/find_user_img_url.js'));
 const find_cover = require(path.resolve(__basename, 'db/sql/public/find_cover.js'));
 const find_desuser = require(path.resolve(__basename, 'db/sql/public/find_desuser.js'));
+const find_style = require(path.resolve(__basename, 'db/sql/public/find_style.js'));
 
 // 管理员sql
 const manage_login = require(path.resolve(__basename, 'db/sql/manage/manage_login.js'));
@@ -64,6 +65,8 @@ const find_user_info = require(path.resolve(__basename, 'db/sql/client/find_user
 const edit_headimg = require(path.resolve(__basename, 'db/sql/client/edit_headimg.js'));
 const edit_userinfo = require(path.resolve(__basename, 'db/sql/client/edit_userinfo.js'));
 const edit_other_userInfo = require(path.resolve(__basename, 'db/sql/client/edit_other_userInfo.js'));
+const edit_password = require(path.resolve(__basename, 'db/sql/client/edit_password.js'));
+const cancellation_user = require(path.resolve(__basename, 'db/sql/client/cancellation_user.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -73,6 +76,7 @@ module.exports = {
     find_user_img_url, // 查找普通用户和设计机构的头像
     find_cover, // 查找动态封面图片路径
     find_desuser, // 查询设计机构信息
+    find_style, // 查询装修风格
 
     // 管理员
     manage_login, // 管理员登录
@@ -128,5 +132,7 @@ module.exports = {
     find_user_info, // 个人资料
     edit_headimg, // 修改用户头像
     edit_userinfo, // 修改用户基本资料
-    edit_other_userInfo // 修改普通用户或设计机构资料
+    edit_other_userInfo, // 修改普通用户或设计机构资料
+    edit_password, // 修改用户密码
+    cancellation_user // 修改用户状态
 }

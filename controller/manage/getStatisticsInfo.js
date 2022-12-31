@@ -11,7 +11,8 @@ module.exports = (req, res) => {
             if (result.length > 0) {
                 resolve({
                     otherStatistics: result[0][0],
-                    cityStatistics: result[1]
+                    cityStatistics: result[1],
+                    FansLeaderboard: result[2]
                 })
             }
         });

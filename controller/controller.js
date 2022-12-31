@@ -45,6 +45,9 @@ let user_info = require(path.resolve(__basename, 'controller/client/user_info.js
 let upload_headimg = require(path.resolve(__basename, 'controller/client/upload_headimg.js')); // 修改用户头像
 let edit_user_info = require(path.resolve(__basename, 'controller/client/edit_user_info.js')); // 修改用户基本资料
 let edit_other_userInfo = require(path.resolve(__basename, 'controller/client/edit_other_userInfo.js')); // 修改用户或机构资料
+let find_style_list = require(path.resolve(__basename, 'controller/client/find_style_list.js')); // 查询装修风格
+let edit_password = require(path.resolve(__basename, 'controller/client/edit_password.js')); // 修改用户密码
+let cancellation_user = require(path.resolve(__basename, 'controller/client/cancellation_user.js')); // 注销用户
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -89,5 +92,8 @@ module.exports = {
     user_info,
     upload_headimg,
     edit_user_info,
-    edit_other_userInfo
+    edit_other_userInfo,
+    find_style_list,
+    edit_password,
+    cancellation_user
 }

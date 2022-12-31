@@ -10,6 +10,7 @@ module.exports = (id) => {
     dy.tags,
     dy.content,
     dy.views,
+    dy.style,
     dy.cover,
     dy.create_time
     FROM users AS u

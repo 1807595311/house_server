@@ -22,7 +22,6 @@ module.exports = async (req, res) => {
                 result[0].head_img = fileUrl + result[0].head_img;
                 let customer_type = result[0].customer_type;
                 let otherUserInfo = customer_type == 1 ? await getAccountInfo('des') : null;
-                console.log(1231231,{...result[0],...otherUserInfo});
                 await resolve({...result[0],...otherUserInfo});
             })
         })

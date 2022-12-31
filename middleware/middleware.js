@@ -25,7 +25,7 @@ module.exports = (app) => {
         
         let token = req.headers.authorization;
         
-        if (!token) return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -1 });
+        if (!token) return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -2 });
         if(token.includes("Bearer ")) token = token.split("Bearer ")[1];
         jwt.verify(token, config.tokenEncryption.salt, (err, decoded) => {
             if (err) {

@@ -50,5 +50,8 @@ module.exports = app =>{
     app.post('/client/upload_headimg',controller.upload_headimg); // 修改用户头像
     app.post('/client/edit_user_info',controller.edit_user_info); // 修改用户基本资料
     app.post('/client/edit_other_userInfo',controller.edit_other_userInfo); // 修改普通用户或设计机构资料
+    app.get('/client/find_style_list',controller.find_style_list); // 查询装修风格
+    app.post('/client/edit_password',controller.edit_password); // 修改用户密码
+    app.post('/client/cancellation_user',controller.cancellation_user); // 注销用户
     
 }

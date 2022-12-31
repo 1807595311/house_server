@@ -14,5 +14,14 @@ module.exports = ()=>{
     FROM ( SELECT COUNT(id) AS value, city AS name FROM des_user GROUP BY city  ORDER BY VALUE DESC ) 
     AS temp;
 
-    `;
+    SELECT 
+    DISTINCT 
+    (SELECT COUNT(f_account_number) FROM follows WHERE follows.f_account_number=u.account_number) AS follows_count,
+    u.account_number,
+    u.nickname
+    FROM users AS u 
+    WHERE u.customer_type != 2
+    GROUP BY u.account_number 
+    ORDER BY follows_count DESC
+    LIMIT 0,10;`;
 }

@@ -41,6 +41,7 @@ module.exports = (d)=>{
         c.content,
         u.nickname,
         (SELECT img.head_img FROM images AS img WHERE img.id = u.headimg) AS head_img,
+        (SELECT d.title FROM DYNAMIC AS d WHERE d.id = c.dynamic_id) AS title,
         c.create_time
         FROM COMMENT AS c
         INNER JOIN users AS u ON u.account_number=c.account_number AND u.state=1

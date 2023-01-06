@@ -31,7 +31,7 @@
           <Tag color="blue">设计风格：{{dynamicStyle.name}}</Tag>
         </div>
         <!-- 标签 -->
-        <div class="tags">              
+        <div class="tags">
           <span v-for="(v,i) in tags" :key="i">{{v}}</span>
         </div>
         <!-- 关注 收藏 点赞 评论 -->
@@ -78,12 +78,11 @@
             </p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
-            <div class="d_f j_c_c" style="padding: 10px 0 20px;"
-              v-if="dynamicDetail.customer_type == 1 && 
+            <div class="d_f j_c_c" style="padding: 10px 0 20px;" v-if="dynamicDetail.customer_type == 1 && 
               account_number && 
               dynamicDetail.account_number != account_number &&
               $store.state.userInfo.customer_type == 0">
-              <Button @click="openDrawer" type="info">
+              <Button @click="()=>consultDialog = true" type="info">
                 <Icon size="14" color="" type="chatbox-working"></Icon>
                 咨询
               </Button>
@@ -115,6 +114,48 @@
         </div>
       </Affix>
     </div>
+    <!-- 咨询弹窗 -->
+    <Modal v-model="consultDialog" title="咨询" width="600" :styles="{top: '10vh'}">
+      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="100">
+        <Form-item label="所在城市" prop="city">
+          <Address @getAddress="v=>formInline.city=v"></Address>
+        </Form-item>
+        <Form-item label="房屋面积" prop="area">
+          <Input size="large" type="text" v-model="formInline.area" placeholder="房屋面积，单位m²"></Input>
+        </Form-item>
+        <Form-item label="装修预算" prop="budget">
+          <Input size="large" type="text" v-model="formInline.budget" placeholder="装修预算，单位万元"></Input>
+        </Form-item>
+        <Form-item label="装修风格">
+          <Select v-model="formInline.style_id" style="width:200px">
+            <Option v-for="item in styleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
+        </Form-item>
+        <Form-item label="房屋现状">
+          <Select v-model="formInline.situation" style="width:200px">
+            <Option v-for="(item,i) in house_status" :value="item" :key="i">{{ item }}</Option>
+          </Select>
+        </Form-item>
+        <Form-item label="预计入住时间" prop="planned_time">
+          <Date-picker type="date" :options="date_options" @on-change="v=>formInline.planned_time=v" placeholder="选择日期" style="width: 200px">
+          </Date-picker>
+        </Form-item>
+        <Form-item label="QQ号" prop="qq_number">
+          <Input size="large" type="text" v-model="formInline.qq_number" placeholder="联系方式：QQ号"></Input>
+        </Form-item>
+        <Form-item label="微信号" prop="wx_number">
+          <Input size="large" type="text" v-model="formInline.wx_number" placeholder="联系方式：微信号"></Input>
+        </Form-item>
+        <Form-item label="手机号" prop="phone_number">
+          <Input size="large" type="text" v-model="formInline.phone_number" placeholder="联系方式：手机号"></Input>
+        </Form-item>
+      </Form>
+      <div slot="footer">
+        <Button type="primary" size="large" long @click="handleSubmit('formInline')">提交</Button>
+        <p></p>
+        <Button style="margin-top: 10px;" @click="()=>consultDialog=false" size="large" long>取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -122,11 +163,46 @@
 import Drawer from "vue-simple-drawer";
 import Comment from "@/components/Comment.vue";
 import { replace, filtion } from "verification-sensitive";
+import Address from "@/components/Address.vue";
+const reg = /^\d+(\.\d+)?$/;
+function TEST_NUM(rule, value, callback) {
+  if (!reg.test(value)) callback(new Error("只能为数字"));
+  else callback();
+}
+function vPhone_number(rule, value, callback) {
+  var myreg = /^[1][3,5,7,8][0-9]{9}$/;
+  if (!myreg.test(value)) {
+    callback(new Error("手机号格式错误"));
+  } else {
+    callback();
+  }
+}
+function vWx_number(rule, value, callback) {
+  var myreg = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/;
+  if (value === '') {
+    return callback();
+  } else if (!myreg.test(value)) {
+    callback(new Error("微信号格式错误"));
+  } else {
+    callback();
+  }
+}
+function vQQ_number(rule, value, callback) {
+  var myreg = /^[1-9][0-9]{4,10}$/gim;
+  if (value === '') {
+    return callback();
+  } else if (!myreg.test(value)) {
+    callback(new Error("QQ号格式错误"));
+  } else {
+    callback();
+  }
+}
 export default {
   name: "ClientDynamicDetails",
   components: {
     Drawer,
-    Comment
+    Comment,
+    Address
   },
   data() {
     return {
@@ -135,42 +211,117 @@ export default {
       otherDynamicList: [],
       flag: true,
       open: false,
-      account_number: this.$store.state.userInfo? this.$store.state.userInfo.account_number : '',
+      account_number: this.$store.state.userInfo ? this.$store.state.userInfo.account_number : '',
       dynamicId: null,
       tags: [],
       commentList: [],
       commentContent: '',
-      styleList: [],
-      dynamicStyle: {}
+      styleList: [], // 装修风格列表
+      dynamicStyle: {},
+      consultDialog: false, // 咨询弹窗
+      formInline: {
+        style_id: 1,
+        area: null,
+        city: '',
+        situation: '毛坯房',
+        budget: '', // 预算
+        planned_time: '', // 预计入住时间
+        phone_number: "", // 手机号
+        wx_number: "", // 微信号
+        qq_number: "", // QQ号
+      },
+      house_status: ['毛坯房', '精装修', '老房重装'],
+      ruleInline: {
+        city: [
+          {
+            required: true,
+            message: '城市不能为空',
+            trigger: "change",
+          },
+        ],
+        area: [
+          {
+            required: true,
+            validator: TEST_NUM,
+            trigger: "blur",
+          },
+        ],
+        budget: [
+          {
+            required: true,
+            validator: TEST_NUM,
+            trigger: "blur",
+          },
+        ],
+        planned_time: [
+          {
+            required: true,
+            message: '预计入住时间不能为空',
+            trigger: "change",
+          },
+        ],
+        phone_number: [
+          {
+            required: true,
+            validator: vPhone_number,
+            trigger: "blur",
+          },
+        ],
+        qq_number: [
+          {
+            validator: vQQ_number,
+            trigger: "blur",
+          },
+        ],
+        wx_number: [
+          {
+            validator: vWx_number,
+            trigger: "blur",
+          },
+        ],
+      },
+      date_options: {
+        disabledDate(date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      }
     };
+  },
+  watch: {
+    formInline: {
+      handler(newVal) {
+        console.log(newVal);
+      },
+      deep: true
+    }
   },
   computed: {
     // 判断是否本人
-    isSelf(){
-      if(this.account_number == this.dynamicDetail.account_number) return true;
+    isSelf() {
+      if (this.account_number == this.dynamicDetail.account_number) return true;
       else return false;
     }
   },
 
   created() {
-    this.dynamicId = Number( this.$route.query.id );
+    this.dynamicId = Number(this.$route.query.id);
     this.open = this.$route.query.open ? this.$route.query.open : false;
-    this.getStyleList();
     this.getDynamicDetail(this.dynamicId);
     this.getComment();
+    this.getContact();
   },
 
   methods: {
     // 获取动态详情
     async getDynamicDetail(id) {
       try {
-        let res = await this.$http.post("/client/dynamic_detail", {id});
+        let res = await this.$http.post("/client/dynamic_detail", { id });
         let data = res.data.data;
         this.dynamicDetail = data.dynamicDetail;
         this.tags = data.dynamicDetail.tags.split(',');
         this.otherDynamicList = data.dynamicDetail.otherDynamicList;
-        this.dynamicStyle = await this.styleList.find(v=>v.id === data.dynamicDetail.style);
-      } catch (err) {}
+        this.getStyleList();
+      } catch (err) { }
     },
     toDetail(id) {
       this.getDynamicDetail(id);
@@ -180,59 +331,78 @@ export default {
       this.flag = !this.flag;
     },
     // 点赞
-    async like(){
-      try{
+    async like() {
+      try {
         let data = { dynamic_id: this.dynamicDetail.id }
-        await this.$http.post('/client/dynamic_likes',data);
+        await this.$http.post('/client/dynamic_likes', data);
         this.getDynamicDetail(this.dynamicId);
-      }catch(err){}
+      } catch (err) { }
     },
     // 收藏
-    async collection(){
-      try{
+    async collection() {
+      try {
         let data = { dynamic_id: this.dynamicDetail.id }
-        await this.$http.post('/client/dynamic_collection',data);
+        await this.$http.post('/client/dynamic_collection', data);
         this.getDynamicDetail(this.dynamicId);
-      }catch(err){}
+      } catch (err) { }
     },
     // 关注
-    async follow(){
-      try{
+    async follow() {
+      try {
         let data = { f_account_number: this.dynamicDetail.account_number };
-        await this.$http.post('/client/user_follow',data);
+        await this.$http.post('/client/user_follow', data);
         this.getDynamicDetail(this.dynamicId);
-      }catch(err){}
+      } catch (err) { }
     },
     // 获取评论
-    async getComment(){
-      try{
-        let res = await this.$http.get('/client/find_dynamic_comment',{ id: this.dynamicId });
+    async getComment() {
+      try {
+        let res = await this.$http.get('/client/find_dynamic_comment', { id: this.dynamicId });
         this.commentList = res.data.data;
-      }catch(err){}
+      } catch (err) { }
     },
     // 评论
-    async sendComment(){
-      if(this.commentContent == '') return this.$Message.error('请输入内容后再发送...');
-      if(filtion(this.commentContent)) return this.$Message.error('评论存在敏感词...');
-      try{
+    async sendComment() {
+      if (this.commentContent == '') return this.$Message.error('请输入内容后再发送...');
+      if (filtion(this.commentContent)) return this.$Message.error('评论存在敏感词...');
+      try {
         let data = {
           account_number: this.account_number,
           dynamic_id: this.dynamicId,
           content: this.commentContent
         }
-        let res = await this.$http.post('/client/dynamic_comment',data);
-        if(res.data.status === 0){
+        let res = await this.$http.post('/client/dynamic_comment', data);
+        if (res.data.status === 0) {
           this.commentContent = '';
           this.getComment();
         }
-      }catch(err){}
+      } catch (err) { }
     },
     // 获取装修风格列表
-    async getStyleList(){
-      try{
+    async getStyleList() {
+      try {
         let res = await this.$http.get('/client/find_style_list');
         this.styleList = res.data.data;
-      }catch(err){}
+        this.dynamicStyle = await this.styleList.find(v => v.id === this.dynamicDetail.style);
+      } catch (err) { }
+    },
+    // 查询用户联系方式
+    async getContact() {
+      let res = await this.$http.get('/client/find_contact');
+      let data = res.data.data;
+      this.formInline.wx_number = data.wx_number;
+      this.formInline.qq_number = data.qq_number;
+      this.formInline.phone_number = data.phone_number;
+    },
+    // 提交咨询
+    handleSubmit(name) {
+      this.$refs[name].validate( async (valid) => {
+        if (valid) {
+          let data = { ...this.formInline, to_account_number: this.dynamicDetail.account_number };
+          let res = await this.$http.post('/client/send_consult', data);
+          if(res.data.status === 0) this.consultDialog = false;
+        }
+      });
     },
     toUserHome() {
       this.$router.push(
@@ -262,7 +432,7 @@ export default {
   background-color: white !important;
 }
 ::v-deep .mask {
-  background-color: rgba(0, 0, 0, .7) !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
 }
 .drawerBox::-webkit-scrollbar {
   width: 0.5em;
@@ -273,21 +443,21 @@ export default {
   border-radius: 0.25em;
   background-color: #b9b9b9;
 }
-.drawerBox{
+.drawerBox {
   height: 100%;
   overflow-y: auto;
   padding-right: 20px;
-  .empty{
+  .empty {
     text-align: center;
     font-size: 14px;
     color: #aaa;
     padding: 40px 0;
   }
-  .commentReply{
+  .commentReply {
     margin: 20px 0;
-    .selfHeadimg{
+    .selfHeadimg {
       display: flex;
-      img{
+      img {
         border: 1px solid #ddd;
         border-radius: 50%;
         height: 30px;
@@ -295,7 +465,7 @@ export default {
         margin-right: 10px;
       }
     }
-    .replyBtn{
+    .replyBtn {
       padding: 10px 0;
       display: flex;
       justify-content: end;
@@ -344,16 +514,16 @@ export default {
           font-size: 25px;
         }
       }
-      .tags{
+      .tags {
         margin: 10px;
         width: 100%;
-        span{
+        span {
           padding: 6px 12px;
-          background: hsla(0,0%,100%,.2);
+          background: hsla(0, 0%, 100%, 0.2);
           color: #fff;
           font-size: 14px;
           margin-right: 10px;
-          &:last-of-type{
+          &:last-of-type {
             margin-right: 0;
           }
         }
@@ -372,7 +542,7 @@ export default {
       overflow: hidden;
       .content {
         margin-top: 50px;
-        .headimg:hover{
+        .headimg:hover {
           cursor: pointer;
         }
         p {
@@ -449,7 +619,7 @@ export default {
     }
   }
 }
-.cancellation{
+.cancellation {
   padding: 25px 0 40px;
 }
 </style>

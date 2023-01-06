@@ -1,22 +1,22 @@
 <template>
   <div class="otherInfo_des">
-      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80">
-        <Form-item label="机构名称" prop="mechanism_name">
-          <Input size="large" type="text" v-model="formInline.mechanism_name" placeholder="请输入机构名称(必填)">
-          </Input>
-        </Form-item>
-        <Form-item label="所在城市" prop="city">
-          <Address :value="findCity(formInline.city)" @getAddress="v=>formInline.city=v"></Address>
-        </Form-item>
-        <Form-item label="成立时间" prop="establish_time">
-          <Date-picker :value="formInline.establish_time" @on-change="v=>formInline.establish_time=v" type="date" placeholder="请选择成立日期" style="width: 100%"></Date-picker>
-        </Form-item>
-        <Form-item>
-          <div class="submit">
-            <Button :disabled="isChange" type="primary" @click="handleSubmit('formInline')" long>保存</Button>
-          </div>
-        </Form-item>
-      </Form>
+    <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80">
+      <Form-item label="机构名称" prop="mechanism_name">
+        <Input size="large" type="text" v-model="formInline.mechanism_name" placeholder="请输入机构名称(必填)">
+        </Input>
+      </Form-item>
+      <Form-item label="所在城市" prop="city">
+        <Address :value="findCity(formInline.city)" @getAddress="v=>formInline.city=v"></Address>
+      </Form-item>
+      <Form-item label="成立时间" prop="establish_time">
+        <Date-picker :value="formInline.establish_time" @on-change="v=>formInline.establish_time=v" type="date" placeholder="请选择成立日期" style="width: 100%"></Date-picker>
+      </Form-item>
+      <Form-item>
+        <div class="submit">
+          <Button :disabled="isChange" type="primary" @click="handleSubmit('formInline')" long>保存</Button>
+        </div>
+      </Form-item>
+    </Form>
   </div>
 </template>
 
@@ -62,7 +62,7 @@ export default {
     };
   },
   watch: {
-    userInfo(newVal){
+    userInfo(newVal) {
       this.formInline = {
         mechanism_name: newVal.mechanism_name,
         city: newVal.city,
@@ -70,14 +70,14 @@ export default {
       }
     },
     formInline: {
-      handler(newVal){
+      handler(newVal) {
         let u = this.userInfo;
-        if(u.mechanism_name != newVal.mechanism_name || u.city != newVal.city || u.establish_time != newVal.establish_time){
-          this.isChange = false; 
+        if (u.mechanism_name != newVal.mechanism_name || u.city != newVal.city || u.establish_time != newVal.establish_time) {
+          this.isChange = false;
         }
         else this.isChange = true;
-		  },
-		  deep: true
+      },
+      deep: true
     }
   },
   methods: {
@@ -101,10 +101,10 @@ export default {
       else callback();
     },
     handleSubmit(name) {
-      this.$refs[name].validate( async (valid) => {
+      this.$refs[name].validate(async (valid) => {
         if (valid) {
-          let res = await this.$http.post('/client/edit_other_userInfo',this.formInline);
-          if(res.data.status === 0){
+          let res = await this.$http.post('/client/edit_other_userInfo', this.formInline);
+          if (res.data.status === 0) {
             this.isChange = true;
             this.$parent.getUserInfo();
           }
@@ -112,25 +112,25 @@ export default {
       });
     },
     // 通过城市查找省份和城市，并组成数组
-    findCity(city){
-        let p = null;
-        let d = null
-        for(let i = 0; i < address.length; i++){
-            let c = address[i].children.filter(v=> v.label == city);
-            if(c.length > 0){
-                p = address[i].label;
-                d = c[0].label;
-                break;
-            }
+    findCity(city) {
+      let p = null;
+      let d = null
+      for (let i = 0; i < address.length; i++) {
+        let c = address[i].children.filter(v => v.label == city);
+        if (c.length > 0) {
+          p = address[i].label;
+          d = c[0].label;
+          break;
         }
-        return [p,d];
+      }
+      return [p, d];
     }
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.otherInfo_des{
-    padding: 20px 0 30px;
+.otherInfo_des {
+  padding: 20px 0 30px;
 }
 </style>

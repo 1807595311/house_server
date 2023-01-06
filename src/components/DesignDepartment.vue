@@ -6,9 +6,12 @@
       </div>
       <div class="nickname">
         <p class="tips">{{design.mechanism_name}}</p>
-        <span>
+        <p style="white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;">
         {{design.nickname}} {{design.mechanism_name ? `| ${design.mechanism_name}` : '' }} 
-        </span>
+        </p>
       </div>
       <p class="establish_time"><span v-if="design.establish_time">成立时间: {{design.establish_time}}</span></p>
       <div class="address d_f j_c_c">

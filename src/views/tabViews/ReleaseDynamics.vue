@@ -246,18 +246,18 @@ export default {
       // console.log(status);
     },
   },
-  // beforeRouteLeave(to, from, next) {
-  //   this.$Modal.confirm({
-  //     title: "提示",
-  //     content: "<p>离开后您所编辑的内容会清空，您确定要离开吗</p>",
-  //     onOk: () => {
-  //       next();
-  //     },
-  //     onCancel: () => {
+  beforeRouteLeave(to, from, next) {
+    this.$Modal.confirm({
+      title: "提示",
+      content: "<p>离开后您所编辑的内容会清空，您确定要离开吗</p>",
+      onOk: () => {
+        next();
+      },
+      onCancel: () => {
         
-  //     },
-  //   });
-  // },
+      },
+    });
+  },
 };
 </script>
 

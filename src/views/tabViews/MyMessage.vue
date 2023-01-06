@@ -93,7 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 .my-message {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 86px);
   .box {
     display: flex;
     &-right {

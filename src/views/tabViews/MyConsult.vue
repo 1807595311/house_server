@@ -3,15 +3,29 @@
     <div class="container d_f j_c_sb">
       <div class="left">
         <!-- 咨询列表 -->
-        <div v-if="true">
-          <div class="item d_f a_l_c" @click="changeIndex(v)" v-for="v in 10" :key="v" :style="activeIndex == v ? 'background: #eee;': ''">
+        <div class="title">{{customer_type === 0 ? '已发送' : '已接收'}}</div>
+        <div v-if="consultList.length > 0">
+          <div class="item d_f a_l_c" @click="changeIndex(index,v.id)" v-for="(v,index) in consultList" :key="v.id" :style="activeIndex == index ? 'background: #eee;': ''">
             <div class="head-img">
-              <img src="@/assets/a.png" alt="">
+              <img :src="v.head_img" alt="">
             </div>
-            <div style="margin-left: 10px;">
-              <p>形成设计</p>
-              <p>广西名扬天下设计股份有限公司</p>
-              <p class="time">2022-10-23 20:20:20</p>
+            <div class="m_l_2" style="width: 80%;">
+              <p class="d_f j_c_sb">
+                <span>{{v.nickname}}</span>
+                <Poptip trigger="hover" placement="bottom-start" v-show="activeIndex === index" v-model="poptip">
+                  <span class="f_w">···</span>
+                  <div slot="title" class="text_a_c">删除咨询？</div>
+                  <div slot="content">
+                    <Button @click.stop="deleteConsult(v)" type="error" long>删除</Button>
+                  </div>
+                </Poptip>
+              </p>
+              <p>{{v.mechanism_name || ''}}</p>
+              <p class="time d_f j_c_sb">
+                <span>{{v.create_time}}</span>
+                <span style="color: #e4393c;" v-if="v.read === 0">未读</span>
+                <span v-if="v.read === 1">已读</span>
+              </p>
             </div>
           </div>
         </div>
@@ -21,50 +35,50 @@
       </div>
       <div class="right">
         <!-- 咨询详情 -->
-        <div v-if="true" class="container">
+        <div v-if="JSON.stringify(consultDetails) !== '{}'" class="container">
           <div class="head-img">
-            <img src="@/assets/a.png" alt="">
+            <img :src="consultDetails.head_img" alt="">
           </div>
           <div class="info">
-            <p>昵称</p>
-            <Tag color="blue">机构名称</Tag>
+            <p>{{consultDetails.nickname}}</p>
+            <Tag v-if="consultDetails.mechanism_name" color="blue">{{consultDetails.mechanism_name}}</Tag>
           </div>
           <div class="other-data">
             <div class="item">
               <p>所在城市：</p>
-              <p>南宁市</p>
+              <p>{{consultDetails.city}}</p>
             </div>
             <div class="item">
               <p>装修风格：</p>
-              <p>北欧风</p>
+              <p>{{consultDetails.style}}</p>
             </div>
             <div class="item">
               <p>房屋面积：</p>
-              <p>25 m²</p>
+              <p>{{consultDetails.area}} m²</p>
             </div>
             <div class="item">
               <p>房屋现状：</p>
-              <p>毛坯房 精装修 老房重装</p>
+              <p>{{consultDetails.situation}}</p>
             </div>
             <div class="item">
               <p>装修预算：</p>
-              <p>15 万元</p>
+              <p>{{consultDetails.budget}} 万元</p>
             </div>
             <div class="item">
               <p>计划入住时间：</p>
-              <p>2023年4月</p>
+              <p>{{consultDetails.planned_time}}</p>
             </div>
             <div class="item">
               <p>手机号：</p>
-              <p>1812848284</p>
+              <p>{{consultDetails.phone_number}}</p>
             </div>
             <div class="item">
               <p>微信号：</p>
-              <p>wdkg1e23</p>
+              <p>{{consultDetails.wx_number}}</p>
             </div>
             <div class="item">
               <p>QQ号：</p>
-              <p>23214314</p>
+              <p>{{consultDetails.qq_number}}</p>
             </div>
           </div>
         </div>
@@ -82,12 +96,44 @@ export default {
   data() {
     return {
       formInline: {},
-      activeIndex: 1
+      activeIndex: -1,
+      consultList: [],
+      consultDetails: {},
+      customer_type: this.$store.state.userInfo && Number(this.$store.state.userInfo.customer_type),
+      poptip: false
     }
   },
+  created() {
+    this.getMyConsult();
+  },
   methods: {
-    changeIndex(i){
+    // 获取我的咨询列表
+    async getMyConsult() {
+      let res = await this.$http.get('/client/my_consult');
+      this.consultList = res.data.data;
+    },
+    // 切换咨询
+    async changeIndex(i, id) {
       this.activeIndex = i;
+      this.consultDetails = this.consultList[i];
+      if (this.customer_type === 1 && this.consultDetails.read === 0) {
+        let res = await this.$http.post('/client/edit_consult_read', { id });
+        if (res.data.status === 2) this.getMyConsult();
+      }
+    },
+    // 删除咨询
+    deleteConsult(v) {
+      this.$Modal.confirm({
+        title: '删除咨询',
+        content: '<h3>删除该咨询将不可恢复，确定要删除吗？</h3>',
+        onOk: async () => {
+          let res = await this.$http.post('/client/delete_consult', { id: v.id });
+          if (res.data.status === 0) {
+            this.getMyConsult();
+            this.consultDetails = {};
+          }
+        }
+      });
     }
   }
 }
@@ -95,11 +141,11 @@ export default {
 
 <style lang="scss" scoped>
 .my-consult {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 86px);
   .empty {
     text-align: center;
     font-size: 16px;
-    padding: 20px 0;
+    padding-top: 50px;
   }
   .container {
     height: calc(100% - 20px);
@@ -107,6 +153,15 @@ export default {
       box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 10%);
       background: #fff;
       overflow-y: auto;
+      .title {
+        width: 320px;
+        position: fixed;
+        padding: 10px;
+        text-align: center;
+        font-size: 16px;
+        background: #fff;
+        color: $theme_color;
+      }
       &::-webkit-scrollbar {
         width: 0.5em;
         background-color: #d9d9d9;
@@ -120,7 +175,10 @@ export default {
         padding: 10px 20px;
         border-bottom: 1px solid #ddd;
         width: 320px;
-        &:hover{
+        &:first-of-type {
+          margin-top: 40px;
+        }
+        &:hover {
           cursor: pointer;
         }
         .head-img {
@@ -142,6 +200,15 @@ export default {
       width: calc(1250px - 350px);
       box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 10%);
       background: #fff;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 0.5em;
+        background-color: #d9d9d9;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 0.25em;
+        background-color: #b9b9b9;
+      }
       .container {
         width: 100%;
         .head-img {

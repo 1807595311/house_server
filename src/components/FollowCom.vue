@@ -6,7 +6,7 @@
         <img v-else src="@/assets/icons/user.png">
       </div>
       <p class="nickname" v-if="userObj.state == 1">{{userObj.nickname}}</p>
-      <p class="nickname" v-else>用户已注销</p>
+      <p class="nickname p_b_20" v-else>用户已注销</p>
       <div class="introduce" v-if="userObj.state == 1">
         {{userObj.introduce}}
       </div>

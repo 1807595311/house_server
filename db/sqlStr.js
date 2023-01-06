@@ -67,6 +67,11 @@ const edit_userinfo = require(path.resolve(__basename, 'db/sql/client/edit_useri
 const edit_other_userInfo = require(path.resolve(__basename, 'db/sql/client/edit_other_userInfo.js'));
 const edit_password = require(path.resolve(__basename, 'db/sql/client/edit_password.js'));
 const cancellation_user = require(path.resolve(__basename, 'db/sql/client/cancellation_user.js'));
+const find_contact = require(path.resolve(__basename, 'db/sql/client/find_contact.js'));
+const send_consult = require(path.resolve(__basename, 'db/sql/client/send_consult.js'));
+const find_consult_by_account = require(path.resolve(__basename, 'db/sql/client/find_consult_by_account.js'));
+const edit_consult_read = require(path.resolve(__basename, 'db/sql/client/edit_consult_read.js'));
+const delete_consult = require(path.resolve(__basename, 'db/sql/client/delete_consult.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -134,5 +139,10 @@ module.exports = {
     edit_userinfo, // 修改用户基本资料
     edit_other_userInfo, // 修改普通用户或设计机构资料
     edit_password, // 修改用户密码
-    cancellation_user // 修改用户状态
+    cancellation_user, // 修改用户状态
+    find_contact, // 查询用户联系方式
+    send_consult, // 发送咨询
+    find_consult_by_account, // 我的咨询
+    edit_consult_read, // 修改咨询已读状态（由设计机构已读后修改状态）
+    delete_consult, // 咨询删除
 }

@@ -32,7 +32,6 @@ module.exports = (app) => {
                 return res.send({ msg: "登录信息不存在或已过期，请重新登录", status: -2 });
             }
             else {
-                console.log('token验证通过');
                 return next();
             }
         });

@@ -48,6 +48,12 @@ let edit_other_userInfo = require(path.resolve(__basename, 'controller/client/ed
 let find_style_list = require(path.resolve(__basename, 'controller/client/find_style_list.js')); // 查询装修风格
 let edit_password = require(path.resolve(__basename, 'controller/client/edit_password.js')); // 修改用户密码
 let cancellation_user = require(path.resolve(__basename, 'controller/client/cancellation_user.js')); // 注销用户
+let find_contact = require(path.resolve(__basename, 'controller/client/find_contact.js')); // 查询用户联系方式
+let send_consult = require(path.resolve(__basename, 'controller/client/send_consult.js')); // 发送咨询
+let my_consult = require(path.resolve(__basename, 'controller/client/my_consult.js')); // 查询我的咨询
+let edit_consult_read = require(path.resolve(__basename, 'controller/client/edit_consult_read.js')); // 由设计机构 修改咨询已读 状态
+let delete_consult = require(path.resolve(__basename, 'controller/client/delete_consult.js')); // 咨询删除
+
 
 
 let upload = require(path.resolve(__basename, 'controller/upload.js'));
@@ -95,5 +101,10 @@ module.exports = {
     edit_other_userInfo,
     find_style_list,
     edit_password,
-    cancellation_user
+    cancellation_user,
+    find_contact,
+    send_consult,
+    my_consult,
+    edit_consult_read,
+    delete_consult
 }

@@ -53,5 +53,10 @@ module.exports = app =>{
     app.get('/client/find_style_list',controller.find_style_list); // 查询装修风格
     app.post('/client/edit_password',controller.edit_password); // 修改用户密码
     app.post('/client/cancellation_user',controller.cancellation_user); // 注销用户
+    app.get('/client/find_contact',controller.find_contact); // 查询用户联系方式
+    app.post('/client/send_consult',controller.send_consult); // 发送咨询
+    app.get('/client/my_consult',controller.my_consult); // 我的咨询
+    app.post('/client/edit_consult_read',controller.edit_consult_read); // 修改咨询已读状态
+    app.post('/client/delete_consult',controller.delete_consult); // 咨询删除
     
 }

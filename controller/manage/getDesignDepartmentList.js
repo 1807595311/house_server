@@ -4,6 +4,12 @@ module.exports = (req,res)=>{
     let currentPage = pageSize - data.pageSize;
     data.pageSize = pageSize;
     data.currentPage = currentPage;
+
+    let fileUrl = `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}`;
+    let formatFileUrl = (arr)=>{
+        arr.forEach(v => v.head_img = fileUrl + v.head_img);
+        return arr;
+    }
     // 查询设计机构列表
     db.query(sqlStr.getDesignDepartmentList(data), (err, result) => {
         // console.log(err);
@@ -18,7 +24,7 @@ module.exports = (req,res)=>{
             })
             let sendData = {
                 count: resu.length,
-                data: result,
+                data: formatFileUrl(result),
                 status: 2
             };
             res.send(sendData);

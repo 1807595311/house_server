@@ -10,5 +10,6 @@ module.exports = [
     '/client/search_dynamic',
     '/client/find_other_userinfo',
     '/client/find_dynamic_comment',
-    '/client/search_users'
+    '/client/search_users',
+    '/client/find_style_list'
 ]

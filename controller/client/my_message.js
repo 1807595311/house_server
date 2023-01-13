@@ -23,14 +23,19 @@ module.exports = async (req, res) => {
         let commentReply = new Promise((resolve, reject) => {
             db.query(sqlStr.find_message_by_user({account_number}).commentReply, (err, result) => resolve(result) )
         })
-        let result = await Promise.all([ follows, collection, fabulous, commentReply ]);
+        // 查询回复我的评论的消息
+        let systemNotice = new Promise((resolve, reject) => {
+            db.query(sqlStr.find_message_by_user({account_number}).systemNotice, (err, result) => resolve(result) )
+        })
+        let result = await Promise.all([ follows, collection, fabulous, commentReply,systemNotice ]);
         result[1].forEach(v=> v.type = 'collection');
         result[2].forEach(v=> v.type = 'fabulous' );
         let data = {
             follows: formatFileUrl(result[0]),
             collection: formatFileUrl(result[1]),
             fabulous: formatFileUrl(result[2]),
-            comment: formatFileUrl(result[3])
+            comment: formatFileUrl(result[3]),
+            systemNotice: result[4]
         }
         await res.send({
             msg: '获取消息成功',

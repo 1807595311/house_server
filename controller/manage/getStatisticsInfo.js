@@ -12,7 +12,8 @@ module.exports = (req, res) => {
                 resolve({
                     otherStatistics: result[0][0],
                     cityStatistics: result[1],
-                    FansLeaderboard: result[2]
+                    fansLeaderboard: result[2],
+                    userLikeStyle: result[3]
                 })
             }
         });

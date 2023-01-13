@@ -1,6 +1,8 @@
 module.exports = ()=>{
     // 统计查询，查询用户表中 普通用户人数、设计机构人数、性别总人数(不包括未知、2) 、男性总人数、女性总人数、动态总数
-    // 查询统计城市设计机构人数
+    // 查询 设计机构所在城市 并统计数量
+    // 查询用户粉丝数排行
+    // 查询用户喜爱设计风格
     return `SELECT 
     DISTINCT (SELECT COUNT(account_number) FROM users WHERE users.customer_type=1) AS des_user_count,
     (SELECT COUNT(account_number) FROM users  WHERE users.customer_type=0) AS old_user_count,
@@ -23,5 +25,18 @@ module.exports = ()=>{
     WHERE u.customer_type != 2
     GROUP BY u.account_number 
     ORDER BY follows_count DESC
-    LIMIT 0,10;`;
+    LIMIT 0,10;
+    
+    SELECT
+    DISTINCT
+    r.id,
+    COUNT( f.id ) AS ${"`value`"},
+    r.name
+    FROM fabulous AS f
+    INNER JOIN DYNAMIC AS d ON d.id = f.dynamic_id
+    INNER JOIN ren_style AS r ON d.style = r.id
+    GROUP BY r.id
+    ORDER BY r.id
+    
+    ` ;
 }

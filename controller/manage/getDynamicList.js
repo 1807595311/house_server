@@ -5,8 +5,10 @@ module.exports = (req, res) => {
     let currentPage = pageSize - data.pageSize;
     data.pageSize = pageSize;
     data.currentPage = currentPage;
+    // 查询动态列表
     db.query(sqlStr.getDynamicList(data), (err, result) => {
         if(err) return res.send({ msg: err, status: -1 });
+        // 查询动态总数
         db.query(sqlStr.getDynamicCount(data), (er, resu) => {
             let fileUrl = `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}`;
             result.forEach(v => v.cover = fileUrl + v.cover);

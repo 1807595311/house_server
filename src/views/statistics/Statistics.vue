@@ -13,8 +13,7 @@
         </StatisticsCard>
       </div>
       <div class="middle">
-        <div class="left" ref="cake" style="width: 45%; height: 280px"></div>
-        <div class="right" ref="column" style="width: 55%; height: 280px"></div>
+        <div class="right" ref="column" style="width: 100%; height: 300px"></div>
       </div>
       <div class="bottom">
         <div ref="like" style="width: 100%; height: 320px"></div>
@@ -23,23 +22,13 @@
     <!-- 性别比例 -->
     <div class="top-right">
       <div class="top-right-box">
-        <p>用户性别比例</p>
+        <!-- <p>用户性别比例</p> -->
         <div class="sex">
-          <el-progress :color="sexColor" type="circle" :percentage="percentage"></el-progress>
-          <div class="right">
-            <div class="top">
-              <div>男</div>
-              <div @click="changeSex(true)" class="triangle-up"></div>
-            </div>
-            <div class="bottom">
-              <div>女</div>
-              <div @click="changeSex(false)" class="triangle-down"></div>
-            </div>
-          </div>
+          <div class="left" ref="cake" style="width: 100%; height: 350px"></div>
         </div>
-        <p style="margin-top:20px">粉丝数排行榜</p>
+        <p style="margin-top: 20px">粉丝数排行榜</p>
         <div class="">
-          <LineProgress></LineProgress>
+          <LineProgress :fansLeaderboard="fansLeaderboard"></LineProgress>
         </div>
       </div>
     </div>
@@ -77,7 +66,9 @@ export default {
       percentage: 0,
       sexColor: "",
       statistics: {},
-      oneWeekAddUserInfo:{}
+      oneWeekAddUserInfo: {},
+      fansLeaderboard: [], // 粉丝排行榜
+      userLikeStyle: [] // 用户喜爱风格
     };
   },
   created() {
@@ -87,32 +78,34 @@ export default {
   },
 
   methods: {
-    async getStatisticsInfo(){
-      try{
+    async getStatisticsInfo() {
+      try {
         let res = await this.$http.get('/manage/getStatisticsInfo');
         this.statistics = res.data;
         this.ordinary_user.count = this.statistics.otherStatistics.old_user_count; // 普通用户人数
-        this.design_department.count = this.statistics.otherStatistics.des_user_count; // 设计机构人数
+        this.design_department.count = this.statistics.otherStatistics.des_user_count; // 设计机构数量
         this.dynamic_count.count = this.statistics.otherStatistics.dynamic_count; // 动态总数
+        this.fansLeaderboard = this.statistics.fansLeaderboard; // 粉丝排行榜
+        this.userLikeStyle = this.statistics.userLikeStyle; // 用户喜爱风格
         this.cakeCharts();// 性别人数
         this.clounmCharts();// 设计机构所在城市
         this.changeSex(false);
         // 最近一周新增用户
-        this.oneWeekAddUserInfo.keysArr = this.statistics.oneWeekAddUsers.map(v=> v.date );
-        this.oneWeekAddUserInfo.valueArr = this.statistics.oneWeekAddUsers.map(v=> v.count );
+        this.oneWeekAddUserInfo.keysArr = this.statistics.oneWeekAddUsers.map(v => v.date);
+        this.oneWeekAddUserInfo.valueArr = this.statistics.oneWeekAddUsers.map(v => v.count);
         this.oneWeekAddUsers()
-      }catch(err){}
+      } catch (err) { }
     },
     // 修改性别比例显示
     changeSex(flag) {
       this.sexColor = flag === true ? "#319EEC" : "#F897A7";
       let male_count = this.statistics.otherStatistics.male_count;
       let female_count = this.statistics.otherStatistics.female_count;
-      let male = Math.floor( 100 * (male_count / (female_count + male_count)) );
+      let male = Math.floor(100 * (male_count / (female_count + male_count)));
       let female = 100 - male;
       this.percentage = flag === true ? male : female;
     },
-    // 性别人数
+    // 用户喜爱风格
     cakeCharts() {
       const chart = this.$refs.cake;
       if (chart) {
@@ -120,16 +113,15 @@ export default {
         // 指定图表的配置项和数据
         var option = {
           title: {
-            text: "用户性别人数",
+            text: "用户喜爱风格",
             left: "center",
           },
           tooltip: {
-            trigger: "item",
+            trigger: "item"
           },
           legend: {
             top: "10%",
-            x: "left",
-            orient: "vertical",
+            y: "10%",
             formatter: function (name) {
               // 获取legend显示内容
               let data = option.series[0].data;
@@ -144,14 +136,11 @@ export default {
           },
           series: [
             {
-              color: ["#4DB4E7", "#F1A0C5"],
               name: "人数",
               type: "pie",
-              radius: "70%",
-              data: [
-                { value: this.statistics.otherStatistics.male_count, name: "男" },
-                { value: this.statistics.otherStatistics.female_count, name: "女" },
-              ],
+              radius: "50%",
+              data: this.userLikeStyle,
+              center: ["50%", "60%"],
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
@@ -159,7 +148,7 @@ export default {
                   shadowColor: "rgba(0, 0, 0, 0.5)",
                 },
               },
-            },
+            }
           ],
         };
         myChart.setOption(option);
@@ -199,7 +188,8 @@ export default {
               name: "城市人数",
               type: "pie",
               radius: ["30%", "70%"],
-              avoidLabelOverlap: false,
+              center: ["70%", "50%"],
+              avoidLabelOverlap: true, //是否启用防止标签重叠策略
               label: {
                 show: false,
                 position: "center",
@@ -217,6 +207,14 @@ export default {
               data: this.statistics.cityStatistics,
             },
           ],
+          dataZoom: [{ //添加X轴滚动条
+        type: 'slider',
+        show: true,
+        start: 20,
+        end: 100,
+        handleSize: 8
+    }]
+
         };
         myChart.setOption(option);
       }
@@ -244,7 +242,7 @@ export default {
           },
           yAxis: {
             type: "value",
-						minInterval: 1,
+            minInterval: 1,
           },
           series: [
             {
@@ -273,7 +271,7 @@ export default {
     justify-content: space-between;
   }
   .top-left {
-    width: 100%;
+    width: 75%;
     // min-width: 900px;
     .middle,
     .bottom {

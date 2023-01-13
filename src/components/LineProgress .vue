@@ -1,17 +1,26 @@
 <template>
   <div class="manageLineProgress">
-    <div ref="fans" style="width: 100%; height: 530px"></div>
+    <div ref="fans" style="width: 100%; height: 380px"></div>
   </div>
 </template>
 
 <script>
 export default {
   name: "ManageLineProgress",
-
+  props: ['fansLeaderboard'],
   data() {
-    return {};
+    return {
+      fansLeaderboardList: []
+    };
   },
 
+  watch: {
+    fansLeaderboard(v){
+      this.fansLeaderboardList = v;
+      this.fans();
+
+    }
+  },
   mounted() {
     this.fans();
   },
@@ -42,23 +51,12 @@ export default {
           },
           yAxis: {
             type: "category",
-            data: [
-              "昵称1",
-              "昵称2",
-              "昵称3",
-              "昵称4",
-              "昵称5",
-              "昵称6",
-              "昵称7",
-              "昵称8",
-              "昵称9qweqwe",
-              "昵称10",
-            ],
+            data: this.fansLeaderboardList.map(v=> v.nickname),
           },
           series: [
             {
               type: "bar",
-              data: [124, 432, 65, 557, 234, 97, 242, 543, 821, 92],
+              data: this.fansLeaderboardList.map(v=> v.follows_count),
             },
           ],
         };

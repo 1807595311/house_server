@@ -24,6 +24,9 @@
           <div v-show="menuList[3].name===activeKey">
             <CommentMessage v-for="v in messageData.comment" :comment="v" :key="v.id"></CommentMessage>
           </div>
+          <div v-show="menuList[4].name===activeKey">
+            <SystemNotice v-for="v in messageData.systemNotice" :systemNotice="v" :key="v.id"></SystemNotice>
+          </div>
         </div>
       </div>
     </div>
@@ -34,6 +37,7 @@
 import CommentMessage from "@/components/message/CommentMessage.vue";
 import CollectionMessage from "@/components/message/CollectionMessage.vue";
 import FollowMessage from "@/components/message/FollowMessage.vue";
+import SystemNotice from "@/components/message/SystemNotice.vue";
 const menuList = [
   {
     name: 1,
@@ -54,14 +58,20 @@ const menuList = [
     name: 4,
     title: '评论回复',
     icon: 'chatboxes'
-  }
+  },
+  {
+    name: 5,
+    title: '系统通知',
+    icon: 'android-notifications'
+  },
 ];
 export default {
   name: 'MyMessage',
   components: {
     CommentMessage,
     CollectionMessage,
-    FollowMessage
+    FollowMessage,
+    SystemNotice
   },
   data() {
     return {
@@ -82,10 +92,8 @@ export default {
     },
     // 获取我的消息
     async getMyMessage(){
-      try{
-        let res = await this.$http.post('/client/my_message');
-        this.messageData = res.data.data;
-      }catch(err){}
+      let res = await this.$http.post('/client/my_message');
+      this.messageData = res.data.data;
     }
   }
 }

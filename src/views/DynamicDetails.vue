@@ -287,14 +287,6 @@ export default {
       }
     };
   },
-  watch: {
-    formInline: {
-      handler(newVal) {
-        console.log(newVal);
-      },
-      deep: true
-    }
-  },
   computed: {
     // 判断是否本人
     isSelf() {
@@ -388,6 +380,7 @@ export default {
     },
     // 查询用户联系方式
     async getContact() {
+      if(!this.account_number) return;
       let res = await this.$http.get('/client/find_contact');
       let data = res.data.data;
       this.formInline.wx_number = data.wx_number;

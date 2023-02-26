@@ -2,7 +2,7 @@ module.exports = (req,res)=>{
     let data = req.query;
     let pageSize = data.pageSize * data.currentPage;
     let currentPage = pageSize - data.pageSize;
-    data.pageSize = pageSize;
+    // data.pageSize = pageSize;
     data.currentPage = currentPage;
 
     let fileUrl = `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}`;
@@ -11,7 +11,7 @@ module.exports = (req,res)=>{
         return arr;
     }
     // 查询设计机构列表
-    db.query(sqlStr.getDesignDepartmentList(data), (err, result) => {
+    db.query(sqlStr.getDesignDepartmentList({...data ,pageSize: data.pageSize}), (err, result) => {
         // console.log(err);
         if(err) return res.send({ msg: err, status: -1 });
         // 查询设计机构当前状态的总数量

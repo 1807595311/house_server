@@ -1,6 +1,9 @@
+//上传图片模块
 const multipleFile = require(path.resolve(__basename, "utils/upload.js"));
 const multer = require("multer");
 const multiparty = require('multiparty');
+// 密码加密模块
+const crypto = require("crypto");
 
 module.exports = (req, res) => {
     let urlArr = [];
@@ -26,6 +29,9 @@ module.exports = (req, res) => {
                 // 获取用户信息
                 formPro.then(res_userInfo => {
                     userInfo = res_userInfo;
+                    // 密码加密
+                    let md5 = crypto.createHash("md5");
+                    userInfo.password = md5.update(userInfo.password).digest("hex");
                     // 执行sql查询用户
                     db.query(sqlStr.findUser(userInfo), (err, result) => {
                         if (err) return res.send({ msg: '注册失败', status: -1 });
@@ -50,7 +56,7 @@ module.exports = (req, res) => {
                 db.query(sqlStr.insertUsersStr(u), (err2, result2) => {
                     if (err2) return res.send({ msg: `注册失败:${err2.message}`, status: -1 });
                     if (result2.affectedRows === 1) {
-                        // 插入普通用户表
+                        // 插入设计机构表
                         db.query(sqlStr.inster_des_user(userInfo), (err3, result3) => {
                             if (err3) return res.send({ msg: `注册失败:${err3.message}`, status: -1 });
                             if (result3.affectedRows === 1) return res.send({ msg: '注册成功', status: 0 });

@@ -1,16 +1,19 @@
+// token生成模块
 const jwt = require("jsonwebtoken");
+// 密码加密模块
+const crypto = require("crypto");
 module.exports = (req, res) => {
     let userInfo = req.body;
+    // 密码加密
+    let md5 = crypto.createHash("md5");
+    userInfo.password = md5.update(userInfo.password).digest("hex");
     db.query(sqlStr.find_orduser_or_desuser(userInfo), (err, result) => {
-        // 失败
         if (err) return res.send({ msg: `登录失败${err}`, status: -1 });
-        // 成功
-        if (result.length < 1) {
-            return res.send({ msg: '账号未被注册', status: -1 });
-        } else {
+        if (result.length < 1)  return res.send({ msg: '账号未被注册', status: -1 });
+        else {
             // 当前用户状态
             let resultUserInfo =  result[0];
-            if(resultUserInfo.state == 0) return res.send({msg:'您的账号状态异常，禁止登录',status: -1});
+            if(resultUserInfo.state == 0) return res.send({msg: '账号被管理员禁用，原因：' + resultUserInfo.disable_reason,status: -1});
             db.query(sqlStr.login_des(userInfo), (err, result) => {
                 if (err) {
                     console.log('err2==>', err);

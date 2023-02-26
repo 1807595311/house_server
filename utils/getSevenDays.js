@@ -36,7 +36,7 @@ module.exports = class GetSevenDaysSql {
     sql() {
       let sqlArr = [];
       this.sevenDays().forEach(v=>{
-        sqlArr.push(`SELECT IFNULL(DATE_FORMAT(create_time,'%Y-%m-%d'),'${v}') AS 'date',COUNT(DATE_FORMAT(create_time,'%Y-%m-%d')) AS 'count' FROM users WHERE create_time LIKE '%${v}%' AND customer_type=0;`)
+        sqlArr.push(`SELECT IFNULL(DATE_FORMAT(create_time,'%Y-%m-%d'),'${v}') AS 'date',COUNT(DATE_FORMAT(create_time,'%Y-%m-%d')) AS 'count' FROM users WHERE create_time LIKE '%${v}%' AND customer_type!= 2;`)
       })
       return sqlArr;
     }

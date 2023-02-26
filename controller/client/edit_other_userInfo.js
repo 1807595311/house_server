@@ -13,7 +13,7 @@ module.exports = (req,res)=>{
                 })
             })
         }
-        // 查询用户类型
+        // 通过用户类型进行修改
         db.query(sqlStr.find_user_info({ account_number }).info, async (err, result) => {
             if (err) return res.send({ msg: '修改失败' + err, status: -1 });
             if (result.length > 0) {

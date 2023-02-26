@@ -3,7 +3,8 @@ module.exports = async (req, res) => {
     try{
         let data = {
             from_account_number: req.body.account_number,
-            account_number: parseToken(req.headers.authorization)
+            account_number: parseToken(req.headers.authorization),
+            currentPage: req.body.currentPage
         }
         let fileUrl = `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}`;
         // 封装查询 普通用户 或 设计机构 的资料
@@ -27,8 +28,10 @@ module.exports = async (req, res) => {
         })
         // 通过账号查询发布的动态
         let getDynamicListByaccount = new Promise((resolve, reject) => {
-            db.query(sqlStr.find_dynamic_by_userinfo(data), (err, result) => {
-                result.forEach(v => v.cover = fileUrl + v.cover);
+            let pageSize = 20 * data.currentPage;
+            let currentPage = pageSize - 20;
+            db.query(sqlStr.find_dynamic_by_userinfo({...data,currentPage}), (err, result) => {
+                result[0].forEach(v => v.cover = fileUrl + v.cover);
                 resolve(result);
             })
         })
@@ -38,8 +41,9 @@ module.exports = async (req, res) => {
             status: 2,
             data:{
                 userInfo: result[0],
-                dynamicList: result[1]
-            }
+                dynamicList: result[1][0],
+            },
+            count: result[1][1][0].counts
         })
     }catch(err){
         res.send({msg: `服务器错误:${err}`,status: -1})

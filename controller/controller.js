@@ -53,6 +53,11 @@ let send_consult = require(path.resolve(__basename, 'controller/client/send_cons
 let my_consult = require(path.resolve(__basename, 'controller/client/my_consult.js')); // 查询我的咨询
 let edit_consult_read = require(path.resolve(__basename, 'controller/client/edit_consult_read.js')); // 由设计机构 修改咨询已读 状态
 let delete_consult = require(path.resolve(__basename, 'controller/client/delete_consult.js')); // 咨询删除
+let insert_house_info = require(path.resolve(__basename, 'controller/client/insert_house_info.js')); // 添加房屋信息
+let find_house_info = require(path.resolve(__basename, 'controller/client/find_house_info.js')); // 获取房屋信息列表
+let delete_house = require(path.resolve(__basename, 'controller/client/delete_house.js')); // 删除房屋信息
+let find_house_by_id = require(path.resolve(__basename, 'controller/client/find_house_by_id.js')); // 查询房屋信息
+let find_other_user_fabulous = require(path.resolve(__basename, 'controller/client/find_other_user_fabulous.js')); // 查询其他用户的点赞列表
 
 
 
@@ -106,5 +111,10 @@ module.exports = {
     send_consult,
     my_consult,
     edit_consult_read,
-    delete_consult
+    delete_consult,
+    insert_house_info,
+    find_house_info,
+    delete_house,
+    find_house_by_id,
+    find_other_user_fabulous
 }

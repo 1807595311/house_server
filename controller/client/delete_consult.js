@@ -12,10 +12,8 @@ module.exports = async (req, res) => {
         })
         let customer_type = await USER_TYPE;
         let type =  customer_type === 0 ? 'ord' : customer_type === 1 ? 'des' : '';
-        // return console.log(sqlStr.delete_consult({ account_number, ...data })[type]);
         db.query(sqlStr.delete_consult({ account_number, ...data })[type], (err, result) => {
             if (err) return res.send({ msg: '删除失败' + err, status: -1 });
-            console.log(1231,result);
             if(result.affectedRows === 1) res.send({ msg: '删除成功',status: 0});
         })
     } catch (err) {

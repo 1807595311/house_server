@@ -72,6 +72,11 @@ const send_consult = require(path.resolve(__basename, 'db/sql/client/send_consul
 const find_consult_by_account = require(path.resolve(__basename, 'db/sql/client/find_consult_by_account.js'));
 const edit_consult_read = require(path.resolve(__basename, 'db/sql/client/edit_consult_read.js'));
 const delete_consult = require(path.resolve(__basename, 'db/sql/client/delete_consult.js'));
+const insert_house_info = require(path.resolve(__basename, 'db/sql/client/insert_house_info.js'));
+const find_house_list = require(path.resolve(__basename, 'db/sql/client/find_house_list.js'));
+const delete_house = require(path.resolve(__basename, 'db/sql/client/delete_house.js'));
+const find_house_by_id = require(path.resolve(__basename, 'db/sql/client/find_house_by_id.js'));
+const contrast_password = require(path.resolve(__basename, 'db/sql/client/contrast_password.js'));
 
 module.exports = {
     insertImagesStr,// 插入图片
@@ -145,4 +150,9 @@ module.exports = {
     find_consult_by_account, // 我的咨询
     edit_consult_read, // 修改咨询已读状态（由设计机构已读后修改状态）
     delete_consult, // 咨询删除
+    insert_house_info, // 添加房屋信息
+    find_house_list, // 查询房屋信息列表
+    delete_house, // 删除房屋信息
+    find_house_by_id, // 查询单条房屋信息
+    contrast_password // 对比用户密码
 }

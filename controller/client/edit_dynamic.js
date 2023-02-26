@@ -22,7 +22,6 @@ module.exports = (req, res) => {
         // 判断是否有修改封面
         if (req.files.length > 0) {
             for (let i = 0; i < req.files.length; i++) {
-                // 重新设置存储在数据库的 url 地址，去掉前面的public字符串方便读取
                 let destination = req.files[i].destination.substring(6);
                 let url = `${destination}/${req.files[i].filename}`;
 
@@ -35,7 +34,6 @@ module.exports = (req, res) => {
                     account_number,
                     cover: url
                 }
-                // 获取images表id
                 db.query(sqlStr.update_dynamic(data), (err, result) => {
                     if (err) return res.send({ msg: '修改失败' + err, status: -1 });
                     if (result.affectedRows === 1) {
@@ -52,7 +50,6 @@ module.exports = (req, res) => {
                 tags: info.tags,
                 account_number
             }
-            // 获取images表id
             db.query(sqlStr.update_dynamic(data), (err, result) => {
                 if (err) return res.send({ msg: '修改失败' + err, status: -1 });
                 if (result.affectedRows === 1) {

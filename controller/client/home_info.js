@@ -6,15 +6,15 @@ module.exports = async (req, res) => {
         arr.forEach(item => item[key] = `${hostUrl}${item[key]}`);
     }
     try{
-        // 查询推荐动态，按浏览次数排序
+        // 查询推荐动态，按点赞数排序
         let recommendCase = new Promise((resolve, reject) => {
             db.query(sqlStr.home_info.recommendCaseFn, (err, result) => resolve(result) )
         })
-        // banner展示动态，按发布最新日期排序
+        // banner展示动态，按点赞数排序
         let banner = new Promise((resolve, reject) => {
             db.query(sqlStr.home_info.banner, (err, result) => resolve(result) )
         })
-        // 推荐设计机构，按机构创立时间排序
+        // 推荐设计机构，按粉丝数排序
         let recommendDesign = new Promise((resolve, reject) => {
             db.query(sqlStr.home_info.recommendDesign, (err, result) => resolve(result) )
         })

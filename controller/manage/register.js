@@ -1,6 +1,12 @@
+// 密码加密模块
+const crypto = require("crypto");
+// 注册
 module.exports = (req, res) => {
     // return console.log(req.body);
     let userInfo = req.body;
+    // 密码加密
+    let md5 = crypto.createHash("md5");
+    userInfo.password = md5.update(userInfo.password).digest("hex");
     db.query(sqlStr.findUser(userInfo), (err, result) => {
         // 失败
         if (err) return res.send({ msg: `注册失败${err}`, status: -1 });

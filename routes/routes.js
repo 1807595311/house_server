@@ -32,7 +32,7 @@ module.exports = app =>{
     app.post('/client/my_likes',controller.my_likes);// 我的点赞列表
     app.post('/client/dynamic_collection',controller.dynamic_collection);// 收藏(取消收藏)
     app.post('/client/my_collection',controller.my_collection);// 我的收藏列表
-    app.get('/client/search_dynamic',controller.search_dynamic);// 搜索动态
+    app.post('/client/search_dynamic',controller.search_dynamic);// 搜索动态
     app.post('/client/my_dynamic',controller.my_dynamic);// 我的动态
     app.post('/client/dynamic_edit_detail',controller.dynamic_edit_detail);// 编辑动态详情
     app.post('/client/edit_dynamic',controller.edit_dynamic);// 编辑动态详情
@@ -58,5 +58,10 @@ module.exports = app =>{
     app.get('/client/my_consult',controller.my_consult); // 我的咨询
     app.post('/client/edit_consult_read',controller.edit_consult_read); // 修改咨询已读状态
     app.post('/client/delete_consult',controller.delete_consult); // 咨询删除
+    app.post('/client/insert_house_info',controller.insert_house_info); // 添加房屋信息
+    app.get('/client/find_house_info',controller.find_house_info); // 查询房屋列表
+    app.post('/client/delete_house',controller.delete_house); // 删除房屋
+    app.get('/client/find_house_by_id',controller.find_house_by_id); // 获取房屋信息
+    app.post('/client/find_other_user_fabulous',controller.find_other_user_fabulous); // 获取其他用户的点赞列表
     
 }

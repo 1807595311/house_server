@@ -1,5 +1,5 @@
 module.exports = ()=>{
-    // 统计查询，查询用户表中 普通用户人数、设计机构人数、性别总人数(不包括未知、2) 、男性总人数、女性总人数、动态总数
+    // 统计查询，查询用户表中 普通用户人数、设计机构人数、 动态总数
     // 查询 设计机构所在城市 并统计数量
     // 查询用户粉丝数排行
     // 查询用户喜爱设计风格
@@ -36,7 +36,5 @@ module.exports = ()=>{
     INNER JOIN DYNAMIC AS d ON d.id = f.dynamic_id
     INNER JOIN ren_style AS r ON d.style = r.id
     GROUP BY r.id
-    ORDER BY r.id
-    
-    ` ;
+    ORDER BY r.id` ;
 }

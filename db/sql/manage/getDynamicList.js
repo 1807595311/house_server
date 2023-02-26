@@ -20,5 +20,6 @@ module.exports = (data) => {
   WHERE ${data.is_delete == 2 ? "" : `d.is_delete=${data.is_delete} AND `}
     ${!account_number ? "" : `d.account_number = '${account_number}' AND `}
     d.title LIKE '%${title}%'
+  ORDER BY d.create_time DESC
   LIMIT ${data.currentPage},${data.pageSize};`
 };

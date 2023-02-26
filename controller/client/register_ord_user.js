@@ -1,6 +1,8 @@
 const multipleFile = require(path.resolve(__basename, "utils/upload.js"));
 const multer = require("multer");
 const multiparty = require('multiparty');
+// 密码加密模块
+const crypto = require("crypto");
 
 module.exports = (req, res) => {
     let urlArr = [];
@@ -13,7 +15,7 @@ module.exports = (req, res) => {
             resolve(JSON.parse(fields.userInfo[0]));
         })
     })
-    
+
     multipleFile(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             console.log("---errMulterError---", err);
@@ -31,6 +33,9 @@ module.exports = (req, res) => {
                 // 获取用户信息
                 formPro.then(res_userInfo => {
                     userInfo = res_userInfo;
+                    // 密码加密
+                    let md5 = crypto.createHash("md5");
+                    userInfo.password = md5.update(userInfo.password).digest("hex");
                     // 执行sql查询用户
                     db.query(sqlStr.findUser(userInfo), (err, result) => {
                         if (err) return res.send({ msg: '注册失败', status: -1 });
@@ -38,18 +43,16 @@ module.exports = (req, res) => {
                         else { // 执行sql插入图片
                             db.query(sqlStr.insertImagesStr, url, (err2, result2) => {
                                 if (err2) return res.send({ msg: '注册失败，写入图片失败', status: -1 });
-                                if(result2.affectedRows === 1) resolve(result2);
+                                if (result2.affectedRows === 1) resolve(result2);
                             })
                         }
                     })
                 })
             })
-            pro.then(result=>{
-                let u = {...userInfo, headimg: result.insertId, customer_type:0 };
+            pro.then(result => {
+                let u = { ...userInfo, headimg: result.insertId, customer_type: 0 };
                 // 插入users表
                 db.query(sqlStr.insertUsersStr(u), (err2, result2) => {
-                    console.log('错误信息==>',err2);
-                    console.log('插入用户结果==>',result2);
                     if (err2) return res.send({ msg: `注册失败:${err2.message}`, status: -1 });
                     if (result2.affectedRows === 1) {
                         // 插入普通用户表

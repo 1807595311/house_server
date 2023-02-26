@@ -1,6 +1,12 @@
+// token生成模块
 const jwt = require("jsonwebtoken");
+// 密码加密模块
+const crypto = require("crypto");
 module.exports = (req, res) => {
     let userInfo = req.body;
+    // 密码加密
+    let md5 = crypto.createHash("md5");
+    userInfo.password = md5.update(userInfo.password).digest("hex");
     db.query(sqlStr.findUser(userInfo), (err, result) => {
         // 失败
         if (err) return res.send({ msg: `登录失败${err}`, status: -1 });

@@ -8,6 +8,7 @@ module.exports = (id) => {
     u.state,
     dy.title,
     dy.tags,
+    dy.city,
     dy.content,
     dy.views,
     dy.style,

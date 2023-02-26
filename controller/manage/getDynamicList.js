@@ -3,10 +3,10 @@ module.exports = (req, res) => {
     let data = req.query;
     let pageSize = data.pageSize * data.currentPage;
     let currentPage = pageSize - data.pageSize;
-    data.pageSize = pageSize;
+    // data.pageSize = pageSize;
     data.currentPage = currentPage;
     // 查询动态列表
-    db.query(sqlStr.getDynamicList(data), (err, result) => {
+    db.query(sqlStr.getDynamicList({...data ,pageSize: data.pageSize}), (err, result) => {
         if(err) return res.send({ msg: err, status: -1 });
         // 查询动态总数
         db.query(sqlStr.getDynamicCount(data), (er, resu) => {

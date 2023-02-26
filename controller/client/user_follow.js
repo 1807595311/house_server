@@ -4,7 +4,7 @@ module.exports = async (req, res) => {
     let account_number = parseToken(req.headers.authorization);
     try{
         let sqlData = { account_number, f_account_number: data.f_account_number };
-        // 查询该用户是否已经对该动态收藏
+        // 查询该是否已关注该用户
         db.query(sqlStr.find_follow(sqlData), (err, result) => {
             if(err) return res.send({msg: err,status: -1});
             if(result.length > 0){

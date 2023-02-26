@@ -3,7 +3,7 @@ module.exports = (req, res) => {
     let data = req.query;
     let pageSize = data.pageSize * data.currentPage;
     let currentPage = pageSize - data.pageSize;
-    data.pageSize = pageSize;
+    // data.pageSize = pageSize;
     data.currentPage = currentPage;
 
     let fileUrl = `${config.serverOptions.host}:${config.serverOptions.port}${config.virtualPath.url}`;
@@ -12,7 +12,7 @@ module.exports = (req, res) => {
         return arr;
     }
     // 查询普通用户
-    db.query(sqlStr.getOrdinaryUserList(data), (err, result) => {
+    db.query(sqlStr.getOrdinaryUserList({...data ,pageSize: data.pageSize}), (err, result) => {
         if(err) return res.send({ msg: err, status: -1 });
         // 查询普通用户当前状态的总数量
         db.query(sqlStr.getOrdinaryUserCount(data), (er, resu) => {

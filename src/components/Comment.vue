@@ -1,16 +1,21 @@
 <template>
   <div class="comment">
     <div class="left-box">
-      <img :src="comment.head_img" alt="" />
+      <img @click="toUserHome(comment)" :src="comment.head_img" alt="" />
     </div>
     <div class="right-box">
       <div class="comment-top">
         <div>
           <a>{{comment.f_nickname}}</a>
+          <span class="comment-author" v-if="author == comment.account_number">作者</span>
+          <span class="comment-self" v-else-if="loginAccount == comment.account_number">自己</span>
           <strong> </strong>
           <span>{{comment.create_time}}</span>
         </div>
-        <div class="reply" v-if="!isDelete" @click="replys(comment)">{{inputReplays ? '收起': '回复'}}</div>
+        <div class="reply" v-if="!isDelete">
+          <span v-if="selfCommentDelete" @click="deleteComment(comment.id)" class="m_r_10 com_btn">删除</span>
+          <span @click="replys(comment)" class="com_btn">{{inputReplays ? '收起': '回复'}}</span>
+        </div>
         <div class="reply" v-if="isDelete" @click="deleteComment(comment.id)">删除</div>
       </div>
       <div class="comment-content">{{comment.content}}</div>
@@ -23,17 +28,24 @@
         <div class="comment-top comment-top-reply">
             <div class="comment-reply">
             <div class="left-box">
-                <img :src="v.head_img" alt="" />
+                <img @click="toUserHome(v)" :src="v.head_img" alt="" />
             </div>
             <span>
                 {{v.f_nickname}}
+                <span class="comment-author" v-if="author == v.account_number">作者</span>
+                <span class="comment-self" v-else-if="loginAccount == v.account_number">自己</span>
                 <span class="span-reply">回复</span>
                 {{v.t_nickname}}
+                <span class="comment-author" v-if="author == v.to_account_number">作者</span>
+                <span class="comment-self" v-else-if="loginAccount == v.to_account_number">自己</span>
             </span>
             <strong> </strong>
             <span>{{v.create_time}}</span>
             </div>
-            <div class="reply" @click="reply(v)">{{inputReplay && replyId==v.id ? '收起': '回复'}}</div>
+            <div class="reply">
+              <span v-if="v.account_number === loginAccount" @click="deleteComment(v.id)" class="m_r_10 com_btn">删除</span>
+              <span class="com_btn" @click="reply(v)">{{inputReplay && replyId==v.id ? '收起': '回复'}}</span>
+            </div>
         </div>
         <div class="comment-content">{{v.content}}</div>
         <Input type="textarea" v-model="replyContent" v-show="inputReplay && replyId==v.id" :autosize="{minRows: 3,maxRows: 5}" placeholder="请输入回复内容（限50字）"></Input>
@@ -53,6 +65,9 @@ export default {
     comment:{
       type: Object
     },
+    author: {
+      type: String
+    },
     isDelete:{
       type: Boolean,
       default: false
@@ -64,7 +79,8 @@ export default {
       inputReplays: false,
       replyId: null,
       replyInfo: {},
-      replyContent: ''
+      replyContent: '',
+      loginAccount: this.$store.state.userInfo.account_number
     }
   },
   watch: {
@@ -78,6 +94,11 @@ export default {
         this.replyContent = '';
       }
     },
+  },
+  computed: {
+    selfCommentDelete(){
+      return this.loginAccount === this.comment.account_number
+    }
   },
   methods: {
     // 回复评论
@@ -131,6 +152,13 @@ export default {
             }catch(err){}
           }
       });
+    },
+    // 通过评论跳转用户主页
+    toUserHome(v){
+      let account_number = v.account_number;
+      if(account_number != this.loginAccount){
+        this.$router.push({path:'/user_home',query: {account_number} });
+      }
     }
   }
 }
@@ -143,10 +171,19 @@ export default {
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   margin-bottom: 20px;
+  &-self,&-author{
+    margin-left: 5px;
+    padding: 2px 4px;
+    color: #e95739 !important;
+    background: #FFEEEA;
+  }
   span{
     color: #999;
   }
   .left-box {
+    &:hover{
+      cursor: pointer;
+    }
     img {
       width: 30px;
       height: 30px;

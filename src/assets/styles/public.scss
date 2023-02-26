@@ -3,29 +3,68 @@ $theme_color: #0058a3; // 主题色
 $logo_size: 22px;
 
 .d_f {
-    display: flex;
+  display: flex;
 }
-.j_c_sa{
-    justify-content: space-around;
+.j_c_sa {
+  justify-content: space-around;
 }
-.j_c_sb{
-    justify-content: space-between;
+.j_c_sb {
+  justify-content: space-between;
 }
-.j_c_c{
-    justify-content: center;
+.j_c_c {
+  justify-content: center;
 }
-.a_l_c{
-    align-items: center;
+.a_l_c {
+  align-items: center;
 }
-.f_w{
-    font-weight: bold;
+.f_w {
+  font-weight: bold;
 }
-.m_l_2{
-    margin-left: 20px;
+.m_l_2 {
+  margin-left: 20px;
 }
-.text_a_c{
-    text-align: center;
+.text_a_c {
+  text-align: center;
 }
-.p_b_20{
-    padding-bottom: 20px;
+.p_b_20 {
+  padding-bottom: 20px;
+}
+.m_t_10 {
+  margin-top: 10px;
+}
+.m_r_10 {
+  margin-right: 10px;
+}
+.m_r_40 {
+  margin-right: 40px;
+}
+.m_l_10 {
+  margin-left: 10px;
+}
+.p_t_10 {
+  padding-top: 10px;
+}
+.com_btn {
+  color: #21abeb !important;
+}
+.scroll {
+  margin: auto;
+  padding: 40px 0;
+  font-size: 15px;
+  text-align: center;
+}
+.label {
+  color: #2d8cf0;
+  line-height: 32px;
+  font-size: 14px;
+}
+.more {
+  text-align: center;
+  padding: 40px 0;
+  &:hover {
+    cursor: pointer;
+  }
+  .btn {
+    font-size: 15px;
+  }
 }

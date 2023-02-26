@@ -137,7 +137,7 @@ export const routes = [
       name: "SearchDesigner",
       meta: {
         title: "更多机构",
-        keepAlive: true
+        keepAlive: false
       },
       component: () => import("@/views/tabViews/SearchDesigner.vue"),
     },
@@ -171,7 +171,7 @@ export const routes = [
       path: "/personal_data",
       name: "PersonalData",
       meta: {
-        title: "PersonalData",
+        title: "个人资料",
         keepAlive: false
       },
       component: () => import("@/views/user/PersonalData.vue"),

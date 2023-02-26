@@ -10,8 +10,13 @@
     </div>
     <Modal v-model="isShow" title="修改密码" :mask-closable="false">
       <Form ref="formInline" :model="formInline" :rules="ruleInline">
+        <Form-item prop="p_password">
+          <Input size="large" type="text" v-model="formInline.p_password" placeholder="请输入原密码">
+          <Icon style="width: 20px;" type="ios-unlocked-outline" slot="prepend"></Icon>
+          </Input>
+        </Form-item>
         <Form-item prop="password">
-          <Input size="large" type="password" v-model="formInline.password" placeholder="请输入密码">
+          <Input size="large" type="password" v-model="formInline.password" placeholder="请输入新密码">
           <Icon style="width: 20px;" type="ios-unlocked-outline" slot="prepend"></Icon>
           </Input>
         </Form-item>
@@ -56,10 +61,17 @@ export default {
       isShow: false,
       isShow2: false,
       formInline: {
+        p_password: '',
         password: '',
         check_password: ''
       },
       ruleInline: {
+        p_password: [
+          {
+            validator: this.vPassword,
+            trigger: "blur",
+          },
+        ],
         password: [
           {
             validator: this.vPassword,
@@ -100,7 +112,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(async (valid) => {
         if (valid) {
-          let res = await this.$http.post('/client/edit_password', { password: this.formInline.password });
+          let res = await this.$http.post('/client/edit_password', this.formInline);
           if (res.data.status === 0) return this.delteCookies();
         }
       });

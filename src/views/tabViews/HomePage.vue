@@ -134,6 +134,7 @@ export default {
       img {
         width: 600px;
         height: 500px;
+        object-fit: cover;
       }
       &-title {
         transition: all 0.5s;

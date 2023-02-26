@@ -84,8 +84,8 @@ export default {
     vIntroduce(rule, value, callback) {
       if (filtion(value)) {
         callback(new Error("个人简介包含敏感词"));
-      } else if (value.length > 100) {
-        callback(new Error("昵称最大长度为100位"));
+      } else if (value.length > 200) {
+        callback(new Error("简介最多可输入200字"));
       } else {
         callback();
       }

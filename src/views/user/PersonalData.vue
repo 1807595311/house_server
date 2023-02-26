@@ -4,14 +4,18 @@
     <div class="box d_f">
       <div class="box-left">
         <Menu @on-select="changeMeun" :active-name="activeName">
-          <Menu-item v-for="v in menuList" :key="v.name" :name="v.name">{{ v.title }}</Menu-item>
+          <div v-for="v in menuList" :key="v.name">
+            <Menu-item v-if="!(v.name == 2 && $store.state.userInfo.customer_type !== '0') " :name="v.name">
+                {{ v.title }}
+            </Menu-item>
+          </div>
         </Menu>
       </div>
       <div class="box-right">
         <!-- 头像 -->
         <div class="head-img">
           <div class="left">
-            <img :src="userInfo.head_img" alt="">
+            <img :src="userInfo.head_img?userInfo.head_img: ''" alt="">
             <UploadHeadImg class="upload" @getFormdata="getFormdata"></UploadHeadImg>
           </div>
           <div class="right">
@@ -33,9 +37,10 @@
           <div class="title">{{ this.activeTitle }}</div>
           <div class="msg-box">
             <BasicInformation :userInfo="userInfo" v-show="activeKey === 1"></BasicInformation>
-            <OtherInfoDes :userInfo="userInfo" v-show="activeKey === 2 && $store.state.userInfo.customer_type === '1'"></OtherInfoDes>
-            <OtherInfoOrd :userInfo="userInfo" v-show="activeKey === 2 && $store.state.userInfo.customer_type === '0'"></OtherInfoOrd>
-            <AccountSetting v-show="activeKey === 3"></AccountSetting>
+            <HouseInfo v-show="activeKey === 2 && $store.state.userInfo.customer_type === '0'"></HouseInfo>
+            <OtherInfoDes :userInfo="userInfo" v-show="activeKey === 3 && $store.state.userInfo.customer_type === '1'"></OtherInfoDes>
+            <OtherInfoOrd :userInfo="userInfo" v-show="activeKey === 3 && $store.state.userInfo.customer_type === '0'"></OtherInfoOrd>
+            <AccountSetting v-show="activeKey === 4"></AccountSetting>
           </div>
         </div>
       </div>
@@ -48,6 +53,7 @@ import BasicInformation from "@/components/information/BasicInformation.vue";
 import OtherInfoDes from "@/components/information/OtherInfo_des.vue";
 import OtherInfoOrd from "@/components/information/OtherInfo_ord.vue";
 import AccountSetting from "@/components/information/AccountSetting.vue";
+import HouseInfo from "@/components/information/HouseInfo.vue";
 import UploadHeadImg from "@/components/UploadHeadImg.vue";
 const menuList = [
   {
@@ -56,10 +62,14 @@ const menuList = [
   },
   {
     name: 2,
-    title: '其他信息'
+    title: '房屋信息'
   },
   {
     name: 3,
+    title: '其他信息'
+  },
+  {
+    name: 4,
     title: '账号设置'
   }
 ];
@@ -69,6 +79,7 @@ export default {
   components: {
     BasicInformation,
     OtherInfoDes,
+    HouseInfo,
     OtherInfoOrd,
     AccountSetting,
     UploadHeadImg

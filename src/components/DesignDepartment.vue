@@ -6,11 +6,8 @@
       </div>
       <div class="nickname">
         <p class="tips">{{design.mechanism_name}}</p>
-        <p style="white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 100%;">
-        {{design.nickname}} {{design.mechanism_name ? `| ${design.mechanism_name}` : '' }} 
+        <p style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;">
+          {{design.nickname}} {{design.mechanism_name ? `| ${design.mechanism_name}` : '' }}
         </p>
       </div>
       <p class="establish_time"><span v-if="design.establish_time">成立时间: {{design.establish_time}}</span></p>
@@ -68,7 +65,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
       img {
@@ -88,14 +85,14 @@ export default {
       -webkit-line-clamp: 1;
       // overflow: hidden;
       position: relative;
-      &:hover{
-        .tips{
+      &:hover {
+        .tips {
           opacity: 1;
         }
       }
       // 公司名弹出提示
-      .tips{
-        transition: all .3s;
+      .tips {
+        transition: all 0.3s;
         opacity: 0;
         font-size: 12px;
         font-weight: 100;
@@ -104,7 +101,7 @@ export default {
         left: 50%;
         top: -40px;
         position: absolute;
-        background: #585E6B;
+        background: #585e6b;
         color: #fff;
         border-radius: 5px;
       }

@@ -35,17 +35,17 @@ export default {
 </script>
 
 <style lang="scss">
-html,body{
-  &::-webkit-scrollbar {
-        width: 0.5em;
-        background-color: #fff;
-      }
+// html,body{
+  // &::-webkit-scrollbar {
+  //       width: 0.5em;
+  //       background-color: #fff;
+  //     }
 
-      &::-webkit-scrollbar-thumb {
-        border-radius: 0.25em;
-        background-color: #a1a1a1;
-      }
-}
+  //     &::-webkit-scrollbar-thumb {
+  //       border-radius: 0.25em;
+  //       background-color: #a1a1a1;
+  //     }
+// }
 * {
   margin: 0;
   padding: 0;

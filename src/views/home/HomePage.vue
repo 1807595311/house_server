@@ -9,8 +9,8 @@
           </p>
         </div>
         <div class="search d_f a_l_c">
-          <Input v-model="searchValue" size="large" placeholder="搜索相关动态(内容/作者/标题/标签)">
-          <Button @click="search" slot="append" icon="ios-search"></Button>
+          <Input v-model="searchValue" size="large" @keyup.enter.native="search" placeholder="根据标题搜索动态">
+            <Button @click="search" slot="append" icon="ios-search"></Button>
           </Input>
         </div>
         <Tooltip v-if="!userInfo.account_number" content="未登录" placement="bottom">

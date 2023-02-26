@@ -5,6 +5,9 @@
         <img v-if="userObj.state == 1" :src="userObj.headimg">
         <img v-else src="@/assets/icons/user.png">
       </div>
+      <p class="destag" v-if="userObj.customer_type == 1">
+        <Tag color="blue">设计机构</Tag>
+      </p>
       <p class="nickname" v-if="userObj.state == 1">{{userObj.nickname}}</p>
       <p class="nickname p_b_20" v-else>用户已注销</p>
       <div class="introduce" v-if="userObj.state == 1">
@@ -41,6 +44,9 @@ export default {
   background: #fff;
   box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 10%);
   width: 180px;
+  &:hover{
+    cursor: pointer;
+  }
   .container {
     width: 180px;
     background: url(@/assets/images/bg.png) no-repeat;
@@ -60,6 +66,10 @@ export default {
         width: 96px;
         height: 96px;
       }
+    }
+    .destag{
+      text-align: center;
+      margin-top: 10px;
     }
     .nickname {
       text-align: center;
@@ -84,7 +94,7 @@ export default {
       margin: 10px auto;
       width: 80%;
       font-size: 14px;
-      text-align: left;
+      text-align: center;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;

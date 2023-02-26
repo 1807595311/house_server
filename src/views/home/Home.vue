@@ -2,7 +2,7 @@
   <div>
     <UploadHeadImg @getFormdata="getFormdata"></UploadHeadImg>
     <div class="box markdown-body" v-html="showContent"></div>
-    <mavon-editor ref="md" @change="changeData" v-model="content" :toolbars="toolbars" />
+    <!-- <mavon-editor ref="md" @change="changeData" v-model="content" :toolbars="toolbars" /> -->
   </div>
 </template>
 
@@ -59,13 +59,16 @@ export default {
 
   methods: {
     getFormdata(v) {
-      console.log(v);
+      // console.log(v);
+      // const formData = new FormData();
+      // formData.append('file',v);
+      // this.$http.register('/upload',formData);
     },
     changeData(value, render) {
-        	// value中是文本值,render是渲染出的html文本
-          this.showContent = render;
-          console.log(render);
-        },
+    	// value中是文本值,render是渲染出的html文本
+      this.showContent = render;
+      console.log(render);
+    },
   },
 };
 </script>

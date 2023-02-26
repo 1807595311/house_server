@@ -5,16 +5,20 @@
       <div class="drawerBox" v-if="open">
         <!-- 发布评论 -->
         <div class="commentReply">
-          <div class="selfHeadimg">
-            <img :src="$store.state.userInfo.head_img" alt="">
-            <Input v-model="commentContent" type="textarea" :autosize="{minRows: 4,maxRows: 7}" placeholder="请输入评论内容（限50字）..."></Input>
-          </div>
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate">
+            <Form-item prop="commentContent">
+              <div class="selfHeadimg">
+                <img :src="userInfo.head_img" alt="">
+                <Input v-model="formValidate.commentContent" type="textarea" :autosize="{minRows: 4,maxRows: 7}" placeholder="请输入评论内容（限50字）..."></Input>
+              </div>
+            </Form-item>
+          </Form>
           <div class="replyBtn">
             <Button type="primary" @click="sendComment">评论</Button>
           </div>
         </div>
         <!-- 评论和回复组件 -->
-        <Comment @refreshComment="getComment" v-for="v in commentList" :key="v.id" :comment="v"></Comment>
+        <Comment @refreshComment="getComment" v-for="v in commentList" :author="dynamicDetail.account_number" :key="v.id" :comment="v"></Comment>
         <div class="empty">
           已加载全部
         </div>
@@ -29,17 +33,14 @@
         <!-- 设计风格 -->
         <div>
           <Tag color="blue">设计风格：{{dynamicStyle.name}}</Tag>
+          <Tag color="blue">所在城市：{{dynamicDetail.city}}</Tag>
         </div>
         <!-- 标签 -->
         <div class="tags">
           <span v-for="(v,i) in tags" :key="i">{{v}}</span>
         </div>
         <!-- 关注 收藏 点赞 评论 -->
-        <div class="btnBox" v-if="$store.state.userInfo">
-          <Button v-if="!isSelf" @click="follow" type="ghost">
-            <Icon size="16" :color="dynamicDetail.is_follow? '#0058A3' : ''" :type="dynamicDetail.is_follow? 'checkmark-round' : 'plus-round' "></Icon>
-            {{dynamicDetail.is_follow? '取消关注':'关注' }}
-          </Button>
+        <div class="btnBox" v-if="userInfo">
           <Button @click="collection" type="ghost">
             <Icon size="16" :color="dynamicDetail.is_collection? '#0058A3' : ''" type="star"></Icon>
             {{dynamicDetail.is_collection? '取消收藏':'收藏' }}【{{dynamicDetail.collection_count}}】
@@ -70,21 +71,22 @@
             <p>{{dynamicDetail.nickname}}
             </p>
             <div class="d_f j_c_c" style="padding: 5px 0;">
-              <Tag color="blue">{{dynamicDetail.customer_type == 0 ? '普通用户' : '设计机构'}}</Tag>
+              <Tag color="blue" v-if="dynamicDetail.customer_type == 1">设计机构</Tag>
             </div>
             <p>
-              <span style="margin-right: 10px;">关注：{{dynamicDetail.follow_to_count}}</span>
+              <span class="m_r_10">关注：{{dynamicDetail.follow_to_count}}</span>
               <span>粉丝：{{dynamicDetail.follows_count}}</span>
             </p>
             <!-- <p>地址</p> -->
             <div class="introduce">{{dynamicDetail.introduce}}</div>
-            <div class="d_f j_c_c" style="padding: 10px 0 20px;" v-if="dynamicDetail.customer_type == 1 && 
-              account_number && 
-              dynamicDetail.account_number != account_number &&
-              $store.state.userInfo.customer_type == 0">
-              <Button @click="()=>consultDialog = true" type="info">
-                <Icon size="14" color="" type="chatbox-working"></Icon>
+            <div class="d_f j_c_c" style="padding: 10px 0 20px;">
+              <Button @click="()=>consultDialog = true"  v-if="showConsultBtn" class="m_r_10" type="info">
+                <Icon size="14" type="chatbox-working"></Icon>
                 咨询
+              </Button>
+              <Button v-if="!isSelf && !showFollowBtn" type="info" @click="follow">
+                <Icon size="16" :type="dynamicDetail.is_follow? 'checkmark-round' : 'plus-round' "></Icon>
+                {{dynamicDetail.is_follow? '取消关注':'关注' }}
               </Button>
             </div>
           </div>
@@ -114,48 +116,7 @@
         </div>
       </Affix>
     </div>
-    <!-- 咨询弹窗 -->
-    <Modal v-model="consultDialog" title="咨询" width="600" :styles="{top: '10vh'}">
-      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="100">
-        <Form-item label="所在城市" prop="city">
-          <Address @getAddress="v=>formInline.city=v"></Address>
-        </Form-item>
-        <Form-item label="房屋面积" prop="area">
-          <Input size="large" type="text" v-model="formInline.area" placeholder="房屋面积，单位m²"></Input>
-        </Form-item>
-        <Form-item label="装修预算" prop="budget">
-          <Input size="large" type="text" v-model="formInline.budget" placeholder="装修预算，单位万元"></Input>
-        </Form-item>
-        <Form-item label="装修风格">
-          <Select v-model="formInline.style_id" style="width:200px">
-            <Option v-for="item in styleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="房屋现状">
-          <Select v-model="formInline.situation" style="width:200px">
-            <Option v-for="(item,i) in house_status" :value="item" :key="i">{{ item }}</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="预计入住时间" prop="planned_time">
-          <Date-picker type="date" :options="date_options" @on-change="v=>formInline.planned_time=v" placeholder="选择日期" style="width: 200px">
-          </Date-picker>
-        </Form-item>
-        <Form-item label="QQ号" prop="qq_number">
-          <Input size="large" type="text" v-model="formInline.qq_number" placeholder="联系方式：QQ号"></Input>
-        </Form-item>
-        <Form-item label="微信号" prop="wx_number">
-          <Input size="large" type="text" v-model="formInline.wx_number" placeholder="联系方式：微信号"></Input>
-        </Form-item>
-        <Form-item label="手机号" prop="phone_number">
-          <Input size="large" type="text" v-model="formInline.phone_number" placeholder="联系方式：手机号"></Input>
-        </Form-item>
-      </Form>
-      <div slot="footer">
-        <Button type="primary" size="large" long @click="handleSubmit('formInline')">提交</Button>
-        <p></p>
-        <Button style="margin-top: 10px;" @click="()=>consultDialog=false" size="large" long>取消</Button>
-      </div>
-    </Modal>
+    <Consult :consultDialog="consultDialog" @sendConsult="sendConsult"></Consult>
   </div>
 </template>
 
@@ -164,45 +125,14 @@ import Drawer from "vue-simple-drawer";
 import Comment from "@/components/Comment.vue";
 import { replace, filtion } from "verification-sensitive";
 import Address from "@/components/Address.vue";
-const reg = /^\d+(\.\d+)?$/;
-function TEST_NUM(rule, value, callback) {
-  if (!reg.test(value)) callback(new Error("只能为数字"));
-  else callback();
-}
-function vPhone_number(rule, value, callback) {
-  var myreg = /^[1][3,5,7,8][0-9]{9}$/;
-  if (!myreg.test(value)) {
-    callback(new Error("手机号格式错误"));
-  } else {
-    callback();
-  }
-}
-function vWx_number(rule, value, callback) {
-  var myreg = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/;
-  if (value === '') {
-    return callback();
-  } else if (!myreg.test(value)) {
-    callback(new Error("微信号格式错误"));
-  } else {
-    callback();
-  }
-}
-function vQQ_number(rule, value, callback) {
-  var myreg = /^[1-9][0-9]{4,10}$/gim;
-  if (value === '') {
-    return callback();
-  } else if (!myreg.test(value)) {
-    callback(new Error("QQ号格式错误"));
-  } else {
-    callback();
-  }
-}
+import Consult from "@/components/Consult.vue";
 export default {
   name: "ClientDynamicDetails",
   components: {
     Drawer,
     Comment,
-    Address
+    Address,
+    Consult
   },
   data() {
     return {
@@ -211,6 +141,7 @@ export default {
       otherDynamicList: [],
       flag: true,
       open: false,
+      userInfo: this.$store.state.userInfo ? this.$store.state.userInfo : null,
       account_number: this.$store.state.userInfo ? this.$store.state.userInfo.account_number : '',
       dynamicId: null,
       tags: [],
@@ -219,79 +150,39 @@ export default {
       styleList: [], // 装修风格列表
       dynamicStyle: {},
       consultDialog: false, // 咨询弹窗
-      formInline: {
-        style_id: 1,
-        area: null,
-        city: '',
-        situation: '毛坯房',
-        budget: '', // 预算
-        planned_time: '', // 预计入住时间
-        phone_number: "", // 手机号
-        wx_number: "", // 微信号
-        qq_number: "", // QQ号
+      ruleValidate: {
+        commentContent: [{required: true,validator: this.vCommentContent,trigger: "blur"}]
       },
-      house_status: ['毛坯房', '精装修', '老房重装'],
-      ruleInline: {
-        city: [
-          {
-            required: true,
-            message: '城市不能为空',
-            trigger: "change",
-          },
-        ],
-        area: [
-          {
-            required: true,
-            validator: TEST_NUM,
-            trigger: "blur",
-          },
-        ],
-        budget: [
-          {
-            required: true,
-            validator: TEST_NUM,
-            trigger: "blur",
-          },
-        ],
-        planned_time: [
-          {
-            required: true,
-            message: '预计入住时间不能为空',
-            trigger: "change",
-          },
-        ],
-        phone_number: [
-          {
-            required: true,
-            validator: vPhone_number,
-            trigger: "blur",
-          },
-        ],
-        qq_number: [
-          {
-            validator: vQQ_number,
-            trigger: "blur",
-          },
-        ],
-        wx_number: [
-          {
-            validator: vWx_number,
-            trigger: "blur",
-          },
-        ],
-      },
-      date_options: {
-        disabledDate(date) {
-          return date && date.valueOf() < Date.now() - 86400000;
-        }
+      formValidate: {
+        commentContent: ''
       }
     };
+  },
+  watch: {
+    formValidate:{
+      deep: true,
+      immediate: true,
+      handler(newVal){
+        this.commentContent = newVal.commentContent;
+      }
+    }
   },
   computed: {
     // 判断是否本人
     isSelf() {
-      if (this.account_number == this.dynamicDetail.account_number) return true;
-      else return false;
+      return this.account_number == this.dynamicDetail.account_number;
+    },
+    // 判断是否为同一用户类型
+    showFollowBtn(){
+      if(!this.userInfo) return true
+      return this.dynamicDetail.customer_type ==  this.userInfo.customer_type;
+    },
+    showConsultBtn(){
+      if(!this.userInfo) return false
+      return this.dynamicDetail.customer_type == 1 && 
+             this.account_number && 
+             this.dynamicDetail.account_number != this.account_number &&
+             this.userInfo.customer_type == 0
     }
   },
 
@@ -300,10 +191,18 @@ export default {
     this.open = this.$route.query.open ? this.$route.query.open : false;
     this.getDynamicDetail(this.dynamicId);
     this.getComment();
-    this.getContact();
   },
 
   methods: {
+    vCommentContent(rule, value, callback) {
+      if (value.length > 50 || value.length <= 0) {
+        callback(new Error("评论1-50字之间"));
+      }else if(filtion(value)){
+        callback(new Error("评论内容存在敏感词"));
+      } else {
+        callback();
+      }
+    },
     // 获取动态详情
     async getDynamicDetail(id) {
       try {
@@ -312,7 +211,11 @@ export default {
         this.dynamicDetail = data.dynamicDetail;
         this.tags = data.dynamicDetail.tags.split(',');
         this.otherDynamicList = data.dynamicDetail.otherDynamicList;
-        this.getStyleList();
+        // 动态风格列表
+        let styleRes = await this.$http.get('/client/find_style_list');
+        this.styleList = styleRes.data.data;
+        // 查找对应风格
+        this.dynamicStyle = this.styleList.find(v=> v.id == this.dynamicDetail.style);
       } catch (err) { }
     },
     toDetail(id) {
@@ -324,78 +227,57 @@ export default {
     },
     // 点赞
     async like() {
-      try {
-        let data = { dynamic_id: this.dynamicDetail.id }
-        await this.$http.post('/client/dynamic_likes', data);
-        this.getDynamicDetail(this.dynamicId);
-      } catch (err) { }
+      let data = { dynamic_id: this.dynamicDetail.id }
+      await this.$http.post('/client/dynamic_likes', data);
+      this.getDynamicDetail(this.dynamicId);
     },
     // 收藏
     async collection() {
-      try {
-        let data = { dynamic_id: this.dynamicDetail.id }
-        await this.$http.post('/client/dynamic_collection', data);
-        this.getDynamicDetail(this.dynamicId);
-      } catch (err) { }
+      let data = { dynamic_id: this.dynamicDetail.id }
+      await this.$http.post('/client/dynamic_collection', data);
+      this.getDynamicDetail(this.dynamicId);
     },
     // 关注
     async follow() {
-      try {
-        let data = { f_account_number: this.dynamicDetail.account_number };
-        await this.$http.post('/client/user_follow', data);
-        this.getDynamicDetail(this.dynamicId);
-      } catch (err) { }
+      let data = { f_account_number: this.dynamicDetail.account_number };
+      await this.$http.post('/client/user_follow', data);
+      this.getDynamicDetail(this.dynamicId);
     },
     // 获取评论
     async getComment() {
-      try {
-        let res = await this.$http.get('/client/find_dynamic_comment', { id: this.dynamicId });
-        this.commentList = res.data.data;
-      } catch (err) { }
+      let res = await this.$http.get('/client/find_dynamic_comment', { id: this.dynamicId });
+      this.commentList = res.data.data;
     },
     // 评论
     async sendComment() {
-      if (this.commentContent == '') return this.$Message.error('请输入内容后再发送...');
-      if (filtion(this.commentContent)) return this.$Message.error('评论存在敏感词...');
-      try {
-        let data = {
-          account_number: this.account_number,
-          dynamic_id: this.dynamicId,
-          content: this.commentContent
-        }
-        let res = await this.$http.post('/client/dynamic_comment', data);
-        if (res.data.status === 0) {
-          this.commentContent = '';
-          this.getComment();
-        }
-      } catch (err) { }
-    },
-    // 获取装修风格列表
-    async getStyleList() {
-      try {
-        let res = await this.$http.get('/client/find_style_list');
-        this.styleList = res.data.data;
-        this.dynamicStyle = await this.styleList.find(v => v.id === this.dynamicDetail.style);
-      } catch (err) { }
-    },
-    // 查询用户联系方式
-    async getContact() {
-      if(!this.account_number) return;
-      let res = await this.$http.get('/client/find_contact');
-      let data = res.data.data;
-      this.formInline.wx_number = data.wx_number;
-      this.formInline.qq_number = data.qq_number;
-      this.formInline.phone_number = data.phone_number;
-    },
-    // 提交咨询
-    handleSubmit(name) {
-      this.$refs[name].validate( async (valid) => {
+      this.$refs['formValidate'].validate(async (valid) => {
         if (valid) {
-          let data = { ...this.formInline, to_account_number: this.dynamicDetail.account_number };
-          let res = await this.$http.post('/client/send_consult', data);
-          if(res.data.status === 0) this.consultDialog = false;
+          if (this.commentContent == '') return this.$Message.error('请输入内容后再发送...');
+          if (filtion(this.commentContent)) return this.$Message.error('评论存在敏感词...');
+          try {
+            let data = {
+              account_number: this.account_number,
+              dynamic_id: this.dynamicId,
+              content: this.commentContent
+            }
+            let res = await this.$http.post('/client/dynamic_comment', data);
+            if (res.data.status === 0) {
+              this.formValidate.commentContent = '';
+              this.getComment();
+            }
+          } catch (err) { }
         }
       });
+    },
+    // 关闭咨询s弹窗
+    close(){
+      this.consultDialog = false;
+    },
+    // 发送咨询
+    async sendConsult(v){
+      let data = { ...v, to_account_number: this.dynamicDetail.account_number };
+      let res = await this.$http.post('/client/send_consult', data);
+      if (res.data.status === 0) this.consultDialog = false;
     },
     toUserHome() {
       this.$router.push(
@@ -413,7 +295,7 @@ export default {
     toggle() {
       this.open = !this.open;
     },
-  },
+  }
 };
 </script>
 
@@ -444,7 +326,7 @@ export default {
     text-align: center;
     font-size: 14px;
     color: #aaa;
-    padding: 40px 0;
+    padding: 15px 0;
   }
   .commentReply {
     margin: 20px 0;

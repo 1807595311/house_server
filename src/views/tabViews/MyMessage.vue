@@ -14,18 +14,23 @@
         <div class="msg-box">
           <div v-show="menuList[0].name===activeKey">
             <FollowMessage v-for="v in messageData.follows" :key="v.id" :follows="v"></FollowMessage>
+            <div class="empty" v-if="messageData.follows.length == 0">暂无数据</div>
           </div>
           <div v-show="menuList[1].name===activeKey">
             <CollectionMessage v-for="v in messageData.collection" :collection_fabulous="v" :key="v.id"></CollectionMessage>
+            <div class="empty" v-if="messageData.collection.length == 0">暂无数据</div>
           </div>
           <div v-show="menuList[2].name===activeKey">
             <CollectionMessage v-for="v in messageData.fabulous" :collection_fabulous="v" :key="v.id"></CollectionMessage>
+            <div class="empty" v-if="messageData.fabulous.length == 0">暂无数据</div>
           </div>
           <div v-show="menuList[3].name===activeKey">
             <CommentMessage v-for="v in messageData.comment" :comment="v" :key="v.id"></CommentMessage>
+            <div class="empty" v-if="messageData.comment.length == 0">暂无数据</div>
           </div>
           <div v-show="menuList[4].name===activeKey">
             <SystemNotice v-for="v in messageData.systemNotice" :systemNotice="v" :key="v.id"></SystemNotice>
+            <div class="empty" v-if="messageData.systemNotice.length == 0">暂无数据</div>
           </div>
         </div>
       </div>
@@ -79,7 +84,13 @@ export default {
       activeName: 1,
       activeKey: 1,
       activeTitle: menuList[0].title,
-      messageData: {}
+      messageData: {
+        follows: [],
+        collection: [],
+        fabulous: [],
+        comment: [],
+        systemNotice: []
+      }
     }
   },
   created() {
@@ -128,6 +139,11 @@ export default {
         border-bottom: 1px solid #eee;
       }
     }
+  }
+  .empty{
+    padding: 20px;
+    font-size: 16px;
+    text-align: center;
   }
 }
 </style>

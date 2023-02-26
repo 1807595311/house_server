@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="personCenterBg d_f j_c_c a_l_c">
-            <p class="title">{{title}}</p>
+            <p class="title">{{ title }} <span v-count="count"></span> </p>
         </div>
     </div>
 </template>
@@ -13,6 +13,10 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        count: {
+            type: Number,
+            default: 0
         }
     },
     data() {
@@ -28,6 +32,15 @@ export default {
     methods: {
         
     },
+    directives: {
+        count: {
+            update(el,v){
+                if(v.value === 0) el.style.display = 'none';
+                el.innerText = `【${v.value}】`;
+            }
+        }
+        
+    }
 };
 </script>
 

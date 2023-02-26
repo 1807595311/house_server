@@ -2,11 +2,14 @@
   <div class="releaseDynamics">
     <div class="form">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-        <Form-item label="标题" prop="title">
+        <Form-item label="标题" prop="title" style="width:500px">
           <Input size="large" v-model="formValidate.title" placeholder="标题(2-30字)"></Input>
         </Form-item>
         <Form-item label="标签">
           <Checkbox v-for="(v,i) in tagList" :key="i" v-model="v.check">{{v.title}}</Checkbox>
+        </Form-item>
+        <Form-item label="城市" prop="city" style="width:300px">
+          <Address @getAddress="v=>formValidate.city=v"></Address>
         </Form-item>
         <Form-item label="风格">
           <Select v-model="styleId" style="width:200px">
@@ -30,24 +33,24 @@
 
 <script>
 import UploadHeadImg from "@/components/UploadHeadImg.vue";
+import Address from "@/components/Address.vue";
+import { replace, filtion } from "verification-sensitive";
 export default {
   name: "ClientReleaseDynamics",
   components: {
     UploadHeadImg,
+    Address
   },
   data() {
     return {
       formValidate: {
         title: "",
         cover: null,
+        city: ''
       },
       ruleValidate: {
-        title: [
-          {
-            validator: this.vTitle,
-            trigger: "blur",
-          },
-        ],
+        title: [{required: true,validator: this.vTitle,trigger: "blur"}],
+        city: [ { required: true, message: '请选择城市', trigger: 'change' }]
       },
       content: "",
       toolbars: {
@@ -129,7 +132,9 @@ export default {
       contentMD: "",
       dynamicId: null, // 动态id
       styleList: [], // 装修风格列表
-      styleId: 1 
+      styleId: 1,
+      city: '',
+      markdownText: ''
     };
   },
   created() {
@@ -137,13 +142,15 @@ export default {
     this.getStyleList();
     if (this.dynamicId) this.getDynamic();
   },
-  mounted(){
+  mounted() {
 
   },
   methods: {
     vTitle(rule, value, callback) {
       if (value.length > 30 || value.length < 2) {
         callback(new Error("标题2-30字之间"));
+      }else if(filtion(value)){
+        callback(new Error("标题存在敏感词"));
       } else {
         callback();
       }
@@ -165,14 +172,12 @@ export default {
             v.check = true;
           }
         });
-      } catch (err) {}
+      } catch (err) { }
     },
     // 获取装修风格列表
-    async getStyleList(){
-      try{
-        let res = await this.$http.get('/client/find_style_list');
-        this.styleList = res.data.data;
-      }catch(err){}
+    async getStyleList() {
+      let res = await this.$http.get('/client/find_style_list');
+      this.styleList = res.data.data;
     },
     handleReset(name) {
       this.$refs[name].resetFields();
@@ -180,9 +185,12 @@ export default {
     getFormdata(v) {
       this.formValidate.cover = v;
     },
+    // 修改内容时触发
     changeData(value, render) {
       // value中是文本值,render是渲染出的html文本
       this.showContent = render;
+      this.markdownText = value.replace(/[^\u4E00-\u9FA5]/g,'');
+      if(filtion(this.markdownText)) return this.$Message.error('评论存在敏感词...');
     },
     async testResDy() {
       let res = await this.$http.post("/testResDy", { data: this.showContent });
@@ -191,15 +199,13 @@ export default {
     // 提交发布
     releaseDynamics() {
       this.$refs["formValidate"].validate(async (valid) => {
+        if(filtion(this.markdownText)) return this.$Message.error('评论存在敏感词...');
         if (valid) {
           if (this.showContent == "")
             return this.$Message.error("请先编辑动态内容");
           if (!this.formValidate.cover && !this.dynamicId)
             return this.$Message.error("请上传封面");
-          let tags = this.tagList
-            .map((v) => (v.check === true ? v.title : null))
-            .filter((v) => v)
-            .join(",");
+          let tags = this.tagList.map((v) => (v.check === true ? v.title : null)).filter((v) => v).join(",");
           this.contentMD = this.$refs.md.d_value;
           let data = {
             id: this.dynamicId,
@@ -207,6 +213,7 @@ export default {
             contentHTML: this.showContent,
             contentMD: this.contentMD,
             tags,
+            city: this.formValidate.city
           };
           const formData = new FormData();
           formData.append("file", this.formValidate.cover);
@@ -220,10 +227,10 @@ export default {
           if (res.data.status === 0) {
             setTimeout(() => {
               this.$router.go(-1);
-            }, 200);
+            }, 600);
           }
         } else {
-          this.$Message.error("表单验证失败!");
+          this.$Message.error("请填写完整信息!");
         }
       });
     },
@@ -240,24 +247,26 @@ export default {
         }
       });
     },
-    imgDel(pos) {},
+    imgDel(pos) { },
     // md全屏
     fullScreen(status) {
       // console.log(status);
     },
-  },
-  beforeRouteLeave(to, from, next) {
-    this.$Modal.confirm({
-      title: "提示",
-      content: "<p>离开后您所编辑的内容会清空，您确定要离开吗</p>",
-      onOk: () => {
-        next();
-      },
-      onCancel: () => {
-        
-      },
-    });
-  },
+  }
+  // beforeRouteLeave(to, from, next) {
+  //   if(this.showContent){
+  //     this.$Modal.confirm({
+  //       title: "提示",
+  //       content: "<p>离开后您所编辑的内容会清空，您确定要离开吗</p>",
+  //       onOk: () => {
+  //         next();
+  //       },
+  //       onCancel: () => {
+  
+  //       },
+  //     });
+  //   }else next();
+  // }
 };
 </script>
 

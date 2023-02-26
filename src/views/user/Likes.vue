@@ -1,98 +1,58 @@
 <template>
   <div class="dynamicList">
-    <HeadBG title="我的点赞"></HeadBG>
+    <HeadBG title="我的收藏" :count="count"></HeadBG>
+    <div class="d_f sort-box">
+      <span class="label">排序方式：</span>
+      <Select v-model="sort" style="width:160px;" placeholder="排序方式" class="m_r_40">
+        <Option value="desc">点赞时间正序</Option>
+        <Option value="asc">点赞时间倒序</Option>
+      </Select>
+    </div>
     <div class="content box dynamic-box d_f">
       <Dynamic v-for="v in dynamicList" :dynamic="v" :key="v.id"></Dynamic>
     </div>
-    <div class="scroll">{{scrollTitle}}</div>
+    <LoadingMore :count="count" :listLength="dynamicList.length" @nextPage="currentPage+=1"></LoadingMore>
   </div>
 </template>
 
 <script>
 import HeadBG from "@/components/HeadBG.vue";
 import Dynamic from "@/components/Dynamic.vue";
+import LoadingMore from "@/components/LoadingMore.vue";
 export default {
   name: "ClientDynamicList",
   components: {
     HeadBG,
     Dynamic,
+    LoadingMore
   },
   data() {
     return {
       dynamicList: [],
-      info: {
-        pageSize: 20,
-        currentPage: 1,
-      },
-      scrollstate: true,
-      scrollTitle: "正在加载中...",
-      timer: null,
+      currentPage: 1,
+      sort: 'desc',
+      count: 0
     };
   },
   created() {
     this.getMyLikes();
   },
-
-  mounted() {
-    window.addEventListener("scroll", this.getbottom);
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.getbottom);
-  },
   watch: {
-    "info.currentPage"() {
+    sort() {
+      this.dynamicList = []
+      this.getMyLikes()
+    },
+    currentPage() {
       this.getMyLikes();
     },
   },
   methods: {
     async getMyLikes() {
       try {
-        let res = await this.$http.post("/client/my_likes", this.info);
+        let res = await this.$http.post("/client/my_likes", { currentPage: this.currentPage,sort: this.sort });
         res.data.data.forEach((v) => this.dynamicList.push(v));
-        let listLength = res.data.data.length;
-        this.isLoadingCompleted(listLength);
-        let deWeightThree = () => {
-          let map = new Map();
-          for (let item of this.dynamicList) {
-            if (!map.has(item.id)) {
-              map.set(item.id, item);
-            }
-          }
-          return [...map.values()];
-        };
-        this.dynamicList = deWeightThree();
-      } catch (err) {}
-    },
-    getbottom() {
-      // 返回滚动条垂直滚动距离
-      let scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      // 返回该元素的像素高度，高度包含内边距（padding），不包含边框（border），外边距（margin）和滚动条
-      let clientHeight =
-        document.documentElement.clientHeight || document.body.clientHeight;
-      // 返回该元素的像素高度，高度包含内边距（padding），不包含外边距（margin）、边框（border）
-      let scrollHeight =
-        document.documentElement.scrollHeight || document.body.scrollHeight;
-      let numHeight = scrollTop + clientHeight;
-
-      if (this.scrollstate == true) {
-        this.scrollstate = false;
-        this.timer = setTimeout(() => {
-          if (scrollHeight > clientHeight && numHeight > scrollHeight - 100) {
-            this.info.currentPage += 1;
-          }
-          this.scrollstate = true; //工作结束开启节流阀方便下一个工作
-        }, 50);
-      }
-    },
-    isLoadingCompleted(length) {
-      if (length < this.info.pageSize || length <= 0) {
-        this.scrollTitle = "已加载全部";
-        this.scrollstate = false;
-      } else {
-        this.scrollTitle = "正在加载中...";
-        this.scrollstate = true;
-      }
+        this.count = res.data.count;
+      } catch (err) { }
     },
   },
 };
@@ -100,6 +60,11 @@ export default {
 
 <style lang="scss" scoped>
 .dynamicList {
+  .sort-box {
+    width: 1320px;
+    padding: 20px;
+    margin: auto;
+  }
   .box {
     padding-top: 20px;
     width: 1280px;

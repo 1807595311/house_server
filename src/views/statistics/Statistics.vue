@@ -208,12 +208,12 @@ export default {
             },
           ],
           dataZoom: [{ //添加X轴滚动条
-        type: 'slider',
-        show: true,
-        start: 20,
-        end: 100,
-        handleSize: 8
-    }]
+            type: 'slider',
+            show: true,
+            start: 20,
+            end: 100,
+            handleSize: 8
+          }]
 
         };
         myChart.setOption(option);

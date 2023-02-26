@@ -73,7 +73,11 @@
     <el-dialog title="下架动态" width="30%" :visible.sync="changeStateVisible">
       <el-form :model="changeStateForm">
         <el-form-item prop="reason" label="下架原因" label-width="80">
-          <el-input type="textarea" maxlength="30" show-word-limit :rows="2" placeholder="请输入下架动态原因" v-model="changeStateForm.delete_reason"></el-input>
+          <!-- <el-input type="textarea" maxlength="30" show-word-limit :rows="2" placeholder="请输入下架动态原因" v-model="changeStateForm.delete_reason"></el-input> -->
+          <el-select v-model="changeStateForm.delete_reason" placeholder="请选择下架原因">
+            <el-option v-for="(v,i) in reasonPtions" :key="i" :label="v" :value="v">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -105,9 +109,10 @@ export default {
       dialogContent: '',
       changeStateVisible: false,
       changeStateForm: {
-        delete_reason: ''
+        delete_reason: '动态内容存在敏感词'
       },
-      postData: {}
+      postData: {},
+      reasonPtions: ['内容存在敏感词','内容不符合规范','内容图片违规','封面图片违规','标题存在敏感词']
     };
   },
 
@@ -142,12 +147,12 @@ export default {
     // 修改状态post请求
     async changeStatePOST() {
       let res = await this.$http.post("/manage/changeDynamicState", this.postData);
-      if(res.data.status === 0) this.changeStateVisible = false;
+      if (res.data.status === 0) this.changeStateVisible = false;
       this.getHomePageData();
     },
     // 下架动态
     offShelf() {
-      this.postData = {...this.postData , delete_reason: this.changeStateForm.delete_reason};
+      this.postData = { ...this.postData, delete_reason: this.changeStateForm.delete_reason };
       this.changeStatePOST(this.postData);
       this.changeStateForm.delete_reason = "";
     },

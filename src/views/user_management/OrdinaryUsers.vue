@@ -43,7 +43,7 @@
             <div>
               <el-button class="operation-btn" size="mini" @click="detail(scope.row)" type="primary">详 情</el-button>
               <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.state==1" type="success">启 用</el-button>
-              <el-button class="operation-btn" size="mini" @click="changeState(scope.row)" :disabled="scope.row.state==0" type="danger">禁 用</el-button>
+              <el-button class="operation-btn" size="mini" @click="changeState(scope.row,true)" :disabled="scope.row.state==0" type="danger">禁 用</el-button>
             </div>
           </template>
         </el-table-column>
@@ -89,6 +89,21 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 禁用原因输入弹出框 -->
+    <el-dialog title="禁用用户" width="30%" :visible.sync="changeStateVisible">
+      <el-form>
+        <el-form-item prop="reason" label="禁用原因" label-width="80">
+          <el-select v-model="disable_reason" placeholder="请选择禁用原因">
+            <el-option v-for="(v,i) in reasonPtions" :key="i" :label="v" :value="v">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="changeStateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="offShelf">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -110,7 +125,11 @@ export default {
       total: 0,
       tableData: [],
       dialogVisible: false,
-      detailInfo: {}
+      detailInfo: {},
+      changeStateVisible: false, // 禁用原因弹窗
+      disable_reason: '发布违规动态',
+      postData: {},
+      reasonPtions: ['发布违规动态', '发布违规评论']
     };
   },
 
@@ -137,21 +156,44 @@ export default {
         this.tableData = res.data.data;
       } catch (err) { }
     },
-    // 修改状态
-    async changeState(userInfo) {
-      let data = {
-        account_number: userInfo.account_number,
-        state: userInfo.state
-      }
-      try {
-        let res = await this.$http.post('/manage/changeUserState', data);
-        // this.$tip(res.data);
-        this.getHomePageData();
-      } catch (err) { }
-
+    // 填写禁用原因弹窗
+    offShelf() {
+      this.postData = { ...this.postData, disable_reason: this.disable_reason };
+      this.changeStatePOST(this.postData);
     },
+    //修改状态
+    async changeState(userInfo, flag) {
+      this.postData = {
+        account_number: userInfo.account_number,
+        state: userInfo.state,
+      };
+      if (flag !== true) {
+        this.changeStatePOST()
+      } else {
+        this.changeStateVisible = true;
+      }
+    },
+    // 修改状态post请求
+    async changeStatePOST() {
+      let res = await this.$http.post("/manage/changeUserState", this.postData);
+      if (res.data.status === 0) this.changeStateVisible = false;
+      this.getHomePageData();
+    },
+    // // 修改状态
+    // async changeState(userInfo) {
+    //   let data = {
+    //     account_number: userInfo.account_number,
+    //     state: userInfo.state
+    //   }
+    //   try {
+    //     let res = await this.$http.post('/manage/changeUserState', data);
+    //     // this.$tip(res.data);
+    //     this.getHomePageData();
+    //   } catch (err) { }
+
+    // },
     // 用户详情
-    detail(v){
+    detail(v) {
       this.dialogVisible = true;
       this.detailInfo = v;
     },

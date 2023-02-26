@@ -68,7 +68,7 @@ export const routes = [
       }
     ],
   },
-// 首页导航菜单---开始
+  // 首页导航菜单---开始
 
   {
     path: "/notfound",
@@ -85,5 +85,11 @@ export const routes = [
       title: "登录",
     },
     component: () => import("../views/user/Register.vue"),
+  },
+  // 错误路径重定向到404
+  {
+    path: '*',
+    redirect: '/notfound',
+    hidden: true
   }
 ];

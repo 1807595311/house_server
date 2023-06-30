@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+house_client
+/house_client
 
 
 # local env files

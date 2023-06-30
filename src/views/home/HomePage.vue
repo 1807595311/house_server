@@ -86,8 +86,12 @@ export default {
         title: "退出登录",
         content: "您确定要退出登录吗",
         onOk: () => {
-          this.$cookie.set("access_userInfo",-1,'/');
-          this.$cookie.set("access_token",-1,'/');
+          let currentTime = new Date().getTime();
+          currentTime -= 24 * 60 * 60 * 1000 * 10;
+          let expires = new Date(currentTime).toUTCString(); // 有效时间
+          // 将token存入cookie
+          document.cookie = `access_token='';expires=${expires}`;
+          document.cookie = `access_userInfo='';expires=${expires}`;
           this.$router.push({ path: "/login" });
         },
         onCancel: () => {},

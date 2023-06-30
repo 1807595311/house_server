@@ -9,7 +9,7 @@
           <Checkbox v-for="(v,i) in tagList" :key="i" v-model="v.check">{{v.title}}</Checkbox>
         </Form-item>
         <Form-item label="城市" prop="city" style="width:300px">
-          <Address @getAddress="v=>formValidate.city=v"></Address>
+          <Address :value="findCity(formValidate.city)" @getAddress="v=>formValidate.city=v"></Address>
         </Form-item>
         <Form-item label="风格">
           <Select v-model="styleId" style="width:200px">
@@ -34,6 +34,7 @@
 <script>
 import UploadHeadImg from "@/components/UploadHeadImg.vue";
 import Address from "@/components/Address.vue";
+import address from "@/utils/address.json";
 import { replace, filtion } from "verification-sensitive";
 export default {
   name: "ClientReleaseDynamics",
@@ -163,6 +164,7 @@ export default {
         });
         let data = res.data.data;
         this.formValidate.title = data.title;
+        this.formValidate.city = data.city;
         this.contentMD = data.content_md;
         this.content = data.content_md;
         this.styleId = data.style;
@@ -190,7 +192,7 @@ export default {
       // value中是文本值,render是渲染出的html文本
       this.showContent = render;
       this.markdownText = value.replace(/[^\u4E00-\u9FA5]/g,'');
-      if(filtion(this.markdownText)) return this.$Message.error('评论存在敏感词...');
+      if(filtion(this.markdownText)) return this.$Message.error('动态内容存在敏感词...');
     },
     async testResDy() {
       let res = await this.$http.post("/testResDy", { data: this.showContent });
@@ -199,7 +201,7 @@ export default {
     // 提交发布
     releaseDynamics() {
       this.$refs["formValidate"].validate(async (valid) => {
-        if(filtion(this.markdownText)) return this.$Message.error('评论存在敏感词...');
+        if(filtion(this.markdownText)) return this.$Message.error('动态内容存在敏感词...');
         if (valid) {
           if (this.showContent == "")
             return this.$Message.error("请先编辑动态内容");
@@ -246,6 +248,20 @@ export default {
           _this.$refs.md.$img2Url(pos, url);
         }
       });
+    },
+    // 通过城市查找省份和城市，并组成数组
+    findCity(city) {
+      let p = null;
+      let d = null
+      for (let i = 0; i < address.length; i++) {
+        let c = address[i].children.filter(v => v.label == city);
+        if (c.length > 0) {
+          p = address[i].label;
+          d = c[0].label;
+          break;
+        }
+      }
+      return [p, d];
     },
     imgDel(pos) { },
     // md全屏

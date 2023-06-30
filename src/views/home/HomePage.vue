@@ -86,8 +86,8 @@ export default {
         title: "退出登录",
         content: "您确定要退出登录吗",
         onOk: () => {
-          this.$cookie.delete("access_userInfo");
-          this.$cookie.delete("access_token");
+          this.$cookie.set("access_userInfo",-1,'/');
+          this.$cookie.set("access_token",-1,'/');
           this.$router.push({ path: "/login" });
         },
         onCancel: () => {},

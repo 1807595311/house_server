@@ -45,7 +45,7 @@
           <Icon type="document-text"></Icon>
           动态
         </Menu-item>
-        <Menu-item name="fabulousList">
+        <Menu-item name="fabulousList" v-if="dataList.fabulousList.length">
           <Icon type="heart"></Icon>
           点赞
         </Menu-item>
@@ -106,9 +106,9 @@ export default {
     },
     showFollowsBtn() {
       return this.loginUserInfo.account_number && this.account_number != this.loginUserInfo.account_number
+      && this.userInfo.customer_type !=  this.loginUserInfo.customer_type
+       
     }
-  },
-  watch: {
   },
   methods: {
     async changeMenu(key) {
@@ -138,10 +138,12 @@ export default {
     },
     // 获取点赞列表
     async getFabulous() {
-      let res = await this.$http.post('/client/find_other_user_fabulous', { account_number: this.account_number, currentPage: this.currentPage });
-      let resData = res.data.data;
-      this.count = res.data.count;
-      resData.forEach(v => this.dataList.fabulousList.push(v));
+      if(this.$store.state.userInfo && this.$store.state.userInfo.account_number){
+        let res = await this.$http.post('/client/find_other_user_fabulous', { account_number: this.account_number, currentPage: this.currentPage });
+        let resData = res.data.data;
+        this.count = res.data.count;
+        resData.forEach(v => this.dataList.fabulousList.push(v));
+      }
     },
     async follow() {
       let data = { f_account_number: this.userInfo.account_number };

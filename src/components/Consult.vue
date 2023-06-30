@@ -31,7 +31,7 @@
             <Option v-for="item in houseList" :value="item.id" :key="item.id">{{ item.title }}</Option>
           </Select>
           <Tooltip content="点击可跳转至房屋信息" placement="top">
-              <span class="m_l_10" style="cursor: pointer;" @click="$router.push('/personal_data')">
+              <span class="m_l_10" style="cursor: pointer;" @click="toPersonData">
                 <Icon type="help-circled" :size="16"></Icon>
               </span>
           </Tooltip>
@@ -148,7 +148,7 @@ export default {
   created() {
     this.getStyleList();
     this.getContact();
-    if(this.$store.state.userInfo){
+    if(this.$store.state.userInfo && this.$store.state.userInfo.account_number){
       this.getHoustList();
     }
   },
@@ -180,11 +180,18 @@ export default {
     // 提交咨询
     handleSubmit(name) {
       this.$refs[name].validate(async (valid) => {
-        console.log(this.formInline);
         if (valid) {
           this.$emit('sendConsult', this.formInline);
         }
       });
+    },
+    toPersonData(){
+      this.$router.push({
+        path: '/personal_data',
+        query: {
+          active: 2
+        }
+      })
     }
   }
 

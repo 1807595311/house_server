@@ -60,6 +60,7 @@
     <!-- 动态内容 -->
     <div class="box d_f j_c_sb">
       <div class="box_left">
+        <Back-top></Back-top>
         <div class="markdown-body" v-html="dynamicDetail.content"></div>
         <mavon-editor v-show="false" ref="md" />
       </div>

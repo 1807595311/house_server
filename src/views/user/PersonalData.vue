@@ -95,6 +95,12 @@ export default {
   },
   created() {
     this.getUserInfo();
+    let active = this.$route.query.active;
+    if(active){
+      this.activeName = Number(active);
+      this.activeKey = Number(active);
+    }
+    
   },
   methods: {
     async getFormdata(formdata) {
@@ -158,7 +164,7 @@ export default {
     &-right {
       margin-left: 20px;
       width: 100%;
-      overflow-y: auto;
+      // overflow-y: auto;
       /*********头像start*********/
       .head-img {
         height: 200px;
